@@ -5,6 +5,7 @@
             <div class="section-title">
                 {{item.name}}
             </div>
+            <content-list :contentList="item.list"></content-list>
         </div>
     </div>
 </template>
@@ -12,9 +13,11 @@
 <script>
     import Swiper from "../../components/swiper/Swiper";
     import {getAllSinger,getAllSongList} from "../../networks/index"
+    import ContentList from "../../components/common/ContentList";
     export default {
         name: "Homes",
         components:{
+            ContentList,
             Swiper
         },
         data(){
@@ -25,17 +28,23 @@
                 ]
             }
         },
+        created() {
+            this.getSongList();
+            this.getSinger();
+        },
         methods:{
             getSongList(){
                 getAllSongList().then((res) =>{
-                    this.songlist[0].list = res.slice(0,10);
+                    this.songslist[0].list = res.playlists.slice(0,10);
+                    console.log(res.playlists);
                 }).catch(err =>{
                     console.log(err);
                 })
             },
             getSinger(){
                 getAllSinger().then((res) =>{
-                    this.songlist[1].list = res.slice(0,10);
+                    this.songslist[1].list = res.playlists.slice(0,10);
+                    console.log(res);
                 }).catch(err =>{
                     console.log(err);
                 })

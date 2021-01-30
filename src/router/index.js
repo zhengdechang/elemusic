@@ -4,6 +4,14 @@ import Home from '../views/home/Home'
 import SongList from "../views/songlist/SongList";
 import Singer from "../views/singer/Singer";
 import MyMusic from "../views/mymusic/MyMusic";
+import Search from "../components/header/search/Search";
+// import VueRouter from 'vue-router';
+
+const originalPush = Router.prototype.push
+
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 Vue.use(Router)
 
@@ -33,6 +41,11 @@ export default new Router({
       path: '/my-music',
       name: 'my-music',
       component: MyMusic
-    }
+    },
+    {
+      path: '/cloudsearch',
+      name: 'cloudsearch',
+      component:Search
+    },
   ],
 })

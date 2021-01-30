@@ -1,7 +1,7 @@
 import {navMsg} from "../assets/data/header";
 const configer ={
     state: {
-        HOST: 'http://127.0.0.1:8080',
+        HOST: 'http://localhost:3000',
         activeName:navMsg[0].name,
     },
     getters:{
