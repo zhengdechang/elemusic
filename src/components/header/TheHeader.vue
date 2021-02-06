@@ -56,9 +56,7 @@
             },
             goSearch(){
                 this.$router.push({path:'/cloudsearch',query:{keywords:this.keywords}});
-                window.location.reload()
-                // this.keywords = this.$route.query.keywprds;
-                // this.$forceUpdate()
+                window.location.reload();
             }
         },
         created() {
