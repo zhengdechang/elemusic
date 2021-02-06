@@ -5,6 +5,7 @@ import SongList from "../views/songlist/SongList";
 import Singer from "../views/singer/Singer";
 import MyMusic from "../views/mymusic/MyMusic";
 import Search from "../components/header/search/Search";
+import Lyric from "../views/lyric/Lyric";
 
 // const originalPush = Router.prototype.push
 
@@ -45,6 +46,11 @@ export default new Router({
       path: '/cloudsearch',
       name: 'cloudsearch',
       component:Search
+    },
+    {
+      path: '/lyric',
+      name: 'lyric',
+      component:Lyric
     },
   ],
 })

@@ -15,6 +15,8 @@ export const likeSongofName =(keywords) => get(`/cloudsearch?keywords= ${keyword
 //根据歌曲id查询歌曲对象
 export const songOfSongId =(id) => get(`song/detail?songId=${id}`);
 
+//id相对应的歌词
+export const songLyric =(id) => get(`/lyric?id=${id}`);
 
 
 
