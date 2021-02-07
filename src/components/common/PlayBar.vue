@@ -1,5 +1,10 @@
 <template>
-    <div class="play-bar">
+    <div class="play-bar" :class="{show:!toggle}">
+        <div @click="toggle = !toggle" class="item-up" :class="{turn:toggle}">
+            <svg class="icon">
+                <use xlink:href="#icon-jiantou-shang-cuxiantiao"></use>
+            </svg>
+        </div>
         <div class="kongjian">
             <!--上一首-->
             <div class="item" @click="prev">
@@ -62,7 +67,7 @@
                     </svg>
                 </div>
                 <!--下载-->
-                <div class="item">
+                <div class="item" @click="download()">
                     <svg class="icon">
                         <use xlink:href="#icon-xiazai"></use>
                     </svg>
@@ -81,7 +86,7 @@
 
 <script>
     import {mapGetters} from "vuex";
-    import {songLyric} from "../../networks";
+    import {songLyric,songUrl,download} from "../../networks";
 
     export default {
         name: "PlayBar",
@@ -94,7 +99,8 @@
                 mouseStartX:0,       //拖拽开始位置
                 tag:false,           //拖拽开始结束的标准
                 volume:50,           //音量
-                ly:'',
+                ly:'',               //歌词
+                toggle:true,         //显示隐藏播放器页面
             }
         },
         computed:{
@@ -271,19 +277,42 @@
             toPlay(id){
               if(id&&id !=this.id){
                   this.$store.commit('setId',this.listOfSongs[this.listIndex].id);
-                  this.$store.commit('setUrl','http://music.163.com/song/media/outer/url?id='+this.listOfSongs[this.listIndex].id+'.mp3');
+                  this.getUrl(this.listOfSongs[this.listIndex].id);
+                  // this.$store.commit('setUrl','http://music.163.com/song/media/outer/url?id='+this.listOfSongs[this.listIndex].id+'.mp3');
                   this.$store.commit('setPicUrl',this.listOfSongs[this.listIndex].al.picUrl);
                   console.log(this.listOfSongs[this.listIndex].al.picUrl);
                   this.$store.commit('setTitle',this.listOfSongs[this.listIndex].name);
                   this.$store.commit('setArtist',this.listOfSongs[this.listIndex].ar[0].name);
-                  songLyric(this.listOfSongs[this.listIndex].id).then(res =>{
-                      console.log(res.lrc.lyric);
-                      this.$store.commit('setLyric',res.lrc.lyric);
-                  }).catch(err => {
-                      console.log(err);
-                  });
+                  // songLyric(this.listOfSongs[this.listIndex].id).then(res =>{
+                  //     console.log(res.lrc.lyric);
+                  //     this.$store.commit('setLyric',res.lrc.lyric);
+                  // }).catch(err => {
+                  //     console.log(err);
+                  // });
+                  this.getLyric(this.listOfSongs[this.listIndex].id);
               }
             },
+            //获取歌曲的url
+            getUrl(id){
+                songUrl(id).then(res =>{
+                    // console.log(res);
+                    this.$store.commit('setUrl',res.data[0].url);
+                    console.log(res.data[0].url);
+                }).catch(err => {
+                    console.log(err);
+                });
+                console.log(this.url);
+            },
+            //获取歌词
+            getLyric(id){
+                songLyric(id).then(res =>{
+                    // console.log(res.lrc.lyric);
+                    this.$store.commit('setLyric',res.lrc.lyric);
+                }).catch(err => {
+                    console.log(err);
+                });
+            },
+
             // //解析歌词
             // parseLyric(text){
             //     let lines = text.split("\n");                   //将歌词按行分解成数组
@@ -317,6 +346,28 @@
             //转向歌词
             toLyric(){
               this.$router.push({path:'/lyric'});
+            },
+            //下载音乐
+            download(){
+              download(this.url).then(res =>{
+                  let content = res.data;
+                  console.log(this.artist);
+                  console.log(this.title);
+                  let eleLink = document.createElement('a');
+                  eleLink.download = `${this.artist}-${this.title}.mp3`;
+                  eleLink.style.display = 'none';
+                  //把字符内容转换为blob地址
+                  let blob = new Blob([content]);
+                  eleLink.href = URL.createObjectURL(blob);
+                  //把链接地址加到document里
+                  document.body.appendChild(eleLink);
+                  //触发点击
+                  eleLink.click();
+                  //然后移除这个新加的控件
+                  document.body.removeChild(eleLink);
+              }).catch(err =>{
+                  console.log(err);
+              })
             },
 
         },

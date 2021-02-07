@@ -60,6 +60,7 @@
                             }
                         }
                     }
+
                 }
             },
         },
@@ -128,7 +129,7 @@
                     sec += min * 60
                 }
                 return Number(sec + '.' + ms)
-            }
+            },
         },
     }
 </script>
