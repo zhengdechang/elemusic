@@ -1,5 +1,29 @@
-import {get} from "./http";
+import {get,post} from "./http";
 import Axios from "axios";
+import axios from "axios";
+import router from "../../../admin/src/router";
+import Vue from 'vue'
+
+const http = axios.create({
+    baseURL:'http://localhost:3001/admin/api'
+})
+
+//拦截服务端错误信息显示在客户端
+http.interceptors.response.use(res =>{
+    return res
+},err =>{
+    if(err.response.data.message){
+        Vue.prototype.$message({
+            type:'err',
+            message:err.response.data.message
+        })
+    }
+    return Promise.reject(err)
+})
+axios.defaults.withCredentials = true
+
+
+export default http
 
 // Axios.defaults.withCredentials = true;  //允许跨域
 // //Content-Type 响应头
@@ -31,6 +55,9 @@ export const download = (url) => Axios({
     responseType:'blob'
 });
 
+//注册
+export const SignUp = (params) =>post('consumer/add',params)
+
 
 //============歌单的歌曲相关============
 //根据歌单id查询歌曲列表
@@ -40,3 +67,10 @@ export const listSongDetail = (songListId) => Axios(`listSong/detail?songListId=
 //============用户相关================
 //查询用户
 export const getAllConsumer =() => get(`consumer/allConsumer`);
+
+
+//用户注册接口
+export const postSignUp =(model) => http.post('rest2/user',model);
+
+//用户登录接口
+export const loginIn =(model) => http.post('user/login',model);

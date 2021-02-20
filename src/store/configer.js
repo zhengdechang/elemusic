@@ -3,6 +3,7 @@ const configer ={
     state: {
         activeName:navMsg[0].name,       //当前选中的菜单名字
         showAside:false,                 //是否显示播放中的歌曲列表
+        loginIn:false,                   //用户是否已登录
     },
     getters:{
         activeName:state => {
@@ -19,6 +20,13 @@ const configer ={
             }
             return showAside;
         },
+        loginIn:state => {
+            let loginIn =state.loginIn;
+            if(!loginIn){
+                loginIn = JSON.parse(window.sessionStorage.getItem('loginIn'))
+            }
+            return loginIn;
+        },
 
     },
     mutations: {
@@ -29,6 +37,10 @@ const configer ={
         setShowAside:(state,showAside) => {
             state.showAside = showAside
             window.sessionStorage.setItem('showAside',JSON.stringify(showAside))
+        },
+        setLoginIn:(state,loginIn) => {
+            state.loginIn = loginIn
+            window.sessionStorage.setItem('loginIn',JSON.stringify(loginIn))
         }
 
     },

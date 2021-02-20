@@ -7,6 +7,7 @@ axios.defaults.timeout = 5000;  //超市时间是5秒
 // //基础url
 axios.defaults.baseURL = "http://localhost:3000";
 
+
 //响应拦截器
 axios.interceptors.response.use(
     response => {

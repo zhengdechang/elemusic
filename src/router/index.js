@@ -6,6 +6,9 @@ import Singer from "../views/singer/Singer";
 import MyMusic from "../views/mymusic/MyMusic";
 import Search from "../components/header/search/Search";
 import Lyric from "../views/lyric/Lyric";
+import signIn from "../views/login/signIn";
+import loginIn from "../views/login/loginIn";
+import Setting from "../components/header/Setting";
 
 // const originalPush = Router.prototype.push
 
@@ -51,6 +54,21 @@ export default new Router({
       path: '/lyric',
       name: 'lyric',
       component:Lyric
+    },
+    {
+      path: '/sign-up',
+      name: 'sign-up',
+      component:signIn
+    },
+    {
+      path: '/login-in',
+      name: 'login-in',
+      component:loginIn
+    },
+    {
+      path: '/setting',
+      name: 'setting',
+      component:Setting
     },
   ],
 })

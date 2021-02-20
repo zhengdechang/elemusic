@@ -2,12 +2,12 @@ import {likeSongofName, songLyric, songUrl} from "../networks";
 
 export const mixin = {
     methods:{
-        // notify(title,type){
-        //     this.notify({
-        //         title:title,
-        //         type:type
-        //     })
-        // },
+        notify(title,type){
+            this.notify({
+                title:title,
+                type:type
+            })
+        },
         attachImageUrl(srcUrl){
             return srcUrl ? srcUrl : '../assets/img/user.jpg';
         },
