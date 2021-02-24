@@ -74,3 +74,9 @@ export const postSignUp =(model) => http.post('rest2/user',model);
 
 //用户登录接口
 export const loginIn =(model) => http.post('user/login',model);
+
+//获取数据
+export  const getUserData =(id) => http.get(`user/change/${id}`);
+
+//修改用户信息
+export  const changeUser =(model,id) => http.put(`user/change/${id}`,model);

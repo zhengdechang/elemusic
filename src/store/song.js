@@ -14,7 +14,7 @@ const song ={
         picUrl:'',              //歌曲图片
         autoNext:true,              //自动播放下一首
         lyric:[],              //未处理歌词数据
-        tempList:{},              //当个歌单信息
+        tempList:{},              //当个歌单信息或者歌手
         listIndex:null,              //当前歌曲在歌单中的位置
         volume:50,              //音量
 

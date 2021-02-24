@@ -2,6 +2,7 @@
     <div class="album-content">
         <h1 class="title">
             <slot name="title"></slot>
+            <hr/>
         </h1>
         <ul>
             <li>

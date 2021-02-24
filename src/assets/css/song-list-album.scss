@@ -53,9 +53,9 @@
 }
 
 /*歌单内容*/
-.album-content {
+.album-contents {
   margin-left: 300px;
-  padding: 40px 100px;
+  padding: 10px 100px;
   /*歌单题目*/
   .album-title {
     font-size: 30px;
@@ -80,6 +80,8 @@
 
   /*歌曲列表*/
   .songs-body {
+    text-align: center;
+    //display: inline-block;
     background-color: $color-white;
     border-radius: 12px;
     padding: 0 40px 50px 40px;

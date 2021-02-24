@@ -9,6 +9,8 @@ import Lyric from "../views/lyric/Lyric";
 import signIn from "../views/login/signIn";
 import loginIn from "../views/login/loginIn";
 import Setting from "../components/header/Setting";
+import SingerAlbum from "../components/common/album/SingerAlbum";
+import SongListAlbum from "../components/common/album/SongListAlbum";
 
 // const originalPush = Router.prototype.push
 
@@ -69,6 +71,16 @@ export default new Router({
       path: '/setting',
       name: 'setting',
       component:Setting
+    },
+    {
+      path: '/singer-album/:id',
+      name: 'singer-album',
+      component:SingerAlbum
+    },
+    {
+      path: '/song-list-album/:id',
+      name: 'song-list-album',
+      component:SongListAlbum
     },
   ],
 })

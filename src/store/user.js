@@ -1,16 +1,16 @@
 const user ={
     state: {
-        userid:'',       //用户id
+        userId:'',       //用户id
         username:'',     //用户名
         avator:'',       //用户头像
     },
     getters:{
-        userid:state => {
-            let userid =state.userid;
-            if(!userid){
-                userid = JSON.parse(window.sessionStorage.getItem('userid'))
+        userId:state => {
+            let userId =state.userId;
+            if(!userId){
+                userId = JSON.parse(window.sessionStorage.getItem('userId'))
             }
-            return userid;
+            return userId;
         },
         username:state => {
             let username =state.username;
@@ -29,9 +29,9 @@ const user ={
 
     },
     mutations: {
-        setUserid:(state,userid) => {
-            state.userid = userid
-            window.sessionStorage.setItem('userid',JSON.stringify(userid))
+        setUserId:(state,userId) => {
+            state.userId = userId
+            window.sessionStorage.setItem('userId',JSON.stringify(userId))
         },
         setUsername:(state,username) => {
             state.username = username

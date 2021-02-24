@@ -59,8 +59,9 @@
                       type:'success',
                       message:'登录成功'
                   })
+
                   _this.$store.commit('setLoginIn',true)
-                  _this.$store.commit('setUserid',res.data.id)
+                  _this.$store.commit('setUserId',res.data.id)
                   _this.$store.commit('setUsername',res.data.username)
                   _this.$store.commit('setAvator',res.data.avator)
                   setTimeout(function () {
@@ -68,6 +69,7 @@
                       _this.changeIndex('首页');
                   },1000)
                   })
+
                 // let _this = this;
                 // loginIn(this.registerForm).then(res =>{
                 //     console.log(res);
