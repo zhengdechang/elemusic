@@ -52,6 +52,7 @@
         },
         methods:{
               login(){
+                  let baseURL = "http://localhost:3001/admin/api/user/getImg/"
                   loginIn(this.registerForm).then(res =>{
                   let _this = this;
                   console.log(res);
@@ -63,8 +64,9 @@
                   _this.$store.commit('setLoginIn',true)
                   _this.$store.commit('setUserId',res.data.id)
                   _this.$store.commit('setUsername',res.data.username)
-                  _this.$store.commit('setAvator',res.data.avator)
-                  setTimeout(function () {
+                  _this.$store.commit('setAvator',baseURL+res.data.id && require("../../assets/img/user.jpg"))
+                      console.log(baseURL + res.data.id);
+                      setTimeout(function () {
                       _this.$router.push('/');
                       _this.changeIndex('首页');
                   },1000)
