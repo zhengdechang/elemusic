@@ -80,3 +80,7 @@ export  const getUserData =(id) => http.get(`user/change/${id}`);
 
 //修改用户信息
 export  const changeUser =(model,id) => http.put(`user/change/${id}`,model);
+
+
+//获取歌单分类
+export  const getLIst =(model,id) => http.put(`user/change/${id}`,model)
