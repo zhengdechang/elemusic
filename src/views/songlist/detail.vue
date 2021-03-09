@@ -114,20 +114,20 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
-import { formatSongInfo } from '@utils/song'
-import songList from '@components/common/song-list'
-import Loading from '@components/common/loading'
+// import { mapGetters, mapMutations, mapActions } from 'vuex'
+// import songList from '@components/common/song-list'
+import Loading from '../../components/common/Loading'
+import {playlistdetail,playlistSCollect,playlistRelated,songDetail} from "../../networks/index"
 export default {
     name: 'PlayListDetail',
     components: {
-        songList,
+        // songList,
         Loading
     },
-    mounted () {
+    mounted() {
         this._initialize(this.$route.query.id)
     },
-    data () {
+    data() {
         // 这里存放数据
         return {
             // 歌单详情
@@ -143,82 +143,80 @@ export default {
     },
     // 监听属性 类似于data概念
     computed: {
-        ...mapGetters(['isLogin', 'playList'])
+        // ...mapGetters(['isLogin', 'playList'])
     },
     // 方法集合
     methods: {
-        ...mapMutations({
-            setPlayStatus: 'SET_PLAYSTATUS',
-            setPlayList: 'SET_PLAYLIST',
-            setPlayIndex: 'SET_PLAYINDEX'
-        }),
-        ...mapActions(['loginSuc', 'playAll']),
-        _initialize (id) {
+        // ...mapMutations({
+        //     setPlayStatus: 'SET_PLAYSTATUS',
+        //     setPlayList: 'SET_PLAYLIST',
+        //     setPlayIndex: 'SET_PLAYINDEX'
+        // }),
+        // ...mapActions(['loginSuc', 'playAll']),
+        _initialize(id) {
             // 歌单详情
-            this.getDetail({ id: id, s: 8 })
+            this.getDetail({id: id, s: 8})
             // 歌单收藏者
-            this.getCollect({ id: id, limit: 18 })
+            this.getCollect({id: id, limit: 18})
             // 相关歌单推荐
-            this.getRecom({ id: id })
+            this.getRecom({id: id})
             // // 歌单评论
-            this.getComment({ id: id, limit: 9 })
+            this.getComment({id: id, limit: 9})
         },
         // 登录及未登录下获取歌单中歌曲的列表
-        async getDetail (params) {
+        getDetail(params) {
             this.isLoading = true
-            const { data: res } = await this.$http.playlistdetail(params)
+            playlistdetail(params).then(res => {
+                if (res.code !== 200) {
+                    return this.$message.error('数据请求失败')
+                }
 
-            if (res.code !== 200) {
-                return this.$msg.error('数据请求失败')
-            }
-
-            this.details = res.playlist
-
-            if (this.isLogin) {
+                this.details = res.playlist
                 const ids = res.playlist.trackIds
-
                 this.getAllSongs(ids)
-            } else {
-                this.songList = this._formatSongs(res.playlist.tracks)
-                this.total = this.songList.length
-                this.isLoading = false
-            }
+                // this.songList = this._formatSongs(res.playlist.tracks)
+                // this.total = this.songList.length
+                // this.isLoading = false
+            })
+
         },
         // 订阅该歌单的用户列表
-        async getCollect (params) {
-            const { data: res } = await this.$http.playlistSCollect(params)
+        getCollect(params) {
+            playlistSCollect(params).then(res => {
+                if (res.code !== 200) {
+                    return this.$message.error('数据请求失败')
+                }
+                this.collects = res.subscribers
+            })
 
-            if (res.code !== 200) {
-                return this.$msg.error('数据请求失败')
-            }
-            this.collects = res.subscribers
         },
         // 相关歌单推荐
-        async getRecom (params) {
-            const { data: res } = await this.$http.playlistRelated(params)
-
-            if (res.code !== 200) {
-                return this.$msg.error('数据请求失败')
-            }
-            this.playlists = res.playlists
+        async getRecom(params) {
+            playlistRelated(params).then(res => {
+                if (res.code !== 200) {
+                    return this.$message.error('数据请求失败')
+                }
+                this.playlists = res.playlists
+            })
         },
         // 歌单精彩评论
-        async getComment (params) {
-            const { data: res } = await this.$http.playlistComment(params)
+        async getComment(params) {
+            playlistComment(params).then(res => {
+                if (res.code !== 200) {
+                    return this.$message.error('数据请求失败')
+                }
+                this.comments = res.comments
+            })
 
-            if (res.code !== 200) {
-                return this.$msg.error('数据请求失败')
-            }
-            this.comments = res.comments
         },
         // 歌单简介查看更多
-        showAllDesc () {
+        showAllDesc() {
             if (this.details.description.length > 120) {
                 this.isShowDesc = !this.isShowDesc
             }
         },
         // 登录后根据ids获取所有歌曲列表
-        async getAllSongs (ids) {
+        async getAllSongs(ids) {
             const sliceArr = []
             const num = 500
             let idsArr = []
@@ -234,65 +232,76 @@ export default {
                     arrs.push(d.id)
                 })
                 this.isLoading = true
-                const { data: res } = await this.$http.songDetail({ ids: arrs.join(','), timestamp: new Date().valueOf() + i })
-
-                idsArr = idsArr.concat(this._formatSongs(res))
+                songDetail({ids: arrs.join(','), timestamp: new Date().valueOf() + i}).then(res => {
+                    idsArr = idsArr.concat(this._formatSongs(res))
+                })
             }
 
             this.songList = idsArr
             this.total = idsArr.length
             this.isLoading = false
         },
-        // 未登录状态，点击登录按钮，显示登录框
-        loginDialog () {
-            this.$store.dispatch('loginSuc', true)
-        },
         // 处理歌曲
-        _formatSongs (list) {
+        _formatSongs(list) {
             const ret = []
             list.songs.map((item, index) => {
                 if (item.id) {
                     // 是否有版权播放
                     item.license = !list.privileges[index].cp
-                    ret.push(formatSongInfo(item))
+                    ret.push(this.formatSongInfo(item))
                 }
             })
             return ret
         },
         // 播放列表为当前歌单的全部歌曲
-        playAllSongs () {
+        playAllSongs() {
             this.playAll({
                 list: this.songList
             })
         },
-        // 收藏、取消歌单
-        async subPlayList (item) {
-            const { data: res } = await this.$http.subPlayList({ id: item.id, t: (item.subscribed ? 2 : 1) })
-
-            if (res.code !== 200) {
-                return this.$msg.error('数据请求失败')
-            }
-            this.details.subscribed = !this.details.subscribed
-        }
-    },
-    watch: {
-        $route (newId, oldId) {
-            const id = this.$route.query.id
-            if (id) {
-                this.songList = []
-                this.total = 0
-                this._initialize(id)
-            }
+        formatSongInfo(params) {
+            return new Song({
+                id: String(params.id),
+                name: params.name,
+                mvId: params.mv,
+                singer: params.ar,
+                album: params.al,
+                alia: params.alia,
+                vip: params.fee === 1,
+                license: params.license,
+                duration: utils.formatSongTime(params.dt),
+                url: `https://music.163.com/song/media/outer/url?id=${params.id}.mp3`,
+                publishTime: utils.formatMsgTime(params.publishTime)
+            })
+            // // 收藏、取消歌单
+            // async subPlayList (item) {
+            //     const { data: res } = await this.$http.subPlayList({ id: item.id, t: (item.subscribed ? 2 : 1) })
+            //
+            //     if (res.code !== 200) {
+            //         return this.$msg.error('数据请求失败')
+            //     }
+            //     this.details.subscribed = !this.details.subscribed
+            // }
         },
-        isLogin (newVal, oldVal) {
-            if (newVal) {
-                const ids = this.details.trackIds
-
-                this.getAllSongs(ids)
-            } else {
-                this.songList = this.details.tracks
-                this.total = this.details.tracks.length
+        watch: {
+            $route(newId, oldId) {
+                const id = this.$route.query.id
+                if (id) {
+                    this.songList = []
+                    this.total = 0
+                    this._initialize(id)
+                }
             }
+            // isLogin (newVal, oldVal) {
+            //     if (newVal) {
+            //         const ids = this.details.trackIds
+            //
+            //         this.getAllSongs(ids)
+            //     } else {
+            //         this.songList = this.details.tracks
+            //         this.total = this.details.tracks.length
+            //     }
+            // }
         }
     }
 }
@@ -327,7 +336,7 @@ export default {
             height: 18px;
             margin: 3px 5px 0 0;
             border-radius: 2px;
-            background: @color-theme;
+            background: #ff641e;
             vertical-align: top;
         }
     }
@@ -390,7 +399,7 @@ export default {
         display: inline-block;
         margin-right: 5px;
         font-size: 12px;
-        color: @color-theme;
+        color: #ff641e;
     }
 }
 .cover-playCount, .cover-collect, .cover-comment {
@@ -495,7 +504,7 @@ export default {
 
     .play-all {
         color: #fff;
-        background: @color-theme;
+        background: #ff641e;
 
         i {
             color: #fff;
@@ -503,7 +512,7 @@ export default {
     }
 
     .collect.active, .collect.active i {
-        color: @color-theme;
+        color: #ff641e;
     }
 }
 
@@ -520,7 +529,7 @@ export default {
         border-radius: 50px;
         padding: 7px 20px;
         color: #fff;
-        background: @color-theme;
+        background: #ff641e;
         cursor: pointer;
     }
 }

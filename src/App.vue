@@ -32,8 +32,15 @@
       TheHeader,
       SongAudio,
       PlayBar
-
     },
+    // created() {
+    //   this.getparams()
+    // },
+    // methods:{
+    //   getparams(){
+    //       this.$store.setActiveName = this.$route.params
+    //   }
+    // }
   }
 </script>
 

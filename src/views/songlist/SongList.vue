@@ -1,5 +1,5 @@
 <template>
-    <div class='playlist'>
+    <div class='song-list'>
         <div class="w1200">
             <div class="filter">
                 <div class="filter-item" v-for="(item, index) in categories" :key="index">
@@ -23,18 +23,19 @@
                         <span :class="params.order === 'new' ? 'active' : ''" @click="selectOrder('new')">最新</span>
                     </div>
                 </div>
-                <PlayList :params="params" :isScroll="true"></PlayList>
+                <songlist :params="params" :isScroll="true"></songlist>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import PlayList from '../../components/common/PlayList.vue'
+    import {catlist,} from "../../networks";
+    import songlist from '../../components/common/songlist.vue'
     export default {
         name: 'song-list',
         components: {
-            PlayList
+            songlist
         },
         created () {
             this.params.cat = this.$route.query.cat
@@ -62,32 +63,33 @@
         // 方法集合
         methods: {
             async getCatlist () {
-                const { data: res } = await this.$http.catlist()
-                this.sub = res.sub
+                catlist().then(res =>{
+                    this.sub = res.sub
 
-                if (res.code !== 200) {
-                    return this.$msg.error('数据请求失败')
-                }
+                    if (res.code !== 200) {
+                        return this.$message.error('数据请求失败')
+                    }
 
-                for (const k in res.categories) {
-                    const params = { name: res.categories[k] }
+                    for (const k in res.categories) {
+                        const params = { name: res.categories[k] }
 
-                    params.children = this.sub.filter(subItem => { return subItem.category === Number(k) })
-                    this.categories.push(params)
-                }
+                        params.children = this.sub.filter(subItem => { return subItem.category === Number(k) })
+                        this.categories.push(params)
+                    }
 
-                this.curType = this.$route.query.cat ? this.$route.query.cat : res.all.name
-                this.allList = res.all
-                this.getMoreTxt()
+                    this.curType = this.$route.query.cat ? this.$route.query.cat : res.all.name
+                    this.allList = res.all
+                    this.getMoreTxt()
+                })
             },
             selectType (item) {
-                this.$router.push({ path: 'playlist', query: { cat: item.name, order: this.params.order } })
+                this.$router.push({ path: 'song-list', query: { cat: item.name, order: this.params.order } })
             },
             closed () {
-                this.$router.push({ path: 'playlist' })
+                this.$router.push({ path: 'song-list' })
             },
             selectOrder (type) {
-                this.$router.push({ path: 'playlist', query: { cat: this.params.cat, order: type } })
+                this.$router.push({ path: 'song-list', query: { cat: this.params.cat, order: type } })
             },
             getMoreTxt () {
                 // 查询当前显示的歌单分类详情，如：全部歌单、华语
@@ -112,6 +114,15 @@
     }
 </script>
 <style scoped lang="less">
+    .song-list{
+        margin-top:70px !important;
+        /*text-align: center;*/
+    }
+    .filter-item:first-child {
+        flex: 1;
+        border: 0;
+        padding-left: 100px !important;
+    }
     .filter {
         display: flex;
         padding: 40px 0;
@@ -211,7 +222,7 @@
 
     .list-head {
         display: flex;
-        padding: 15px 0;
+        padding: 15px 95px;
 
         h2 {
             font-size: 24px;

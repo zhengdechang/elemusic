@@ -1,57 +1,85 @@
 <template>
-    <div class='playlist'>
-        <div class="item" v-for="item in playList" :key="item.id">
-            <router-link :to="{ path: 'song-list/detail', query: { id: item.id }}" class="faceImg">
-                <el-image :src="item.coverImgUrl" lazy>
-                    <div slot="placeholder" class="image-slot">
-                        <i class="iconfont icon-placeholder"></i>
-                    </div>
-                </el-image>
-                <span class="playCount"><i class="iconfont icon-playnum"></i><em>{{dealNum(item.playCount)}}</em></span>
-            </router-link>
-            <div class="info">
-                <router-link :to="{ path: 'song-list/detail', query: { id: item.id }}" class="info_name">{{item.name}} </router-link>
-                <div class="tags">
-                    <router-link :to="{ path: '/song-list', query: { cat: tag }}" class="tag" v-for="(tag, index) in item.tags" :key="index">#{{tag}} </router-link>
-                </div>
-            </div>
-        </div>
+    <div class='wrapper infinite-list' v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="50">
+        <play-list :playList="list"></play-list>
+        <template v-if="isLoading">
+            <Loading/>
+        </template>
     </div>
 </template>
 
 <script>
+import Loading from "./Loading"
+import PlayList from "./PlayList";
+import {playList} from "../../networks/index"
 export default {
-    components: {},
-    props: ['playList'],
+    name: 'songlist',
+    components: {
+        PlayList,
+        Loading
+    },
+    created () {
+        this.getPlayList(this.params)
+    },
+    props: {
+        params: {
+            type: Object,
+            default: () => {}
+        },
+        // 是否有滚动条
+        isScroll: {
+            type: Boolean,
+            default: false
+        }
+    },
     data () {
         // 这里存放数据
         return {
+            list: [],
+            isLoading: true,
+            busy: true
         }
     },
     // 监听属性 类似于data概念
     computed: {},
     // 方法集合
     methods: {
-        // 数字过万的处理
-        dealNum (val) {
-            let num = 0
-            if (val > 9999) {
-                num = Math.round(val / 10000 * 10) / 10 + '万'
-            } else {
-                num = val
-            }
+        async getPlayList (params) {
+            playList(params).then(res =>{
+                if (res.code !== 200) {
+                    return this.$message.error('数据请求失败')
+                }
+                this.list = this.params.offset !== 0 ? [...this.list, ...res.playlists] : res.playlists
+                this.busy = this.list.length >= res.total
+                this.isLoading = !this.busy
+            })
 
-            return num
         },
+        loadMore () {
+            if (this.isScroll) {
+                this.busy = true
+                this.params.offset = this.list.length
+            }
+        }
+    },
+    watch: {
+        params: {
+            handler (newVal, oldVal) {
+                if (newVal.cat !== oldVal.cat) {
+                    this.list = []
+                }
+                this.getPlayList(newVal)
+            },
+            deep: true // 深度监听
+        }
     }
 }
 </script>
 <style scoped lang="less">
-.playlist {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    font-size: 0;
+.wrapper {
+    min-height: 500px;
+    overflow-y: auto;
+    margin-left: 95px;
+    margin-right: 50px;
 }
 .item {
     width: 18%;
@@ -81,7 +109,7 @@ export default {
             -webkit-transform-origin: 100% 50%;
             -ms-transform-origin: 100% 50%;
             transform-origin: 100% 50%;
-            z-index: -1;
+            z-index: 2;
             border-radius: 2px;
             transition: all .4s linear;
         }
@@ -95,7 +123,7 @@ export default {
             -webkit-transform-origin: 100% 50%;
             -ms-transform-origin: 100% 50%;
             transform-origin: 100% 50%;
-            z-index: 0;
+            z-index: 1;
             border-radius: 2px;
             opacity: .5;
             transition: all .4s linear .1s;
@@ -159,32 +187,27 @@ export default {
             color: #000;
         }
     }
+}
 
-    .info_name {
-        display: block;
-        font-size: 16px;
-        line-height: 22px;
-        margin-top: 15px;
-        font-weight: 400;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        word-break: break-all;
-    }
+.info_name {
+    display: block;
+    font-size: 16px;
+    line-height: 22px;
+    margin-top: 15px;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+}
 
-    .tags {
-        padding: 5px 0;
-        .tag {
-            font-size: 12px;
-            color: #ff641e;
-        }
+.tags {
+    padding: 5px 0;
+    .tag {
+        font-size: 12px;
+        color: #ff641e;
     }
-    a {
-        text-decoration: none;
-        color: #333;
-    }
-
 }
 </style>
