@@ -81,7 +81,7 @@ export default {
             -webkit-transform-origin: 100% 50%;
             -ms-transform-origin: 100% 50%;
             transform-origin: 100% 50%;
-            z-index: 2;
+            z-index: -1;
             border-radius: 2px;
             transition: all .4s linear;
         }
@@ -95,7 +95,7 @@ export default {
             -webkit-transform-origin: 100% 50%;
             -ms-transform-origin: 100% 50%;
             transform-origin: 100% 50%;
-            z-index: 1;
+            z-index: 0;
             border-radius: 2px;
             opacity: .5;
             transition: all .4s linear .1s;

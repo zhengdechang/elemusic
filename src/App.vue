@@ -7,7 +7,9 @@
     </div>
     <song-audio/>
     <the-aside></the-aside>
-    <play-bar></play-bar>
+    <div class="play-bar">
+      <play-bar></play-bar>
+    </div>
     <scroll-top></scroll-top>
     <the-footer></the-footer>
   </div>
@@ -44,4 +46,7 @@
     /*min-height: calc(100vh - 80px - 40px);*/
     margin: 0 30px;
   }
+ .play-bar{
+   z-index: 5;
+ }
 </style>

@@ -7,16 +7,6 @@
 <!--            </div>-->
 <!--            <content-list :contentList="item.list"></content-list>-->
 <!--        </div>-->
-        <!--热门歌单-->
-        <div class='recom_list'>
-            <div class="h_title">
-                <h3>热门歌单</h3>
-                <span v-for="(item, index) in playlist_tags" :key="item.id" :class="index == playlist_index ? 'active' : ''" @click="choosePlayListType(index)">{{item.name}}</span>
-            </div>
-            <div class="wrapper">
-                <play-list :playList="playlist_list"></play-list>
-            </div>
-        </div>
         <!--排行版-->
         <div class='top_list'>
             <div class="h_title">
@@ -43,6 +33,16 @@
                     </div>
                 </el-col>
             </el-row>
+        </div>
+        <!--热门歌单-->
+        <div class='recom_list'>
+            <div class="h_title">
+                <h3>热门歌单</h3>
+                <span v-for="(item, index) in playlist_tags" :key="item.id" :class="index == playlist_index ? 'active' : ''" @click="choosePlayListType(index)">{{item.name}}</span>
+            </div>
+            <div class="wrapper">
+                <play-list :playList="playlist_list"></play-list>
+            </div>
         </div>
         <!--热门歌手 -->
         <div class='artists_list'>
