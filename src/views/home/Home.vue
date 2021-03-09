@@ -25,7 +25,7 @@
             <el-row class="wrapper" :gutter="20">
                 <el-col :span="6" v-for="item in top_list" :key="item.id" class="toplist_item">
                     <div class="coverImg">
-                        <el-image :src="item.coverImgUrl"></el-image>
+                        <el-image :src="item.coverImgUrl" class="toplist_img"></el-image>
                     </div>
                     <div class="toplist_wrapper">
                         <h4 class="toplist_hd">{{item.name}}</h4>
@@ -299,7 +299,7 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        margin:0 63px !important;
+        margin:0 80px !important;
     }
 
     .toplist_item {
@@ -309,16 +309,16 @@
         .coverImg {
             position: absolute;
             top: 0;
-            right: 10px;
-            left: 10px;
-            z-index: 1;
-            height: 100px;
+            right: 30px;
+            left: 30px;
+            z-index: 0;
+            height: 100% !important;
 
             &::before {
                 position: absolute;
                 top: 0;
                 left: 0;
-                z-index: 2;
+                z-index: 0;
                 content: '';
                 width: 100%;
                 height: 100%;
@@ -332,7 +332,7 @@
 
         .toplist_wrapper {
             position: relative;
-            z-index: 2;
+            z-index: 0;
         }
 
         &:hover {
@@ -436,18 +436,17 @@
             border-radius: 100%;
             overflow: hidden;
         }
+    }
+    .info {
+        text-align: center;
 
-        .info {
-            text-align: center;
+        .name {
+            line-height: 28px;
+            font-size: 14px;
+        }
 
-            .name {
-                line-height: 28px;
-                font-size: 14px;
-            }
-
-            .albumSize {
-                color: #999;
-            }
+        .albumSize {
+            color: #999;
         }
     }
 
@@ -455,5 +454,14 @@
         padding-bottom: 40px;
         margin-bottom: 50px;
     }
+
+    .toplist_img{
+        height: 600px;
+    }
+
+    a {
+          text-decoration: none;
+          color: #333;
+      }
 
 </style>

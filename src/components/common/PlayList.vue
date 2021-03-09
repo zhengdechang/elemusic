@@ -7,7 +7,7 @@
                         <i class="iconfont icon-placeholder"></i>
                     </div>
                 </el-image>
-<!--                <span class="playCount"><i class="iconfont icon-playnum"></i><em>{{this.dealNum(item.playCount)}}</em></span>-->
+                <span class="playCount"><i class="iconfont icon-playnum"></i><em>{{dealNum(item.playCount)}}</em></span>
             </router-link>
             <div class="info">
                 <router-link :to="{ path: 'playlist/detail', query: { id: item.id }}" class="info_name">{{item.name}} </router-link>
@@ -33,16 +33,16 @@ export default {
     // 方法集合
     methods: {
         // 数字过万的处理
-        // dealNum (val) {
-        //     let num = 0
-        //     if (val > 9999) {
-        //         num = Math.round(val / 10000 * 10) / 10 + '万'
-        //     } else {
-        //         num = val
-        //     }
-        //
-        //     return num
-        // },
+        dealNum (val) {
+            let num = 0
+            if (val > 9999) {
+                num = Math.round(val / 10000 * 10) / 10 + '万'
+            } else {
+                num = val
+            }
+
+            return num
+        },
     }
 }
 </script>

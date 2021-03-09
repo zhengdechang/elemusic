@@ -1,9 +1,7 @@
 import {get,post} from "./http";
 import Axios from "axios";
 import axios from "axios";
-import router from "../../../admin/src/router";
 import Vue from 'vue'
-import api from "../../../vue_pc_music/src/apis/instance";
 
 const http = axios.create({
     baseURL:'http://localhost:3001/admin/api'
