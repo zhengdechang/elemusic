@@ -26,7 +26,7 @@ export const mixin = {
                         console.log('您输入的内容为空')
                     }else{
                         this.$store.commit('setListOfSongs',res.result.songs)
-                        // console.log(res.result);
+                        console.log(res.result);
                         // console.log(res.result.songs[0].id);
                         // console.log(res.result.songs[0].ar[0].name);
                         // console.log(res.result.songs[0].al.picUrl);

@@ -1,11 +1,15 @@
 <template>
-  <div id="app">
+  <div id="app" class="container">
     <song-audio/>
     <the-header/>
-    <router-view class="music-content"/>
+    <div class="layout">
+      <router-view/>
+    </div>
     <song-audio/>
     <the-aside></the-aside>
-    <play-bar></play-bar>
+    <div class="play-bar">
+      <play-bar></play-bar>
+    </div>
     <scroll-top></scroll-top>
     <the-footer></the-footer>
   </div>
@@ -28,11 +32,28 @@
       TheHeader,
       SongAudio,
       PlayBar
-
     },
+    // created() {
+    //   this.getparams()
+    // },
+    // methods:{
+    //   getparams(){
+    //       this.$store.setActiveName = this.$route.params
+    //   }
+    // }
   }
 </script>
 
 <style  lang="scss" scoped>
-  @import './assets/css/app.scss';
+    @import './assets/css/app.scss';
+  .container {
+    height: 100%;
+  }
+  .layout {
+    /*min-height: calc(100vh - 80px - 40px);*/
+    margin: 0 30px;
+  }
+ .play-bar{
+   z-index: 5;
+ }
 </style>

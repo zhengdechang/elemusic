@@ -66,6 +66,7 @@
                     birth:'',               //生日
                     introduction:'',        //签名
                     location:'',            //地区
+                    avator:'../../assets/img/user.jpg',              //头像
                 },
                 cities:[],                  //所有的地区--省
                 rules:{},                   //表单提交的规则

@@ -1,7 +1,8 @@
-import {navMsg} from "../assets/data/header";
+// import {navMsg} from "../assets/data/header";
 const configer ={
     state: {
-        activeName:navMsg[0].name,       //当前选中的菜单名字
+        // activeName:navMsg[0].name,       //当前选中的菜单名字
+        activeName:'',       //当前选中的菜单名字
         showAside:false,                 //是否显示播放中的歌曲列表
         loginIn:false,                   //用户是否已登录
     },
@@ -9,7 +10,7 @@ const configer ={
         activeName:state => {
             let activeName =state.activeName;
             if(!activeName){
-                activeName = JSON.parse(window.sessionStorage.getItem('activeName'))
+                activeName = JSON.parse(window.localStorage.getItem('activeName'))
             }
             return activeName;
         },
@@ -32,7 +33,7 @@ const configer ={
     mutations: {
         setActiveName:(state,activeName) => {
             state.activeName = activeName
-            window.sessionStorage.setItem('activeName',JSON.stringify(activeName))
+            window.localStorage.setItem('activeName',JSON.stringify(activeName))
         },
         setShowAside:(state,showAside) => {
             state.showAside = showAside

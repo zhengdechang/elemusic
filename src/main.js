@@ -11,6 +11,7 @@ import '@/assets/js/iconfont1.js'
 import '@/assets/js/iconfont2.js'
 import '@/assets/js/iconfont3.js'
 
+import '../src/assets/fonts/font.css'
 
 
 

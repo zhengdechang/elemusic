@@ -26,7 +26,7 @@
         </ul>
         <div class="header-right" v-show="loginIn">
             <div id="user">
-                <img :src="attachImageUrl()" alt="" >
+                <img :src="attachImageUrl(this.avator)" alt="" >
             </div>
             <ul class="menu">
                 <li v-for="(item,index) in menuList" :key="index" @click="goMenuList(item.path)">
@@ -89,8 +89,8 @@
                 window.location.reload();
             },
             //获取图片地址/头像
-            attachImageUrl(srcUrl){
-                return srcUrl ? srcUrl : require("../../assets/img/user.jpg");
+            attachImageUrl(avator){
+                return avator ? avator : require("../../assets/img/user.jpg");
             },
             goMenuList(path){
                 if(path == 0){

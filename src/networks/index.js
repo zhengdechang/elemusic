@@ -1,7 +1,6 @@
 import {get,post} from "./http";
 import Axios from "axios";
 import axios from "axios";
-import router from "../../../admin/src/router";
 import Vue from 'vue'
 
 const http = axios.create({
@@ -82,5 +81,41 @@ export  const getUserData =(id) => http.get(`user/change/${id}`);
 export  const changeUser =(model,id) => http.put(`user/change/${id}`,model);
 
 
-//获取歌单分类
-export  const getLIst =(model,id) => http.put(`user/change/${id}`,model)
+//获取用户头像
+export  const getImg =(id) => http.get(`/user/getImg/${id}`);
+
+
+// 热门歌单分类
+export const hotList = () => get('/playlist/hot', {})
+
+// 歌单列表
+export const playLists = ({ order = 'hot', cat = '', limit = 50, offset = 0 }) => get(`/top/playlist?limit=${limit}&order=${order}&cat=${cat}&offset=${offset}`, {})
+// 歌单详情
+export const playlistdetail = ({ id = '', s = 8 }) => get(`/playlist/detail?id=${id}&s=${s}`, {})
+// 歌单收藏用户
+export const playlistSCollect = ({ id = '', limit = 20, offset = 0 }) => get(`/playlist/subscribers?id=${id}&limit=${limit}&offset=${offset}`, {})
+// 相关歌单推荐
+export const playlistRelated = ({ id = '' }) => get(`/related/playlist?id=${id}`, {})
+// 歌单评论
+export const playlistComment = ({ id = '', limit = 20, offset = 0, before = 0 }) => get(`/comment/playlist?id=${id}&limit=${limit}&offset=${offset}&before=${before}`, {})
+// 歌单中的歌曲详情 多个id , 隔开
+export const songDetail = ({ ids = '', timestamp = 0 }) => post(`/song/detail?timestamp=${timestamp}`, { ids: ids })
+
+
+
+// 热门歌手
+export const topArtists = ({ limit = 30, offset = 0 }) => get(`/top/artists?limit=${limit}&offset=${offset}`, {})
+
+//排行榜
+export  const topList = () => get('/toplist', {})
+
+// 歌单详情
+export const listDetail = ({ id = '', s = 8 }) => get(`/playlist/detail?id=${id}&s=${s}`, {})
+
+// 歌单分类
+export const catlist = () => get('/playlist/catlist', {})
+// 歌单列表
+export const playList = ({ order = 'hot', cat = '', limit = 50, offset = 0 }) => get(`/top/playlist?limit=${limit}&order=${order}&cat=${cat}&offset=${offset}`, {})
+
+//歌手列表
+export const artistList = ({ type = -1, area = -1, initial = '', limit = 50, offset = 0 }) => get(`/artist/list?type=${type}&area=${area}&initial=${initial}&limit=${limit}&offset=${offset}`, {})
