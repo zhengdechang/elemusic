@@ -114,7 +114,6 @@ export default {
         this.sId = String(this.$route.query.id)
         this.init()
         window.addEventListener('scroll', this.handleScroll, true)
-        this.backGround();
     },
     // 监听属性 类似于data概念
     computed: {
@@ -144,12 +143,6 @@ export default {
     },
     // 方法集合
     methods: {
-        backGround(){
-            const bg =  document.getElementsByClassName('song-container');
-            console.log(bg);
-            console.log(this.background);
-            bg.style = "background-image:url('"+this.background+"')";
-        },
         getSongDetail () {
             songDetail({ ids: this.sId, timestamp: new Date().valueOf() }).then(res =>{
                 if (res.code !== 200) {
@@ -158,7 +151,14 @@ export default {
                 // 是否有版权播放
                 // res.songs[0].license = !res.privileges[0].cp
                 this.info = res.songs[0];
-                this.background = this.info.al.picUrl
+                this.background = res.al.picUrl
+                console.log(this.background);
+
+                // //设置背景
+                // const bg =  document.getElementsByClassName('song-container');
+                // console.log(bg);
+                // console.log(this.background);
+                // bg.style = "background-image:url('"+this.background+"')";
             })
         },
         // 获取相似音乐
