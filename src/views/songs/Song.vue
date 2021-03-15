@@ -146,7 +146,9 @@ export default {
     methods: {
         backGround(){
             const bg =  document.getElementsByClassName('song-container');
-            bg.style.backgroundImage = "url('"+this.background+"')";
+            console.log(bg);
+            console.log(this.background);
+            bg.style = "background-image:url('"+this.background+"')";
         },
         getSongDetail () {
             songDetail({ ids: this.sId, timestamp: new Date().valueOf() }).then(res =>{
