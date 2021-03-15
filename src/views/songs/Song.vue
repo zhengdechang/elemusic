@@ -71,11 +71,9 @@
                 </div>
                 <div class="song-lyric">
                     <SongShowLyric :sId="sId" local="page"></SongShowLyric>
-<!--                    <Lyrics :sId="sId" local="page"></Lyrics>-->
                 </div>
                 <div class="song-comments" ref=comment>
-                    <div></div>
-<!--                    <Comments :type="type" :id="sId"></Comments>-->
+                    <Comments  :type="type" :id="sId"></Comments>
                 </div>
             </div>
         </div>
@@ -90,9 +88,11 @@
 // import addList from '@components/common/addlist.vue'
 import SongShowLyric from "../lyric/SongShowLyric";
 import {songDetail,simiSong} from '../../networks/index'
+import Comments from "../../components/common/Comment";
 export default {
     name: 'song-detail',
     components: {
+        Comments,
         // Lyrics,
         // Comments,
         // addList
@@ -106,13 +106,15 @@ export default {
             info: null,
             sId: '0',
             type: 0, // 0: 歌曲 1: mv 2: 歌单 3: 专辑  4: 电台 5: 视频 6: 动态
-            simiSong: []
+            simiSong: [],
+            background:'',
         }
     },
     mounted () {
         this.sId = String(this.$route.query.id)
         this.init()
         window.addEventListener('scroll', this.handleScroll, true)
+        this.backGround();
     },
     // 监听属性 类似于data概念
     computed: {
@@ -142,6 +144,10 @@ export default {
     },
     // 方法集合
     methods: {
+        backGround(){
+            const bg =  document.getElementsByClassName('song-container');
+            bg.style.backgroundImage = "url('"+this.background+"')";
+        },
         getSongDetail () {
             songDetail({ ids: this.sId, timestamp: new Date().valueOf() }).then(res =>{
                 if (res.code !== 200) {
@@ -150,6 +156,7 @@ export default {
                 // 是否有版权播放
                 // res.songs[0].license = !res.privileges[0].cp
                 this.info = res.songs[0];
+                this.background = this.info.al.picUrl
             })
         },
         // 获取相似音乐
@@ -206,6 +213,9 @@ export default {
 }
 </script>
 <style scoped lang="less">
+.song-container{
+    background-image: url("../../assets/img/user.jpg");
+}
 a {
     text-decoration: none;
     color: #333;

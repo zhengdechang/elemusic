@@ -8,6 +8,17 @@
 <!--            <content-list :contentList="item.list"></content-list>-->
 <!--        </div>-->
         <!--排行版-->
+        <div class='album_list'>
+            <div class="h_title">
+                <h3>新碟上架</h3>
+                <span v-for="(item, index) in album_area" :key="item.id" :class="index == album_index ? 'active' : ''" @click="chooseAlbumType(index)">{{item.name}}</span>
+            </div>
+            <div class="wrapper">
+                <div class="album_list">
+                    <AlbumList  :albumList="album_list"></AlbumList>
+                </div>
+            </div>
+        </div>
         <div class='top_list'>
             <div class="h_title">
                 <h3>排行榜</h3>
@@ -72,11 +83,13 @@
     import Swiper from "../../components/swiper/Swiper";
     import playList from '../../components/common/PlayList'
     // import {getAllSinger,getAllSongList} from "../../networks/index"
-    import {hotList,playLists,topArtists,topList,listDetail} from "../../networks/index"
+    import {hotList, playLists, topArtists, topList, listDetail, topAlbum} from "../../networks/index"
+    import AlbumList from "../../components/common/AlbumList";
     // import ContentList from "../../components/common/ContentList";
     export default {
         name: "Homes",
         components:{
+            AlbumList,
             // ContentList,
             playList,
             Swiper
@@ -121,6 +134,7 @@
             }
         },
         created() {
+            this.chooseAlbumType ('0');
             // this.getSongList();
             // this.getSinger();
         },
@@ -170,20 +184,20 @@
                 this.getPlayList(this.playlist_params)
             },
             // 新碟上架
-            // async getAlbum (params) {
-            //     const { data: res } = await this.$http.topAlbum(params)
-            //
-            //     if (res.code !== 200) {
-            //         return this.$msg.error('数据请求失败')
-            //     }
-            //
-            //     this.album_list = res.monthData.slice(0, 9)
-            // },
-            // chooseAlbumType (index) {
-            //     this.album_index = index
-            //     this.album_params.area = index !== 0 ? this.album_area[index].code : ''
-            //     this.getAlbum(this.album_params)
-            // },
+            getAlbum (params) {
+                topAlbum(params).then(res =>{
+                    if (res.code !== 200) {
+                        return this.$message.error('数据请求失败')
+                    }
+
+                    this.album_list = res.monthData.slice(0, 9)
+                })
+            },
+            chooseAlbumType (index) {
+                this.album_index = index
+                this.album_params.area = index !== 0 ? this.album_area[index].code : ''
+                this.getAlbum(this.album_params)
+            },
 
             //排行榜
             getToplist () {
@@ -239,6 +253,9 @@
 </script>
 
 <style scoped lang="less">
+    .album_list{
+        margin: 0 15px -10px 15px;
+    }
     .home {
         margin-top: 90px - 10px;
         .section {

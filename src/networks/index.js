@@ -136,3 +136,36 @@ export const artistList = ({ type = -1, area = -1, initial = '', limit = 50, off
 export const playlistUser = ({ uid = '', limit = 30, offset = 0 }) => get(`/user/playlist?uid=${uid}&limit=${limit}&offset=${offset}`, {})
 // 收藏、取消歌单 1：收藏 2取消
 export const subPlayList = ({ t = 1, id = '' }) => get(`/playlist/subscribe?t=${t}&id=${id}`, {})
+
+/* ********* 专辑 ********* */
+// 获取专辑内容
+export const album = ({ id = '' }) => get(`/album?id=${id}`, {})
+export const albumDynamic = ({ id = '' }) => get(`/album/detail/dynamic?id=${id}`, {})
+
+// 新碟上架
+export  const topAlbum = ({ limit = 20, offset = 0, area = '', type = 'new', year = '', month = '' }) => get(`/top/album?limit=${limit}&offset=${offset}&area=${area}&type=${type}&year=${year}&month=${month}`, {})
+
+
+/* ********* 歌曲评论 ********* */
+// 歌曲评论
+export const commentSong = ({ id = '', limit = 20, offset = 0, before = 0, timestamp = 0 }) =>get(`/comment/music?id=${id}&limit=${limit}&offset=${offset}&before=${before}&timestamp=${timestamp}`, {})
+/*
+    * 发送/删除评论
+    * t: 0删除 1发送 2回复
+    * type: 0: 歌曲 1: mv 2: 歌单 3: 专辑  4: 电台 5: 视频 6: 动态
+    * id: 对应资源id
+    * content: 发送的内容/对应内容的id
+    * commentId: 回复的评论id
+*/
+export const comment = ({ t = 1, type = 0, id = '', content = '', commentId = '' }) => get(`/comment?t=${t}&type=${type}&id=${id}&content=${content}&commentId=${commentId}`, {})
+/*
+    * 给评论点赞
+    * id: 对应资源id
+    * cid: 评论id
+    * t: 是否点赞 1: 是  0: 取消
+    * type: 0: 歌曲 1: mv 2: 歌单 3: 专辑  4: 电台 5: 视频 6: 动态
+*/
+export const commentLike = ({ id = '', cid = '', t = 1, type = 0 }) => get(`/comment/like?id=${id}&cid=${cid}&t=${t}&type=${type}`, {})
+
+// 专辑评论
+export const albumComment = ({ id = '', limit = 20, offset = 0, before = 0, timestamp = 0 }) =>get(`/comment/album?id=${id}&limit=${limit}&offset=${offset}&before=${before}&timestamp=${timestamp}`, {})

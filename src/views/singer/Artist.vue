@@ -35,9 +35,8 @@
                     </div>
                 </div>
                 <div class="singer-list">
-<!--                    <song-list :songList="hotSongs" :stripe="true" v-show="type === 'hot'"></song-list>-->
                         <album-content   :songList="listOfSongs" :stripe="true" v-show="type === 'hot'"></album-content>
-<!--                    <album-list :albumList="hotAlbums" v-show="type === 'album'"></album-list>-->
+                        <AlbumList :albumList="hotAlbums" v-show="type === 'album'"></AlbumList>
 <!--                    <mv-list class="loadMv" :mvList="hotMvs" v-show="type === 'mv'" v-infinite-scroll="loadMv" :infinite-scroll-disabled="isLoadMv" infinite-scroll-distance="20"></mv-list>-->
                     <template v-if="isLoading">
                         <Loading />
@@ -46,9 +45,18 @@
                 <div class="pagination" v-if="type === 'hot'">
                     <el-pagination
                             background
-                            @current-change="currentChange"
+                            @current-change="currentChange2"
                             layout="prev, pager, next"
                             :page-size="limit"
+                            :total="total">
+                    </el-pagination>
+                </div>
+                <div class="pagination" v-if="type ==='album'">
+                    <el-pagination
+                            background
+                            @current-change="currentChange1"
+                            layout="prev, pager, next"
+                            :page-size="limit-1"
                             :total="total">
                     </el-pagination>
                 </div>
@@ -75,9 +83,11 @@
     // import albumList from '../../components/common/album-list'
     import Loading from "../../components/common/Loading"
     import AlbumContent from "../../components/common/AlbumContent";
+    import AlbumList from "../../components/common/AlbumList";
     export default {
         name: 'artist',
         components: {
+            AlbumList,
             AlbumContent,
             // albumList,
             Loading
@@ -104,6 +114,7 @@
                 start:0,
                 end:1,
                 listSongs:'',
+                AllhotAlbums:[],
             }
         },
         // 监听属性 类似于data概念
@@ -157,12 +168,14 @@
             // },
             getArtistAlbum () {
                 this.isLoading = true
-                artistAlbum({ id: this.sUid, limit: this.limit, offset: this.offset }).then(res =>{
+                artistAlbum({ id: this.sUid, offset: this.offset }).then(res =>{
                     if (res.code !== 200) {
                         return this.$message.error('数据请求失败')
                     }
                     this.total = res.artist.albumSize
-                    this.hotAlbums = res.hotAlbums
+
+                    this.AllhotAlbums = res.hotAlbums
+                    this.hotAlbums = this.AllhotAlbums.slice(this.start*9,this.end*9)
                     this.isLoading = false
                 })
 
@@ -214,7 +227,12 @@
                 this.$router.push({ path: 'artist', query: params })
             },
             // 分页
-            currentChange (page) {
+            currentChange1 (page) {
+                    this.start = page -1;
+                    this.end = page;
+                    this.hotAlbums = this.AllhotAlbums.slice(this.start*9,this.end*9);
+            },
+            currentChange2 (page) {
                 this.start = page -1;
                 this.end = page;
                 this.$store.commit('setListOfSongs',(this.listSongs).slice(this.start*10,this.end*10))

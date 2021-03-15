@@ -15,6 +15,7 @@ import detail from "../views/songlist/detail";
 import Artist from "../views/singer/Artist";
 import My from "../views/mymusic/My";
 import Song from "../views/songs/Song";
+import Album from "../views/album/Album";
 
 // const originalPush = Router.prototype.push
 
@@ -107,6 +108,11 @@ export default new Router({
       path:'/song',
       name:'song',
       component:Song
-    }
+    },
+    {
+      path:'/album',
+      name:'album',
+      component:Album
+    },
   ]
 })
