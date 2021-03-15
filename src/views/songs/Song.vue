@@ -74,6 +74,7 @@
 <!--                    <Lyrics :sId="sId" local="page"></Lyrics>-->
                 </div>
                 <div class="song-comments" ref=comment>
+                    <div></div>
 <!--                    <Comments :type="type" :id="sId"></Comments>-->
                 </div>
             </div>
