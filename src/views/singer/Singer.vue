@@ -153,6 +153,9 @@
         margin-left: 150px;
         margin-right: 100px;
         padding: 0 20px 40px 20px;
+        overflow-y: auto;
+        /*width: 100%;*/
+        /*height: auto;*/
 
         .item {
             width: 120px;

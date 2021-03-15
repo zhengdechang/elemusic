@@ -51,7 +51,16 @@
                             <Loading />
                         </template>
                         <template v-else>
-                            <album-content :songList="songList"></album-content>
+                            <album-content :songList="listOfSongs"></album-content>
+                            <div class="pagination" >
+                                <el-pagination
+                                        background
+                                        @current-change="currentChange"
+                                        layout="prev, pager, next"
+                                        :page-size="limit"
+                                        :total="total">
+                                </el-pagination>
+                            </div>
                         </template>
                     </div>
                 </div>
@@ -59,7 +68,7 @@
                     <div class="playlist-collect">
                         <h3 class="aside-title">喜欢这个歌单的人</h3>
                         <div class="aside-main collect-main">
-                            <router-link class="collect-author" :to="{ path: '/singer', query: { id: item.userId }}" v-for="item in collects" :key="item.userId">
+                            <router-link class="collect-author" :to="{ path: '/artist', query: { id: item.userId }}" v-for="item in collects" :key="item.userId">
                                 <el-image :src="item.avatarUrl">
                                     <div slot="placeholder" class="image-slot">
                                         <i class="iconfont icon-placeholder"></i>
@@ -71,7 +80,7 @@
                     <div class="playlist-recom">
                         <h3 class="aside-title">相关歌单推荐</h3>
                         <div class="aside-main recom-main">
-                            <router-link class="recom-item" :to="{ path: '/playlist/detail', query: { id: item.id }}" v-for="item in playlists" :key="item.id">
+                            <router-link class="recom-item" :to="{ path: '/song-list/detail', query: { id: item.id }}" v-for="item in playlists" :key="item.id">
                                 <el-image :src="item.coverImgUrl">
                                     <div slot="placeholder" class="image-slot">
                                         <i class="iconfont icon-placeholder"></i>
@@ -80,7 +89,7 @@
                                 <div class="recom-info">
                                     <div class="recom-name">{{item.name}}</div>
                                     <div class="recom-author">
-                                        By. <router-link :to="{ path: '/user', query: { id: item.creator.userId }}">{{ item.creator.nickname }}</router-link>
+                                        By. <router-link :to="{ path: '/artist', query: { id: item.creator.userId }}">{{ item.creator.nickname }}</router-link>
                                     </div>
                                 </div>
                             </router-link>
@@ -111,7 +120,7 @@
 </template>
 
 <script>
-// import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 // import songList from '@components/common/song-list'
 import Loading from '../../components/common/Loading'
 import {playlistdetail,playlistSCollect,playlistRelated,songDetail,playlistComment} from "../../networks/index"
@@ -137,15 +146,24 @@ export default {
             comments: [],
             total: 0,
             isLoading: true,
-            isShowDesc: false
+            isShowDesc: false,
+            limit:10,
+            start:0,
+            end:1,
+            listSongs:'',
         }
     },
     // 监听属性 类似于data概念
     computed: {
-        // ...mapGetters(['isLogin', 'playList'])
+        ...mapGetters(['listOfSongs'])
     },
     // 方法集合
     methods: {
+        currentChange (page) {
+            this.start = page -1;
+            this.end = page;
+            this.$store.commit('setListOfSongs',(this.listSongs).slice(this.start*10,this.end*10))
+        },
         // 数字过万的处理
         formartNum (val) {
             let num = 0
@@ -203,12 +221,6 @@ export default {
 
             return result
         },
-        // ...mapMutations({
-        //     setPlayStatus: 'SET_PLAYSTATUS',
-        //     setPlayList: 'SET_PLAYLIST',
-        //     setPlayIndex: 'SET_PLAYINDEX'
-        // }),
-        // ...mapActions(['loginSuc', 'playAll']),
         _initialize(id) {
             // 歌单详情
             this.getDetail({id: id, s: 8})
@@ -219,7 +231,7 @@ export default {
             // // 歌单评论
             this.getComment({id: id, limit: 9})
         },
-        // 登录及未登录下获取歌单中歌曲的列表
+        // 获取歌单中歌曲的列表
         getDetail(params) {
             this.isLoading = true
             playlistdetail(params).then(res => {
@@ -229,12 +241,40 @@ export default {
 
                 this.details = res.playlist
                 const ids = res.playlist.trackIds
+                console.log(ids);
                 this.getAllSongs(ids)
                 // this.songList = this._formatSongs(res.playlist.tracks)
                 // this.total = this.songList.length
                 // this.isLoading = false
             })
 
+        },
+        // 根据ids获取所有歌曲列表
+        getAllSongs(ids) {
+            const sliceArr = []
+            const num = 500
+
+            // 数组过长 每500份一组
+            for (let index = 0; index < ids.length; index += num) {
+                sliceArr.push(ids.slice(index, index + num))
+            }
+
+            for (let i = 0; i < sliceArr.length; i++) {
+                const arrs = []
+                sliceArr[i].map(d => {
+                    arrs.push(d.id)
+                })
+                this.isLoading = true
+                songDetail({ids: arrs.join(','), timestamp: new Date().valueOf() + i}).then(res => {
+                    // this.$store.commit('setListOfSongs',res.songs)
+                    this.listSongs = res.songs;
+                    this.$store.commit('setListOfSongs',(this.listSongs).slice(this.start*10,this.end*10))
+                    this.total = res.songs.length
+                    // idsArr = idsArr.concat(this._formatSongs(res))
+                    // console.log(idsArr);
+                })
+            }
+            this.isLoading = false
         },
         // 订阅该歌单的用户列表
         getCollect(params) {
@@ -271,44 +311,18 @@ export default {
                 this.isShowDesc = !this.isShowDesc
             }
         },
-        // 登录后根据ids获取所有歌曲列表
-        async getAllSongs(ids) {
-            const sliceArr = []
-            const num = 500
-            let idsArr = []
-
-            // 数组过长 每500份一组
-            for (let index = 0; index < ids.length; index += num) {
-                sliceArr.push(ids.slice(index, index + num))
-            }
-
-            for (let i = 0; i < sliceArr.length; i++) {
-                const arrs = []
-                sliceArr[i].map(d => {
-                    arrs.push(d.id)
-                })
-                this.isLoading = true
-                songDetail({ids: arrs.join(','), timestamp: new Date().valueOf() + i}).then(res => {
-                    idsArr = idsArr.concat(this._formatSongs(res))
-                })
-            }
-
-            this.songList = idsArr
-            this.total = idsArr.length
-            this.isLoading = false
-        },
-        // 处理歌曲
-        _formatSongs(list) {
-            const ret = []
-            list.songs.map((item, index) => {
-                if (item.id) {
-                    // 是否有版权播放
-                    item.license = !list.privileges[index].cp
-                    // ret.push(this.formatSongInfo(item))
-                }
-            })
-            return ret
-        },
+        // // 处理歌曲
+        // _formatSongs(list) {
+        //     const ret = []
+        //     list.songs.map((item, index) => {
+        //         if (item.id) {
+        //             // 是否有版权播放
+        //             item.license = !list.privileges[index].cp
+        //             // ret.push(this.formatSongInfo(item))
+        //         }
+        //     })
+        //     return ret
+        // },
         // 播放列表为当前歌单的全部歌曲
         playAllSongs() {
             this.playAll({
@@ -363,6 +377,10 @@ export default {
 }
 </script>
 <style scoped lang="less">
+.pagination {
+    padding: 30px 0;
+    text-align: center;
+}
 .detail{
     margin-top:70px;
     padding-left: 100px;

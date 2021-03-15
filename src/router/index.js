@@ -12,6 +12,9 @@ import Setting from "../components/header/Setting";
 import SingerAlbum from "../components/common/album/SingerAlbum";
 import SongListAlbum from "../components/common/album/SongListAlbum";
 import detail from "../views/songlist/detail";
+import Artist from "../views/singer/Artist";
+import My from "../views/mymusic/My";
+import Song from "../views/songs/Song";
 
 // const originalPush = Router.prototype.push
 
@@ -42,11 +45,6 @@ export default new Router({
       path: '/singer',
       name: 'singer',
       component: Singer
-    },
-    {
-      path: '/my-music',
-      name: 'my-music',
-      component: MyMusic
     },
     {
       path: '/cloudsearch',
@@ -88,5 +86,27 @@ export default new Router({
       name: 'song-list-detail',
       component:detail
     },
-  ],
+    {
+      path: '/artist',
+      name: 'artist',
+      component:Artist
+    },
+    {
+      path: '/my',
+      name: 'my',
+      component:My,
+      children:[
+        {
+        path: '/my/mymusic',
+        name: 'mymusic',
+        component: MyMusic
+        },
+      ]
+    },
+    {
+      path:'/song',
+      name:'song',
+      component:Song
+    }
+  ]
 })

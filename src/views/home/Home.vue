@@ -25,7 +25,7 @@
                                 <div class="songinfo">
                                     <router-link :to="{ path: '/song', query: { id: item.id }}" class="song_title">{{songItem.name}}</router-link>
                                     <div class="song_author">
-                                        <router-link :to="{ path: '/singer', query: { id: author.id }}" class="song_name" v-for="(author, k) in songItem.ar" :key="k">{{ k !== 0 ? '/ ' + author.name : author.name }}</router-link>
+                                        <router-link :to="{ path: '/artist', query: { id: author.id }}" class="song_name" v-for="(author, k) in songItem.ar" :key="k">{{ k !== 0 ? '/ ' + author.name : author.name }}</router-link>
                                     </div>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@
                 <h3>热门歌手</h3>
             </div>
             <div class="wrapper">
-                <router-link :to="{ path: '/singer', query: { id: item.id }}" class="artists_item" :key="item.id" v-for="item in artists_list">
+                <router-link :to="{ path: '/artist', query: { id: item.id }}" class="artists_item" :key="item.id" v-for="item in artists_list">
                     <div class="faceImg">
                         <el-image :src="item.picUrl + '?param=120y120'">
                             <div slot="placeholder" class="image-slot">
@@ -221,7 +221,6 @@
 
             // 热门歌手
             async getArtists (params) {
-                const { data: res } = await topArtists(params)
                 topArtists(params).then(res =>{
                     if (res.code !== 200) {
                         return this.$message.error('数据请求失败')
@@ -259,6 +258,10 @@
                 box-sizing: border-box;
             }
         }
+    }
+    .recom_list{
+        margin-left: 35px;
+        margin-right: 15px;
     }
     .h_title {
         padding: 20px 0 0;
@@ -300,6 +303,9 @@
         flex-wrap: wrap;
         justify-content: space-between;
         margin:0 80px !important;
+        /*margin:0 60px !important;*/
+        margin-left: 63px !important;
+        margin-right: 60px !important;
     }
 
     .toplist_item {
@@ -453,12 +459,16 @@
     .artists_list {
         padding-bottom: 40px;
         margin-bottom: 50px;
+        margin-left: 35px;
+        margin-right: 10px;
     }
 
     .toplist_img{
         height: 600px;
     }
-
+    .toplist_img{
+        height: 600px;
+    }
     a {
           text-decoration: none;
           color: #333;

@@ -96,6 +96,7 @@
             //     });
             //     return result;
             // },
+            //解析歌词
             parseLyric(lyric) {
                 const regNewLine = /\n/
                 const lineArr = lyric.split(regNewLine) // 每行歌词的数组

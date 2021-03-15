@@ -12,9 +12,9 @@ export default {
         return {
         }
     },
-    // 监听属性 类似于data概念
+    // 监听属性 类似于data概念s
     computed: {},
-    // 方法集合
+    // 方法集合//////
     methods: {
     }
 }

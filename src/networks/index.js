@@ -67,6 +67,11 @@ export const listSongDetail = (songListId) => Axios(`listSong/detail?songListId=
 //查询用户
 export const getAllConsumer =() => get(`consumer/allConsumer`);
 
+// 首页轮播图
+export const getBanner = () => get('/banner', {})
+
+// 获取相似音乐
+export const simiSong = ({ id = '' }) => get(`/simi/song?id=${id}`, {})
 
 //用户注册接口
 export const postSignUp =(model) => http.post('rest2/user',model);
@@ -99,10 +104,15 @@ export const playlistRelated = ({ id = '' }) => get(`/related/playlist?id=${id}`
 // 歌单评论
 export const playlistComment = ({ id = '', limit = 20, offset = 0, before = 0 }) => get(`/comment/playlist?id=${id}&limit=${limit}&offset=${offset}&before=${before}`, {})
 // 歌单中的歌曲详情 多个id , 隔开
-export const songDetail = ({ ids = '', timestamp = 0 }) => post(`/song/detail?timestamp=${timestamp}`, { ids: ids })
+export const songDetail = ({ ids = '', timestamp = 0 }) => post(`/song/detail?timestamp=${timestamp}&&ids=${ids}`, { ids: ids })
 
-
-
+/* ********* 歌手 ********* */
+// 歌手介绍
+export const artistDesc = ({ id = '' }) => get(`/artist/desc?id=${id}`, {})
+// 歌手热门歌曲
+export const artists = ({ id = '' }) => get(`/artists?id=${id}`, {})
+// 获取歌手专辑
+export const artistAlbum = ({ id = '', limit = 50, offset = 0 }) => get(`/artist/album?id=${id}&limit=${limit}&offset=${offset}`, {})
 // 热门歌手
 export const topArtists = ({ limit = 30, offset = 0 }) => get(`/top/artists?limit=${limit}&offset=${offset}`, {})
 
@@ -119,3 +129,10 @@ export const playList = ({ order = 'hot', cat = '', limit = 50, offset = 0 }) =>
 
 //歌手列表
 export const artistList = ({ type = -1, area = -1, initial = '', limit = 50, offset = 0 }) => get(`/artist/list?type=${type}&area=${area}&initial=${initial}&limit=${limit}&offset=${offset}`, {})
+
+
+
+// 获取用户歌单
+export const playlistUser = ({ uid = '', limit = 30, offset = 0 }) => get(`/user/playlist?uid=${uid}&limit=${limit}&offset=${offset}`, {})
+// 收藏、取消歌单 1：收藏 2取消
+export const subPlayList = ({ t = 1, id = '' }) => get(`/playlist/subscribe?t=${t}&id=${id}`, {})
