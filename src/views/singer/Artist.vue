@@ -37,7 +37,7 @@
                 <div class="singer-list">
                         <album-content   :songList="listOfSongs" :stripe="true" v-show="type === 'hot'"></album-content>
                         <AlbumList :albumList="hotAlbums" v-show="type === 'album'"></AlbumList>
-<!--                    <mv-list class="loadMv" :mvList="hotMvs" v-show="type === 'mv'" v-infinite-scroll="loadMv" :infinite-scroll-disabled="isLoadMv" infinite-scroll-distance="20"></mv-list>-->
+                        <MvList  class="loadMv" :mvList="currentMv" v-show="type === 'mv'" v-infinite-scroll="loadMv" :infinite-scroll-disabled="isLoadMv" infinite-scroll-distance="20"></MvList>
                     <template v-if="isLoading">
                         <Loading />
                     </template>
@@ -60,6 +60,15 @@
                             :total="total">
                     </el-pagination>
                 </div>
+                <div class="pagination" v-if="type ==='mv'">
+                    <el-pagination
+                            background
+                            @current-change="currentChange3"
+                            layout="prev, pager, next"
+                            :page-size="limit"
+                            :total="total">
+                    </el-pagination>
+                </div>
             </div>
         </div>
         <el-dialog :title="artist.name" :visible.sync="dialogDescVisible" :destroy-on-close="true">
@@ -78,18 +87,18 @@
 </template>
 
 <script>
-    import {artistDesc,artists,artistAlbum} from "../../networks/index"
+    import {artistDesc,artists,artistAlbum,artistMv} from "../../networks/index"
     import { mapGetters } from "vuex"
-    // import albumList from '../../components/common/album-list'
     import Loading from "../../components/common/Loading"
     import AlbumContent from "../../components/common/AlbumContent";
     import AlbumList from "../../components/common/AlbumList";
+    import MvList from "../../components/common/MvList";
     export default {
         name: 'artist',
         components: {
+            MvList,
             AlbumList,
             AlbumContent,
-            // albumList,
             Loading
         },
 
@@ -101,6 +110,7 @@
                 hotSongs: [],
                 hotAlbums: [],
                 hotMvs: [],
+                currentMv:[],
                 introduction: [],
                 type: this.$route.query.type || 'hot',
                 limit: 10,
@@ -133,7 +143,7 @@
             //     setPlayListTips: 'setPlayListTips',
             //     setPlayIndex: 'SET_PLAYINDEX'
             // }),
-            async getArtistDesc () {
+            getArtistDesc () {
                 artistDesc({ id: this.sUid, timestamp: new Date().valueOf() }).then(res =>{
                     if (res.code !== 200) {
                         return this.$message.error('数据请求失败')
@@ -180,25 +190,26 @@
                 })
 
             },
-            // getArtistMv () {
-            //     console.log(this.isLoadMv)
-            //     if (!this.hasMoreMvs || !this.isLoadMv) return
-            //     this.isLoading = true
-            //     this.isLoadMv = false
-            //     const { data: res } =  this.$http.artistMv({ id: this.sUid, limit: 20, offset: this.offset })
-            //
-            //     if (res.code !== 200) {
-            //         return this.$msg.error('数据请求失败')
-            //     }
-            //     this.hasMoreMvs = res.hasMore
-            //     this.hotMvs = [...this.hotMvs, ...res.mvs]
-            //     this.isLoading = res.hasMore
-            //     this.isLoadMv = true
-            //     this.offset += 20
-            // },
-            // loadMv () {
-            //     this.getArtistMv()
-            // },
+            getArtistMv () {
+                if (!this.hasMoreMvs || !this.isLoadMv) return
+                this.isLoading = true
+                this.isLoadMv = false
+                artistMv({ id: this.sUid, offset: this.offset }).then(res =>{
+                    if (res.code !== 200) {
+                        return this.$message.error('数据请求失败')
+                    }
+                    this.hasMoreMvs = res.hasMore
+                    this.hotMvs = [...this.hotMvs, ...res.mvs]
+                    this.total =  this.hotMvs.length;
+                    this.currentMv = this.hotMvs.slice(this.start*10,this.end*10)
+                    this.isLoadMv = false
+                    this.isLoading = false
+                })
+
+            },
+            loadMv () {
+                this.getArtistMv()
+            },
             moreDesc () {
                 this.dialogDescVisible = true
             },
@@ -215,11 +226,11 @@
                     case 'album' :
                         this.getArtistAlbum()
                         break
-                    // case 'mv' :
-                    //     this.hotMvs = []
-                    //     this.hasMoreMvs = true
-                    //     this.getArtistMv()
-                    //     break
+                    case 'mv' :
+                        this.hotMvs = []
+                        this.hasMoreMvs = true
+                        this.getArtistMv()
+                        break
                 }
                 if (type !== 'hot') {
                     params.type = this.type
@@ -237,6 +248,12 @@
                 this.end = page;
                 this.$store.commit('setListOfSongs',(this.listSongs).slice(this.start*10,this.end*10))
             },
+            currentChange3 (page) {
+                this.start = page -1;
+                this.end = page;
+                this.currentMv = this.hotMvs.slice(this.start*10,this.end*10)
+
+            },
             init () {
                 this.sUid = this.$route.query.id
                 this.getArtistDesc()
@@ -247,9 +264,9 @@
                     case 'album' :
                         this.getArtistAlbum()
                         break
-                    // case 'mv' :
-                    //     // this.getArtistMv()
-                    //     break
+                    case 'mv' :
+                        this.getArtistMv()
+                        break
                 }
             },
             playAllList () {
@@ -293,6 +310,11 @@
     }
 </script>
 <style scoped lang="less">
+    .loadMv{
+        display: flex;
+        flex-wrap: wrap;
+        overflow-y: auto;
+    }
     a {
         text-decoration: none;
         color: #333;

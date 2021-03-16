@@ -1,7 +1,9 @@
 //左侧导航栏
 const  navMsg = [
     {name:'首页',path:'/'},
+    {name:'排行榜',path:'/rank'},
     {name:'歌单',path:'/song-list'},
+    {name:'MV',path:'/mv-page'},
     {name:'歌手',path:'/singer'},
     {name:'我的音乐',path:'/my'},
 ]

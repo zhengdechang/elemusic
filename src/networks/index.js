@@ -169,3 +169,28 @@ export const commentLike = ({ id = '', cid = '', t = 1, type = 0 }) => get(`/com
 
 // 专辑评论
 export const albumComment = ({ id = '', limit = 20, offset = 0, before = 0, timestamp = 0 }) =>get(`/comment/album?id=${id}&limit=${limit}&offset=${offset}&before=${before}&timestamp=${timestamp}`, {})
+
+
+/* ********* MV ********* */
+// 获取 mv
+export const mv = ({ area = '', type = '', order = '', limit = 50, offset = 0 }) => get(`/mv/all?area=${area}&type=${type}&order=${order}&limit=${limit}&offset=${offset}`, {})
+// 获取 mv详情
+export const mvDetail = ({ id = '' }) =>get(`/mv/detail?mvid=${id}`, {})
+// 获取 地址
+export const mvUrl = ({ id = '', r = 1080 }) => get(`/mv/url?id=${id}&r=${r}`, {})
+// 获取mv评论
+export const commentMv = ({ id = '', limit = 20, offset = 0, before = 0, timestamp = 0 }) => get(`/comment/mv?id=${id}&limit=${limit}&offset=${offset}&before=${before}&timestamp=${timestamp}`, {})
+// 相似mv
+export const simiMv= ({ id = ''} ) =>get(`/simi/mv?mvid=${id}`,{})
+// 最新MV
+export const getNewMv = ({ limit = 30, area = '' }) =>get(`/mv/first?limit=${limit}&area=${area}`, {})
+
+
+// 获取歌手 mv
+export const artistMv = ({ id = '', limit = 100, offset = 0 }) => get(`/artist/mv?id=${id}&limit=${limit}&offset=${offset}`, {})
+
+
+// 排行榜
+export const toplist = () => get('/toplist', {})
+// 所有榜单内容摘要
+export const topListDetail = () => get('/toplist/detail', {})

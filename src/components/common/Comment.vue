@@ -78,7 +78,7 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import ReplyComment from "./ReplyComment";
-import {albumComment, comment, commentSong} from "../../networks";
+import {albumComment, comment, commentMv, commentSong} from "../../networks";
 export default {
     name: 'Comments',
     components: {
@@ -187,10 +187,11 @@ export default {
                 this.msgHandler(res)
             })
         },
-        // async getMvComment () {
-        //     const { data: res } = await this.$http.commentMv({ id: this.curId, limit: this.limit, offset: this.offset, before: this.before })
-        //     this.msgHandler(res)
-        // },
+        getMvComment () {
+            commentMv({ id: this.curId, limit: this.limit, offset: this.offset, before: this.before }).then(res =>{
+                this.msgHandler(res)
+            })
+        },
         getAlbumComment () {
             albumComment({ id: this.curId, limit: this.limit, offset: this.offset, before: this.before }).then(res =>{
                 this.msgHandler(res)

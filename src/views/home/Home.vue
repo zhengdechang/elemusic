@@ -1,13 +1,7 @@
 <template>
     <div class="home">
         <swiper/>
-<!--        <div class="section" v-for="(item,index) in songslist" :key="index">-->
-<!--            <div class="section-title">-->
-<!--                {{item.name}}-->
-<!--            </div>-->
-<!--            <content-list :contentList="item.list"></content-list>-->
-<!--        </div>-->
-        <!--排行版-->
+        <!--新碟上架-->
         <div class='album_list'>
             <div class="h_title">
                 <h3>新碟上架</h3>
@@ -19,6 +13,7 @@
                 </div>
             </div>
         </div>
+        <!--排行版-->
         <div class='top_list'>
             <div class="h_title">
                 <h3>排行榜</h3>
@@ -44,6 +39,16 @@
                     </div>
                 </el-col>
             </el-row>
+        </div>
+        <!--最新MV-->
+        <div class='mv_list'>
+            <div class="h_title">
+                <h3>最新MV</h3>
+                <span v-for="(item, index) in mv_area" :key="item.id" :class="index == mv_index ? 'active' : ''" @click="chooseMvType(index)">{{item}}</span>
+            </div>
+            <div class="wrapper">
+                <MvList class="loadMv" :mvList="mv_list"></MvList>
+            </div>
         </div>
         <!--热门歌单-->
         <div class='recom_list'>
@@ -83,12 +88,14 @@
     import Swiper from "../../components/swiper/Swiper";
     import playList from '../../components/common/PlayList'
     // import {getAllSinger,getAllSongList} from "../../networks/index"
-    import {hotList, playLists, topArtists, topList, listDetail, topAlbum} from "../../networks/index"
+    import {hotList, playLists, topArtists, topList, listDetail, topAlbum, getNewMv} from "../../networks/index"
     import AlbumList from "../../components/common/AlbumList";
+    import MvList from "../../components/common/MvList";
     // import ContentList from "../../components/common/ContentList";
     export default {
         name: "Homes",
         components:{
+            MvList,
             AlbumList,
             // ContentList,
             playList,
@@ -128,15 +135,15 @@
                 mv_area: ['全部', '内地', '港台', '欧美', '日本', '韩国'],
                 mv_list: [],
                 mv_index: 0,
-                mv_params: { limit: 10 },
+                mv_params: { limit: 5 },
                 artists_list: [],
                 artists_params: { limit: 9 }
             }
         },
         created() {
             this.chooseAlbumType ('0');
-            // this.getSongList();
-            // this.getSinger();
+            this.chooseMvType('全部');
+            this.mv_index = 0;
         },
         mounted() {
             this.init()
@@ -216,25 +223,25 @@
                     })
                 })
             },
-            // // 最新MV
-            // async getMv (params) {
-            //     const { data: res } = await this.$http.getNewMv(params)
-            //
-            //     if (res.code !== 200) {
-            //         return this.$msg.error('数据请求失败')
-            //     }
-            //
-            //     this.mv_list = res.data
-            // },
-            // chooseMvType (index) {
-            //     this.mv_index = index
-            //     this.mv_params.area = index !== 0 ? this.mv_area[index] : ''
-            //     this.getMv(this.mv_params)
-            // },
+            // 最新MV
+            getMv (params) {
+                getNewMv(params).then(res =>{
+                    if (res.code !== 200) {
+                        return this.$message.error('数据请求失败')
+                    }
+                    this.mv_list = res.data
+                    console.log(this.mv_list);
+                })
+            },
+            chooseMvType (index) {
+                this.mv_index = index
+                this.mv_params.area = index !== 0 ? this.mv_area[index] : ''
+                this.getMv(this.mv_params)
+            },
 
 
             // 热门歌手
-            async getArtists (params) {
+            getArtists (params) {
                 topArtists(params).then(res =>{
                     if (res.code !== 200) {
                         return this.$message.error('数据请求失败')
@@ -253,242 +260,245 @@
 </script>
 
 <style scoped lang="less">
-    .album_list{
-        margin: 0 15px -10px 15px;
-    }
-    .home {
-        margin-top: 90px - 10px;
-        .section {
-            width: 100%;
-            margin-top: 20px;
-            padding: 0 120px 50px 120px;
-            background-color: #ffffff;
-            box-sizing: border-box;
-            .section-title {
-                height: 60px;
-                line-height: 60px;
-                padding-top: 10px;
-                font-size: 28px;
-                font-weight: 500;
-                text-align: center;
-                color: #000000;
-                box-sizing: border-box;
-            }
-        }
-    }
-    .recom_list{
-        margin-left: 35px;
-        margin-right: 15px;
-    }
-    .h_title {
-        padding: 20px 0 0;
-        text-align: center;
-
-        h3 {
-            padding: 20px 0;
+.mv_list{
+    margin: 0 30px;
+}
+.album_list{
+    margin: 0 15px -10px 15px;
+}
+.home {
+    margin-top: 90px - 10px;
+    .section {
+        width: 100%;
+        margin-top: 20px;
+        padding: 0 120px 50px 120px;
+        background-color: #ffffff;
+        box-sizing: border-box;
+        .section-title {
+            height: 60px;
+            line-height: 60px;
+            padding-top: 10px;
             font-size: 28px;
-            font-weight: 700;
+            font-weight: 500;
+            text-align: center;
+            color: #000000;
+            box-sizing: border-box;
         }
+    }
+}
+.recom_list{
+    margin-left: 35px;
+    margin-right: 15px;
+}
+.h_title {
+    padding: 20px 0 0;
+    text-align: center;
 
-        span {
-            display: inline-block;
-            font-size: 16px;
-            margin: 0 24px;
-            color: #333;
-            cursor: pointer;
+    h3 {
+        padding: 20px 0;
+        font-size: 28px;
+        font-weight: 700;
+    }
 
-            &.active {
-                position: relative;
-                font-weight: 600;
-                color: #000;
-                &:after {
-                    position: absolute;
-                    content: "";
-                    left: 0;
-                    bottom: 1px;
-                    width: 100%;
-                    height: 6px;
-                    background:#d9d9d9;
-                    z-index: -1;
-                }
+    span {
+        display: inline-block;
+        font-size: 16px;
+        margin: 0 24px;
+        color: #333;
+        cursor: pointer;
+
+        &.active {
+            position: relative;
+            font-weight: 600;
+            color: #000;
+            &:after {
+                position: absolute;
+                content: "";
+                left: 0;
+                bottom: 1px;
+                width: 100%;
+                height: 6px;
+                background:#d9d9d9;
+                z-index: -1;
             }
         }
     }
+}
 
-    .wrapper {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        margin:0 80px !important;
-        /*margin:0 60px !important;*/
-        margin-left: 63px !important;
-        margin-right: 60px !important;
-    }
+.wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin:0 80px !important;
+    /*margin:0 60px !important;*/
+    margin-left: 63px !important;
+    margin-right: 60px !important;
+}
 
-    .toplist_item {
-        position: relative;
-        margin-bottom: 30px;
+.toplist_item {
+    position: relative;
+    margin-bottom: 30px;
 
-        .coverImg {
+    .coverImg {
+        position: absolute;
+        top: 0;
+        right: 30px;
+        left: 30px;
+        z-index: 0;
+        height: 100% !important;
+
+        &::before {
             position: absolute;
             top: 0;
-            right: 30px;
-            left: 30px;
+            left: 0;
             z-index: 0;
-            height: 100% !important;
-
-            &::before {
-                position: absolute;
-                top: 0;
-                left: 0;
-                z-index: 0;
-                content: '';
-                width: 100%;
-                height: 100%;
-            }
-
-            /deep/ img {
-                filter: blur(60px);
-                transform: scale(1.5);
-            }
+            content: '';
+            width: 100%;
+            height: 100%;
         }
 
-        .toplist_wrapper {
-            position: relative;
-            z-index: 0;
-        }
-
-        &:hover {
-            /deep/ img {
-                transform: scale(2);
-            }
+        /deep/ img {
+            filter: blur(60px);
+            transform: scale(1.5);
         }
     }
 
     .toplist_wrapper {
-        padding: 30px 40px;
-        height: 505px;
+        position: relative;
+        z-index: 0;
+    }
 
-        .toplist_hd {
-            position: relative;
-            font-size: 24px;
-            text-align: center;
+    &:hover {
+        /deep/ img {
+            transform: scale(2);
+        }
+    }
+}
+
+.toplist_wrapper {
+    padding: 30px 40px;
+    height: 505px;
+
+    .toplist_hd {
+        position: relative;
+        font-size: 24px;
+        text-align: center;
+        color: #fff;
+
+        &::after {
+            display: inline-block;
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+            width: 30px;
+            height: 2px;
+            margin: 0 auto;
+            background-color: #fff;
+        }
+    }
+
+    .toplist_songlist {
+        padding-top: 80px;
+    }
+
+    .songitem {
+        display: flex;
+        padding-bottom: 20px;
+        color: #fff;
+
+        .songnum {
+            padding-right: 10px;
+            font-size: 18px;
+        }
+
+        .song_title {
+            line-height: 24px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            word-break: break-all;
+            padding-bottom: 5px;
+            font-size: 14px;
             color: #fff;
+        }
 
-            &::after {
+        .song_author {
+            display: block;
+            font-size: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            word-break: break-all;
+
+            a {
                 display: inline-block;
-                content: '';
-                position: absolute;
-                bottom: -30px;
-                left: 0;
-                right: 0;
-                width: 30px;
-                height: 2px;
-                margin: 0 auto;
-                background-color: #fff;
-            }
-        }
-
-        .toplist_songlist {
-            padding-top: 80px;
-        }
-
-        .songitem {
-            display: flex;
-            padding-bottom: 20px;
-            color: #fff;
-
-            .songnum {
-                padding-right: 10px;
-                font-size: 18px;
-            }
-
-            .song_title {
-                line-height: 24px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-line-clamp: 1;
-                -webkit-box-orient: vertical;
-                word-break: break-all;
-                padding-bottom: 5px;
+                line-height: 20px;
                 font-size: 14px;
                 color: #fff;
             }
+        }
 
-            .song_author {
-                display: block;
-                font-size: 0;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-line-clamp: 1;
-                -webkit-box-orient: vertical;
-                word-break: break-all;
-
-                a {
-                    display: inline-block;
-                    line-height: 20px;
-                    font-size: 14px;
-                    color: #fff;
-                }
-            }
-
-            &:last-child {
-                padding-bottom: 0;
-            }
+        &:last-child {
+            padding-bottom: 0;
         }
     }
+}
 
-    .artists_item {
-        width: 120px;
+.artists_item {
+    width: 120px;
 
+    .el-image {
+        transition: all .4s linear;
+    }
+
+    &:hover {
         .el-image {
-            transition: all .4s linear;
-        }
-
-        &:hover {
-            .el-image {
-                transform: rotateY(180deg);
-            }
-        }
-
-        .faceImg {
-            width: 120px;
-            height: 120px;
-            border-radius: 100%;
-            overflow: hidden;
-        }
-    }
-    .info {
-        text-align: center;
-
-        .name {
-            line-height: 28px;
-            font-size: 14px;
-        }
-
-        .albumSize {
-            color: #999;
+            transform: rotateY(180deg);
         }
     }
 
-    .artists_list {
-        padding-bottom: 40px;
-        margin-bottom: 50px;
-        margin-left: 35px;
-        margin-right: 10px;
+    .faceImg {
+        width: 120px;
+        height: 120px;
+        border-radius: 100%;
+        overflow: hidden;
+    }
+}
+.info {
+    text-align: center;
+
+    .name {
+        line-height: 28px;
+        font-size: 14px;
     }
 
-    .toplist_img{
-        height: 600px;
+    .albumSize {
+        color: #999;
     }
-    .toplist_img{
-        height: 600px;
-    }
-    a {
-          text-decoration: none;
-          color: #333;
-      }
+}
+
+.artists_list {
+    padding-bottom: 40px;
+    margin-bottom: 50px;
+    margin-left: 35px;
+    margin-right: 10px;
+}
+
+.toplist_img{
+    height: 600px;
+}
+.toplist_img{
+    height: 600px;
+}
+a {
+      text-decoration: none;
+      color: #333;
+  }
 
 </style>

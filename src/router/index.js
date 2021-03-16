@@ -16,6 +16,9 @@ import Artist from "../views/singer/Artist";
 import My from "../views/mymusic/My";
 import Song from "../views/songs/Song";
 import Album from "../views/album/Album";
+import MvDetail from "../views/mv/MvDetail";
+import MvPage from "../views/mv/MvPage";
+import Rank from "../views/rank/Rank";
 
 // const originalPush = Router.prototype.push
 
@@ -113,6 +116,21 @@ export default new Router({
       path:'/album',
       name:'album',
       component:Album
+    },
+    {
+      path:'/mv',
+      name:'mv',
+      component:MvDetail
+    },
+    {
+      path:'/mv-page',
+      name:'mv-page',
+      component:MvPage
+    },
+    {
+      path:'/rank',
+      name:'rank',
+      component:Rank
     },
   ]
 })
