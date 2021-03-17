@@ -24,7 +24,7 @@
 <script>
     import LoginLogo from "./loginLogo";
     import {mixin} from "../../mixins";
-    import {loginIn} from  '../../networks/index'
+    import {getImg, loginIn} from '../../networks/index'
     export default {
         name: "login-in",
         components: {
@@ -64,8 +64,18 @@
                   _this.$store.commit('setLoginIn',true)
                   _this.$store.commit('setUserId',res.data.id)
                   _this.$store.commit('setUsername',res.data.username)
-                  _this.$store.commit('setAvator',baseURL+res.data.id && require("../../assets/img/user.jpg"))
-                      console.log(baseURL + res.data.id);
+                  const avator = baseURL+res.data.id
+                  getImg(res.data.id).then(r =>{
+                      console.log(r.status);
+                      if(r.status !== 200){
+                          _this.$store.commit('setAvator',require("../../assets/img/user.jpg"))
+                      }else {
+                          _this.$store.commit('setAvator',avator)
+                      }
+                  }).catch(err =>{
+                      console.log(err);
+                  })
+                      // console.log(baseURL + res.data.id);
                       setTimeout(function () {
                       _this.$router.push('/');
                       _this.changeIndex('首页');

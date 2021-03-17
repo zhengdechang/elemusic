@@ -53,7 +53,7 @@ a {
         max-width: calc(100% / 3 - 20px);
         margin: 20px 10px 0;
         border-radius: 4px;
-        background: #f0f0f0;
+        background: #1512e836;
 
         &:hover {
             .album-name {

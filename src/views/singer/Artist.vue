@@ -29,7 +29,7 @@
                         <span :class="[ type === 'mv' ? 'active' : '']" @click="changeType('mv')">相关MV</span>
                     </div>
                     <div class="singer-oper" v-if="type === 'hot'">
-                        <span @click="playAllList" class="singer-btn playAll"><i class="iconfont icon-audio-play"></i> 播放全部</span>
+                        <span @click="playAllSongs" class="singer-btn playAll"><i class="iconfont icon-audio-play"></i> 播放全部</span>
                         <span @click="addAll" class="singer-btn addAll"><i class="iconfont icon-add"></i> 添加到播放列表</span>
                         <span @click="collectAll" class="singer-btn collectAll"><i class="iconfont icon-collect"></i> 收藏热门</span>
                     </div>
@@ -88,6 +88,7 @@
 
 <script>
     import {artistDesc,artists,artistAlbum,artistMv} from "../../networks/index"
+    import {mixin} from "../../mixins";
     import { mapGetters } from "vuex"
     import Loading from "../../components/common/Loading"
     import AlbumContent from "../../components/common/AlbumContent";
@@ -101,7 +102,7 @@
             AlbumContent,
             Loading
         },
-
+        mixins:[mixin],
         data () {
             // 这里存放数据
             return {
@@ -269,10 +270,14 @@
                         break
                 }
             },
-            playAllList () {
-                this.playAll({
-                    list: this.hotSongs
+            // 播放列表为当前歌单的全部歌曲
+            playAllSongs() {
+                // listSongs
+                this.listSongs.forEach((item,i) => {
+                    this.listOfSongs[i] = item
                 })
+                this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
+
             },
             addAll () {
                 this.addList({ list: this.hotSongs })

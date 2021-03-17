@@ -56,7 +56,7 @@
                 <p><router-link :to="{ path: '/singer', query: { id: author.id }}" class="song-author" v-for="(author, k) in info.singer" :key="author.name">{{ k !== 0 ? ' / ' + author.name : author.name }}</router-link></p>
                 <p class="song-info">
                     <span>专辑：<router-link class="song-album" :to="{ path: '/album', query: { id: info.al.id }}">{{ info.al.name }}</router-link></span>
-                    <span>发行时间：<em>{{info.publishTime}}</em></span>
+                    <span>发行时间：<em>{{formartDate(info.publishTime,'yyyy年MM月dd日')}}</em></span>
                 </p>
                 <div class="song-oper">
                     <span :class="['play-btn','play-all', songDisable]" @click="plyaing(info)"><i :class="['iconfont']"></i> {{info.vip ? 'VIP尊享' : '立即播放'}}</span>
@@ -86,6 +86,8 @@
 // import Lyrics from '@components/common/lyrics.vue'
 // import Comments from '@components/common/comments.vue'
 // import addList from '@components/common/addlist.vue'
+import {mapGetters} from "vuex"
+import {mixin} from "../../mixins";
 import SongShowLyric from "../lyric/SongShowLyric";
 import {songDetail,simiSong} from '../../networks/index'
 import Comments from "../../components/common/Comment";
@@ -100,6 +102,7 @@ export default {
     },
     created () {
     },
+    mixins:[mixin],
     data () {
         // 这里存放数据
         return {
@@ -118,6 +121,9 @@ export default {
     },
     // 监听属性 类似于data概念
     computed: {
+        ...mapGetters([
+            'listOfSongs'
+        ]),
         // isCurSong () {
         //     return this.isPlayed && this.curSongInfo && this.curSongInfo.id === this.sId
         // },
@@ -144,6 +150,27 @@ export default {
     },
     // 方法集合
     methods: {
+        // 时间毫秒格式化处理 2020-10-30 09:30:00
+        formartDate (originVal, fmt) {
+            const dt = new Date(originVal)
+            const opt = {
+                yyyy: dt.getFullYear(),
+                MM: (dt.getMonth() + 1 + '').padStart(2, '0'),
+                dd: (dt.getDate() + '').padStart(2, '0'),
+                HH: (dt.getHours() + '').padStart(2, '0'),
+                mm: (dt.getMinutes() + '').padStart(2, '0'),
+                ss: (dt.getSeconds() + '').padStart(2, '0')
+            }
+
+            for (const k in opt) {
+                const ret = new RegExp('(' + k + ')').exec(fmt)
+                if (ret) {
+                    fmt = fmt.replace(ret[1], opt[k])
+                }
+            }
+
+            return fmt
+        },
         backGround(){
             const bg =  document.getElementsByClassName('song-container');
             console.log(bg);
@@ -171,27 +198,11 @@ export default {
                 this.simiSong = res.songs
             })
         },
-        // plyaing (params) {
-        //     // 若当前唔歌曲 或者 当前播放歌曲不是本页显示的歌曲  立即播放当前页面歌曲
-        //     if (!this.curSongInfo || this.curSongInfo.id !== params.id) {
-        //         // 无版权及vip不可播放
-        //         if (params.license) {
-        //             this.$msg.error('由于版权保护，您所在的地区暂时无法使用。')
-        //             return
-        //         }
-        //
-        //         if (params.vip) {
-        //             this.$msg.error('付费歌曲，请在网易云音乐播放')
-        //             return
-        //         }
-        //
-        //         this.selectPlay({
-        //             list: [params]
-        //         })
-        //     } else {
-        //         this.setPlayStatus(!this.isPlayed)
-        //     }
-        // },
+        plyaing (params) {
+            this.listOfSongs.unshift(params)
+            console.log(params);
+            this.toPlay(params.id,params.al.picUrl,0,params.name,params.ar[0].name)
+        },
         closeAddListPop () {
             this.$refs.popAddList.doClose()
         },
@@ -279,19 +290,19 @@ a {
         }
     }
 
-    // &::after {
-    //     content: '';
-    //     position: absolute;
-    //     top: 50%;
-    //     left: 50%;
-    //     z-index: 2;
-    //     width: 30px;
-    //     height: 30px;
-    //     border-radius: 100%;
-    //     transform: translate(-50%,-50%);
-    //     background: #000;
-    //     box-shadow: 0px 2px 10px 20px rgba(150, 150, 150, 0.5);
-    // }
+     &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 2;
+        width: 30px;
+        height: 30px;
+        border-radius: 100%;
+        transform: translate(-50%,-50%);
+        background: #000;
+        box-shadow: 0px 2px 10px 20px rgba(150, 150, 150, 0.5);
+    }
 
     .iconfont {
         position: absolute;

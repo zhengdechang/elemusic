@@ -35,7 +35,7 @@
     margin: $header-nav-margin;
     padding: $header-nav-padding;
     font-size: $font-size-header;
-    color: $color-grey;
+    color: #abe200cc;
     text-align: center;
     border-bottom: none;
     box-sizing: border-box;
@@ -138,6 +138,6 @@
 }
 
 .active {
-  color: $theme-color !important;
-  border-bottom: 5px solid $theme-color !important;
+  color: #ff621bc4 !important;
+  border-bottom: 5px solid #ff621b66 !important;
 }

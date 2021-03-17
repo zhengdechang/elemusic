@@ -40,7 +40,7 @@
                                 {{rankInfo.name}} <span>({{formartDate(rankInfo.updateTime, 'MM月dd日')}} 更新)</span>
                             </div>
                             <div class="rank-tags" v-if="rankInfo.tags">
-                                <router-link :to="{ path: '/playlist', query: { cat: tag }}" class="tag" v-for="(tag, index) in rankInfo.tags" :key="index">#{{tag}}</router-link>
+                                <router-link :to="{ path: '/song-list', query: { cat: tag }}" class="tag" v-for="(tag, index) in rankInfo.tags" :key="index">#{{tag}}</router-link>
                             </div>
                             <div class="rank-digital">
                                 <span class="rank-playCount"><i class="iconfont icon-playnum"></i> {{formartNum(rankInfo.playCount)}}次</span>
@@ -82,12 +82,14 @@ import Loading from "../../components/common/Loading"
 import AlbumContent from "../../components/common/AlbumContent";
 import {listDetail, topListDetail} from "../../networks";
 import { mapGetters } from 'vuex'
+import {mixin} from "../../mixins";
 export default {
     name: 'Rank',
     components: {
         AlbumContent,
         Loading
     },
+    mixins:[mixin],
     data () {
         // 这里存放数据
         return {
@@ -211,10 +213,14 @@ export default {
             this.rId = item.id
             this.$router.push({ path: 'rank', query: { type: this.type, rId: this.rId } })
         },
-        playAllSongs () {
-            this.playAll({
-                list: this.songList
+        // 播放列表为当前歌单的全部歌曲
+        playAllSongs() {
+            // listSongs
+            this.listSongs.forEach((item,i) => {
+                this.listOfSongs[i] = item
             })
+            this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
+
         },
         // 处理歌曲
         _formatSongs (list, privileges) {

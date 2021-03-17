@@ -121,7 +121,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-// import songList from '@components/common/song-list'
+import {mixin} from "../../mixins";
 import Loading from '../../components/common/Loading'
 import {playlistdetail,playlistSCollect,playlistRelated,songDetail,playlistComment} from "../../networks/index"
 import AlbumContent from "../../components/common/AlbumContent";
@@ -135,6 +135,7 @@ export default {
     mounted() {
         this._initialize(this.$route.query.id)
     },
+    mixins:[mixin],
     data() {
         // 这里存放数据
         return {
@@ -325,10 +326,13 @@ export default {
         // },
         // 播放列表为当前歌单的全部歌曲
         playAllSongs() {
-            this.playAll({
-                list: this.songList
+            // listSongs
+            this.listSongs.forEach((item,i) => {
+                this.listOfSongs[i] = item
             })
-        },
+            this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
+
+        }
         // formatSongInfo(params) {
         //     return new Song({
         //         id: String(params.id),

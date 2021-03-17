@@ -97,14 +97,15 @@
                         this.$message({
                             type:'success',
                             message:'注册成功'
-                        })
-                            setTimeout(function () {
-                                _this.$router.push({path:'/'});
-                            },1000)
-                        }
-                    }).catch(err =>{
-                        console.log(err);
-                    })
+                         })
+                        // this.$store.commit("setAvator",require("../../assets/img/user.jpg"));
+                        setTimeout(function () {
+                            _this.$router.push({path:'/login-in'});
+                        },1000)
+                    }
+                }).catch(err =>{
+                    console.log(err);
+                })
 
             },
             goback(index){

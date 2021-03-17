@@ -30,7 +30,7 @@
                 <div class="detail-main">
                     <div class="song-header">
                         <h4>包含歌曲列表 <em>{{details.size + '首歌'}}</em></h4>
-                        <span class="play-all" @click="1"><i class="iconfont icon-audio-play"></i> 播放全部</span>
+                        <span class="play-all" @click="playAllSongs"><i class="iconfont icon-audio-play"></i> 播放全部</span>
                         <span :class="['collect', dynamic.isSub ? 'active' : '']" @click="'subAlbum'"><i :class="['iconfont', 'icon-collect' + (dynamic.isSub ? '-active' : '')]"></i> {{ dynamic.isSub ? '已收藏' : '收藏'}}</span>
                     </div>
                     <album-content :songList="songList" :stripe="true"></album-content>
@@ -65,8 +65,8 @@
 import {album,artistAlbum,albumDynamic} from "../../networks/index"
 import AlbumContent from "../../components/common/AlbumContent";
 import Comments from "../../components/common/Comment";
-// import songList from '@components/common/song-list'
-// import Comments from '@components/common/comments.vue'
+import {mixin} from "../../mixins";
+import {mapGetters} from "vuex"
 export default {
     name: 'albumDetail',
     components: {
@@ -79,6 +79,7 @@ export default {
         this.albumId = this.$route.query.id
         this._initialize()
     },
+    mixins:[mixin],
     data () {
         // 这里存放数据
         return {
@@ -95,7 +96,11 @@ export default {
         }
     },
     // 监听属性 类似于data概念
-    computed: {},
+    computed: {
+        ...mapGetters([
+            'listOfSongs',
+        ])
+    },
     // 方法集合
     methods: {
         // 时间毫秒格式化处理 2020-10-30 09:30:00
@@ -127,7 +132,8 @@ export default {
                 }
                 this.artist_id = res.album.artists[0].id;
                 this.details = res.album;
-                this.songList = this._formatSongs(res.songs)
+                this.songList = res.songs
+                this.$store.commit("setListOfSongs",this.songList)
                 console.log(this.details)
                 this.getArtistAlbum(this.artist_id)
             })
@@ -154,11 +160,15 @@ export default {
                 this.isShowDesc = !this.isShowDesc
             }
         },
-        // playAllSongs () {
-        //     this.playAll({
-        //         list: this.songList
-        //     })
-        // },
+        // 播放列表为当前歌单的全部歌曲
+        playAllSongs() {
+            // listSongs
+            this.songList.forEach((item,i) => {
+                this.listOfSongs[i] = item
+            })
+            this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
+
+        },
         // async subAlbum () {
         //     const { data: res } = await this.$http.albumSub({ id: this.albumId, t: Number(!this.dynamic.isSub) })
         //
@@ -168,17 +178,6 @@ export default {
         //     this.dynamic.isSub = Number(!this.dynamic.isSub)
         // },
         // 处理歌曲
-        _formatSongs (list) {
-            const ret = []
-            list.map((item, index) => {
-                if (item.id) {
-                    // 是否有版权播放
-                    item.license = !list[index].privilege.cp
-                    ret.push(item)
-                }
-            })
-            return ret
-        },
         _initialize () {
             this.getAlbum({ id: this.albumId })
             this.getAlbumDynamic({ id: this.albumId })
