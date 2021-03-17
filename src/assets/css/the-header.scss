@@ -21,9 +21,12 @@
   font-weight: bold;
   white-space: nowrap;
   cursor: pointer;
+  color: #1c0ef7bf;
 .icon {
-    @include icon(($header-height / 3) * 2, $color-black);
+    @include icon(($header-height / 3) * 2,#1c0ef7bf);
     vertical-align: middle;
+    margin-right: 11px;
+    margin-top: -5px;
   }
 }
 
@@ -54,7 +57,7 @@
     font-size: $font-size-default;
     border: 0;
     text-indent: 10px;
-    background-color: $color-light-grey;
+    background-color: #ffffffe6;
     &:focus {
       outline: none;
     }
