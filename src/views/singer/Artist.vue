@@ -12,7 +12,7 @@
                 <div class="singer-desc">
                     <div class="singer-author">
                         <div class="singer-name">{{artist.name}}</div>
-                        <router-link v-if="artist.accountId" class="singer-btn singer-home" :to="{ path: '/user', query: { id: artist.accountId }}"><i class="iconfont icon-home"></i> 个人主页</router-link>
+                        <router-link v-if="artist.accountId" class="singer-btn singer-home" :to="{ path: '/artist', query: { id: artist.accountId }}"><i class="iconfont icon-home"></i> 个人主页</router-link>
                         <span :class="['singer-btn', 'singer-collect', artist.followed ? 'active' : '']" @click="getArtistSub(artist.followed ? 0 : 1)"><i :class="['iconfont', 'icon-collect' + (artist.followed ? '-active' : '')]"></i> {{ artist.followed ? '已收藏' : '收藏'}}</span>
                     </div>
                     <div class="singer-brief">{{artist.briefDesc ? artist.briefDesc : '暂无简介'}} <span v-if="introduction.length" @click="moreDesc">更多>></span></div>
@@ -30,7 +30,7 @@
                     </div>
                     <div class="singer-oper" v-if="type === 'hot'">
                         <span @click="playAllSongs" class="singer-btn playAll"><i class="iconfont icon-audio-play"></i> 播放全部</span>
-                        <span @click="addAll" class="singer-btn addAll"><i class="iconfont icon-add"></i> 添加到播放列表</span>
+<!--                        <span @click="addAll" class="singer-btn addAll"><i class="iconfont icon-add"></i> 添加到播放列表</span>-->
                         <span @click="collectAll" class="singer-btn collectAll"><i class="iconfont icon-collect"></i> 收藏热门</span>
                     </div>
                 </div>
@@ -279,14 +279,14 @@
                 this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
 
             },
-            addAll () {
-                this.addList({ list: this.hotSongs })
-                this.setPlayListTips({ flag: true, txt: '已添加到播放列表' })
-                clearTimeout(this.timer)
-                this.timer = setTimeout(() => {
-                    this.setPlayListTips({ flag: false, txt: '已添加到播放列表' })
-                }, 2000)
-            },
+            // addAll () {
+            //     this.addList({ list: this.hotSongs })
+            //     this.setPlayListTips({ flag: true, txt: '已添加到播放列表' })
+            //     clearTimeout(this.timer)
+            //     this.timer = setTimeout(() => {
+            //         this.setPlayListTips({ flag: false, txt: '已添加到播放列表' })
+            //     }, 2000)
+            // },
             // TODO收藏
             collectAll () {},
         },

@@ -8,34 +8,34 @@ axios.defaults.timeout = 5000;  //超市时间是5秒
 axios.defaults.baseURL = "http://localhost:3000";
 
 
-//响应拦截器
-axios.interceptors.response.use(
-    response => {
-        //如果reponse里面的status是200，说明访问到接口了，否则错误
-        if(response.status == 200){
-            return Promise.resolve(response);
-        }else{
-            return Promise.reject(response);
-        }
-    },
-    error => {
-        if(error.response.status){
-            switch(error.response.status){
-                case 401:       //未登录
-                    router.replace({
-                        path:'/',
-                        query:{
-                            redirect: router.currentRoute.fullPath
-                        }
-                    });
-                    break;
-                case 404:   //没找到
-                    break;
-            }
-            return Promise.reject(error.response);
-        }
-    }
-);
+// //响应拦截器
+// axios.interceptors.response.use(
+//     response => {
+//         //如果reponse里面的status是200，说明访问到接口了，否则错误
+//         if(response.status == 200){
+//             return Promise.resolve(response);
+//         }else{
+//             return Promise.reject(response);
+//         }
+//     },
+//     error => {
+//         if(error.response.status){
+//             switch(error.response.status){
+//                 case 401:       //未登录
+//                     router.replace({
+//                         path:'/',
+//                         query:{
+//                             redirect: router.currentRoute.fullPath
+//                         }
+//                     });
+//                     break;
+//                 case 404:   //没找到
+//                     break;
+//             }
+//             return Promise.reject(error.response);
+//         }
+//     }
+// );
 
 /**
  * 封装get方法

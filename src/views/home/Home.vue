@@ -29,7 +29,7 @@
                             <div class="songitem" v-for="(songItem, index) in songList[item.id]" :key="songItem.id">
                                 <div class="songnum">{{index + 1}}</div>
                                 <div class="songinfo">
-                                    <router-link :to="{ path: '/song', query: { id: item.id }}" class="song_title">{{songItem.name}}</router-link>
+                                    <router-link :to="{ path: '/song', query: { id: songItem.id }}" class="song_title">{{songItem.name}}</router-link>
                                     <div class="song_author">
                                         <router-link :to="{ path: '/artist', query: { id: author.id }}" class="song_name" v-for="(author, k) in songItem.ar" :key="k">{{ k !== 0 ? '/ ' + author.name : author.name }}</router-link>
                                     </div>
@@ -144,6 +144,7 @@
             this.chooseAlbumType ('0');
             this.chooseMvType('全部');
             this.mv_index = 0;
+            this.$store.commit('setActiveName','首页');
         },
         mounted() {
             this.init()
@@ -177,7 +178,7 @@
 
             },
             // 分类歌单列表
-            async getPlayList (params) {
+            getPlayList (params) {
                 playLists(params).then(res =>{
                     if (res.code !== 200) {
                         return this.$message.error('数据请求失败')
@@ -209,20 +210,31 @@
             //排行榜
             getToplist () {
                 topList().then((r) => {
-                    const res = r
-                    if (res.code !== 200) {
-                        return this.$msg.error('数据请求失败')
-                    }
-                    return res
-                }).then((r) => {
                     this.top_list = r.list.splice(0, 4)
-                    this.top_list.forEach(async item => {
+                    this.top_list.forEach( item => {
                         listDetail({ id: item.id }).then(res =>{
-                            this.$set(this.songList, item.id, res.playlist.tracks.splice(0, 6))
+                            // this.$set(this.songList, item.id, res.playlist.tracks.splice(0, 6))
+                            this.songList[item.id] = res.playlist.tracks.splice(0, 6)
                         })
                     })
                 })
             },
+            // getToplist () {
+            //     topList().then((r) => {
+            //         const res = r
+            //         if (res.code !== 200) {
+            //             return this.$message.error('数据请求失败')
+            //         }
+            //         return res
+            //     }).then((r) => {
+            //         this.top_list = r.list.splice(0, 4)
+            //         this.top_list.forEach(async item => {
+            //             listDetail({ id: item.id }).then(res =>{
+            //                 this.$set(this.songList, item.id, res.playlist.tracks.splice(0, 6))
+            //             })
+            //         })
+            //     })
+            // },
             // 最新MV
             getMv (params) {
                 getNewMv(params).then(res =>{

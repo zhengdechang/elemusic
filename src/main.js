@@ -13,7 +13,7 @@ import '@/assets/js/iconfont3.js'
 
 import '../src/assets/fonts/font.css'
 
-
+import '../src/assets/js/directive'
 
 
 

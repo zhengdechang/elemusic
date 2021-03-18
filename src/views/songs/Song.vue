@@ -27,11 +27,6 @@
                                         </router-link>
                                         <div class="simi-author"><router-link :to="{ path: '/artist', query: { id: author.id }}" class="song-author" v-for="(author, k) in simiItem.artists" :key="author.name">{{ k !== 0 ? ' / ' + author.name : author.name }}</router-link></div>
                                     </div>
-                                    <div class="simi-song-status">
-                                        <i v-if="simiItem.vip" class="iconfont icon-vip"></i>
-                                        <i v-else @click="plyaing(simiItem)" :class="['iconfont','icon-audio-play']"></i>
-<!--                                        <i v-else @click="plyaing(simiItem)" :class="['iconfont', playSimiIcon(simiItem)]"></i>-->
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -53,13 +48,13 @@
 <!--                        <div class="column" style="animation-delay: -0.6s;"></div>-->
 <!--                    </div>-->
                 </h3>
-                <p><router-link :to="{ path: '/singer', query: { id: author.id }}" class="song-author" v-for="(author, k) in info.singer" :key="author.name">{{ k !== 0 ? ' / ' + author.name : author.name }}</router-link></p>
+                <p><router-link :to="{ path: '/artist', query: { id: author.id }}" class="song-author" v-for="(author, k) in info.singer" :key="author.name">{{ k !== 0 ? ' / ' + author.name : author.name }}</router-link></p>
                 <p class="song-info">
                     <span>专辑：<router-link class="song-album" :to="{ path: '/album', query: { id: info.al.id }}">{{ info.al.name }}</router-link></span>
                     <span>发行时间：<em>{{formartDate(info.publishTime,'yyyy年MM月dd日')}}</em></span>
                 </p>
                 <div class="song-oper">
-                    <span :class="['play-btn','play-all', songDisable]" @click="plyaing(info)"><i :class="['iconfont']"></i> {{info.vip ? 'VIP尊享' : '立即播放'}}</span>
+                    <span :class="['play-btn','play-all', songDisable]" @click="playing1(info)"><i :class="['iconfont']"></i> {{info.vip ? 'VIP尊享' : '立即播放'}}</span>
                     <template>
                         <span class="play-btn play-collect" @click="1"><i class="iconfont icon-collect"></i> 收藏</span>
                     </template>
@@ -81,11 +76,6 @@
 </template>
 
 <script>
-// import { mapGetters, mapMutations, mapActions } from 'vuex'
-// import { formatSongInfo } from '@utils/song'
-// import Lyrics from '@components/common/lyrics.vue'
-// import Comments from '@components/common/comments.vue'
-// import addList from '@components/common/addlist.vue'
 import {mapGetters} from "vuex"
 import {mixin} from "../../mixins";
 import SongShowLyric from "../lyric/SongShowLyric";
@@ -189,16 +179,17 @@ export default {
             })
         },
         // 获取相似音乐
-        async getSimiSong () {
+        getSimiSong () {
             simiSong({ id: this.sId }).then(res =>{
                 if (res.code !== 200) {
                     return this.$message.error('数据请求失败')
                 }
 
                 this.simiSong = res.songs
+                console.log(res.songs);
             })
         },
-        plyaing (params) {
+        playing1(params) {
             this.listOfSongs.unshift(params)
             console.log(params);
             this.toPlay(params.id,params.al.picUrl,0,params.name,params.ar[0].name)

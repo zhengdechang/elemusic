@@ -194,3 +194,15 @@ export const artistMv = ({ id = '', limit = 100, offset = 0 }) => get(`/artist/m
 export const toplist = () => get('/toplist', {})
 // 所有榜单内容摘要
 export const topListDetail = () => get('/toplist/detail', {})
+
+
+// 搜索
+export const search = ({ keywords = '' }) => get(`/search?keywords=${keywords}`, {})
+// 搜索类型；默认为 1 即单曲 , 取值意义 : 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合
+export const cloudsearch = ({ keywords = '', limit = 30, offset = 0, type = '1' }) =>get(`/cloudsearch?keywords=${keywords}&limit=${limit}&offset=${offset}&type=${type}`, {})
+// 热门搜索
+export const searchHot = () =>get('/search/hot', {})
+// 热门搜索详细
+export const searchHotDetail = () => ('/search/hot/detail', {})
+export const searchSuggest = ({ keywords = '' }) => get(`/search/suggest?keywords=${keywords}`, {})
+export const searchMatch = ({ keywords = '' }) => get(`/search/multimatch?keywords=${keywords}`, {})

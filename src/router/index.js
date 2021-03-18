@@ -4,13 +4,11 @@ import Home from '../views/home/Home'
 import SongList from "../views/songlist/SongList";
 import Singer from "../views/singer/Singer";
 import MyMusic from "../views/mymusic/MyMusic";
-import Search from "../components/header/search/Search";
+import Search from "../views/search/Search";
 import Lyric from "../views/lyric/Lyric";
 import signIn from "../views/login/signIn";
 import loginIn from "../views/login/loginIn";
 import Setting from "../components/header/Setting";
-import SingerAlbum from "../components/common/album/SingerAlbum";
-import SongListAlbum from "../components/common/album/SongListAlbum";
 import detail from "../views/songlist/detail";
 import Artist from "../views/singer/Artist";
 import My from "../views/mymusic/My";
@@ -28,109 +26,109 @@ import Rank from "../views/rank/Rank";
 
 Vue.use(Router)
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: Home
+const routes = [
+  {
+    path: '/',
+    name: 'home',
+    component: Home
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: Home
+  },
+  {
+    path: '/song-list',
+    name: 'song-list',
+    component: SongList
+  },
+  {
+    path: '/singer',
+    name: 'singer',
+    component: Singer
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component:Search
+  },
+  {
+    path: '/lyric',
+    name: 'lyric',
+    component:Lyric
+  },
+  {
+    path: '/sign-up',
+    name: 'sign-up',
+    component:signIn
+  },
+  {
+    path: '/login-in',
+    name: 'login-in',
+    component:loginIn
+  },
+  {
+    path: '/setting',
+    name: 'setting',
+    component:Setting
+  },
+  {
+    path: '/song-list/detail',
+    name: 'song-list-detail',
+    component:detail
+  },
+  {
+    path: '/artist',
+    name: 'artist',
+    component:Artist
+  },
+  {
+    path: '/my',
+    name: 'my',
+    component:My,
+    mata:{
+      requireAuth:true
     },
-    {
-      path: '/home',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/song-list',
-      name: 'song-list',
-      component: SongList
-    },
-    {
-      path: '/singer',
-      name: 'singer',
-      component: Singer
-    },
-    {
-      path: '/cloudsearch',
-      name: 'cloudsearch',
-      component:Search
-    },
-    {
-      path: '/lyric',
-      name: 'lyric',
-      component:Lyric
-    },
-    {
-      path: '/sign-up',
-      name: 'sign-up',
-      component:signIn
-    },
-    {
-      path: '/login-in',
-      name: 'login-in',
-      component:loginIn
-    },
-    {
-      path: '/setting',
-      name: 'setting',
-      component:Setting
-    },
-    {
-      path: '/singer-album/:id',
-      name: 'singer-album',
-      component:SingerAlbum
-    },
-    {
-      path: '/song-list-album/:id',
-      name: 'song-list-album',
-      component:SongListAlbum
-    },
-    {
-      path: '/song-list/detail',
-      name: 'song-list-detail',
-      component:detail
-    },
-    {
-      path: '/artist',
-      name: 'artist',
-      component:Artist
-    },
-    {
-      path: '/my',
-      name: 'my',
-      component:My,
-      children:[
-        {
+    children:[
+      {
         path: '/my/mymusic',
         name: 'mymusic',
         component: MyMusic
-        },
-      ]
-    },
-    {
-      path:'/song',
-      name:'song',
-      component:Song
-    },
-    {
-      path:'/album',
-      name:'album',
-      component:Album
-    },
-    {
-      path:'/mv',
-      name:'mv',
-      component:MvDetail
-    },
-    {
-      path:'/mv-page',
-      name:'mv-page',
-      component:MvPage
-    },
-    {
-      path:'/rank',
-      name:'rank',
-      component:Rank
-    },
-  ]
+      },
+    ]
+  },
+  {
+    path:'/song',
+    name:'song',
+    component:Song
+  },
+  {
+    path:'/album',
+    name:'album',
+    component:Album
+  },
+  {
+    path:'/mv',
+    name:'mv',
+    component:MvDetail
+  },
+  {
+    path:'/mv-page',
+    name:'mv-page',
+    component:MvPage
+  },
+  {
+    path:'/rank',
+    name:'rank',
+    component:Rank
+  },
+]
+const router = new Router({
+  routes
 })
+
+
+
+
+
+export default router

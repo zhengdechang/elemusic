@@ -52,7 +52,7 @@ import {playlistUser,subPlayList} from "../../networks/index"
 export default {
     components: {},
     created () {
-
+        this.init();
     },
     data () {
         // 这里存放数据
@@ -68,10 +68,17 @@ export default {
     computed: {
     },
     mounted () {
-            this.getUserPlayList()
+        this.getUserPlayList()
     },
     // 方法集合
     methods: {
+        init(){
+            const loginIn = window.sessionStorage.getItem('loginIn')
+            if(loginIn == 'false'||!loginIn){
+                this.$router.push('/login-in')
+                this.$message.warning('你还没有登录，请先登录')
+            }
+        },
         async getUserPlayList () {
             playlistUser({ uid:'276291614', limit: '', offset: '' }).then(res =>{
                 if (res.code !== 200) {

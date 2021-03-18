@@ -68,13 +68,13 @@
                     <div class="playlist-collect">
                         <h3 class="aside-title">喜欢这个歌单的人</h3>
                         <div class="aside-main collect-main">
-                            <router-link class="collect-author" :to="{ path: '/artist', query: { id: item.userId }}" v-for="item in collects" :key="item.userId">
+                            <div class="collect-author" :to="{ path: '/artist', query: { id: item.userId }}" v-for="item in collects" :key="item.userId">
                                 <el-image :src="item.avatarUrl">
                                     <div slot="placeholder" class="image-slot">
                                         <i class="iconfont icon-placeholder"></i>
                                     </div>
                                 </el-image>
-                            </router-link>
+                            </div>
                         </div>
                     </div>
                     <div class="playlist-recom">

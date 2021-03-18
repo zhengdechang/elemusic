@@ -62,6 +62,7 @@
 
 <script>
     import {mapGetters} from "vuex"
+    import {mixin} from "../../mixins";
     import {playlistdetail,songDetail} from "../../networks/index"
     import Loading from "../../components/common/Loading";
     import AlbumContent from "../../components/common/AlbumContent";
@@ -70,6 +71,7 @@
             AlbumContent,
             Loading
         },
+        mixins:[mixin],
         data () {
             // 这里存放数据
             return {
@@ -204,10 +206,13 @@
                 this.isLoading = false
             },
             // 播放列表为当前歌单的全部歌曲
-            playAllSongs () {
-                this.playAll({
-                    list: this.songList
+            playAllSongs() {
+                // listSongs
+                this.listSongs.forEach((item,i) => {
+                    this.listOfSongs[i] = item
                 })
+                this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
+
             },
             // 歌单简介查看更多
             showAllDesc () {
