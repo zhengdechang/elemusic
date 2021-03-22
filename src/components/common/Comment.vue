@@ -23,7 +23,7 @@
         </el-form>
         <div class="comment_area">
             <template v-if="comments.length">
-                <div class="comment_item" v-for="(item, index) in comments" :key="item.commentId + index + ''">
+                <div class="comment_item" v-for="(item, index) in comments" :key="index">
                     <router-link :to="{ path: '/user', query: { id: item.user.userId }}" class="comment_avatar">
                         <el-image :src="item.user.avatarUrl + '?param=120y120'">
                             <div slot="placeholder" class="image-slot">
@@ -76,9 +76,20 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
 import ReplyComment from "./ReplyComment";
-import {albumComment, comment, commentMv, commentSong} from "../../networks";
+import {
+    albumComment,
+    comment,
+    commentMv,
+    commentSong,
+    serveSongComment,
+    getServeSongComment,
+    serveMvComment,
+    getServeMvComment,
+    serveAlbumComment,
+    getServeAlbumComment,
+} from "../../networks";
 export default {
     name: 'Comments',
     components: {
@@ -110,7 +121,9 @@ export default {
             currentPage: 0,
             isEmpty: false,
             replyCommentId: 0,
-            replyIndex: -1
+            replyIndex: -1,
+            serveComment:[],
+            childType:0,
         }
     },
     // 监听属性 类似于data概念
@@ -119,9 +132,14 @@ export default {
             return function (item, index) {
                 return item.commentId === this.replyCommentId && this.replyIndex === index
             }
-        }
+        },
+        ...mapGetters([
+            'userId',
+            'loginIn'
+        ])
     },
-    mounted () {
+    created () {
+        this.childType = this.type
         this.getComment()
     },
     // 方法集合
@@ -150,24 +168,25 @@ export default {
         // 评论时间格式化处理
         formatMsgTime (duration) {
             let result = ''
-            const NOW = new Date()
-            const PAST = new Date(duration)
+            // const NOW = new Date()
+            // const PAST = new Date(duration)
 
             // 判断是当天的时间 显示格式 10：30
-            if (NOW.toDateString() === PAST.toDateString()) {
-                result = this.formartDate(duration, 'HH:mm')
-                // 时间为当年 显示月日 时间戳
-            } else if (PAST.getFullYear() === NOW.getFullYear()) {
-                result = this.formartDate(duration, 'MM月dd日 HH:mm')
-            } else {
-                result = this.formartDate(duration, 'yyyy年MM月dd日')
-            }
-
+            // if (NOW.toDateString() === PAST.toDateString()) {
+            //     result = this.formartDate(duration, 'HH:mm')
+            //     // 时间为当年 显示月日 时间戳
+            // } else if (PAST.getFullYear() === NOW.getFullYear()) {
+            //     result = this.formartDate(duration, 'MM月dd日 HH:mm')
+            // } else {
+            //     result = this.formartDate(duration, 'yyyy年MM月dd日')
+            // }
+            result = this.formartDate(duration, 'MM月dd日 HH:mm')
             return result
         },
         // 获取页面评论
         getComment () {
-            switch (this.type) {
+            this.getServeComments()
+            switch (this.childType) {
                 case 0:
                     this.getSongComment()
                 break
@@ -177,15 +196,12 @@ export default {
                 case 3:
                     this.getAlbumComment()
                 break
-                case 5:
-                    this.getVideoComment()
-                break
             }
         },
          getSongComment () {
-            commentSong({ id: this.curId, limit: this.limit, offset: this.offset, before: this.before }).then(res =>{
-                this.msgHandler(res)
-            })
+             commentSong({ id: this.curId, limit: this.limit, offset: this.offset, before: this.before }).then(res =>{
+                 this.msgHandler(res)
+             })
         },
         getMvComment () {
             commentMv({ id: this.curId, limit: this.limit, offset: this.offset, before: this.before }).then(res =>{
@@ -206,18 +222,18 @@ export default {
             if (res.code !== 200) {
                 return this.$message.error('数据请求失败')
             }
-            this.total = res.total
             this.hotComments = res.hotComments || []
             this.hotComments.map(item => {
                 item.isHot = true
                 return item
             })
-            this.comments = [...this.hotComments, ...res.comments]
+            this.comments = [...this.serveComment,...this.hotComments, ...res.comments]
             // 当前评论是否为空
+            this.total = this.comments.length
             this.isEmpty = this.before === 0 && !this.comments.length
         },
         // 发布/删除/回复评论
-        async commentHandler (t, content, commentId) {
+        commentHandler (t, content, commentId) {
             const params = {
                 t: t, // 0删除 1发送 2回复
                 type: this.type, // 0: 歌曲 1: mv 2: 歌单 3: 专辑  4: 电台 5: 视频 6: 动态
@@ -244,11 +260,11 @@ export default {
         },
         // 发布评论
         subComment () {
-            // if (!this.isLogin) {
-            //     this.setLoginDialog(true)
-            //     return
-            // }
-            this.commentHandler(1, this.msg)
+            if (!this.loginIn) {
+                this.$message.error('请先登录')
+            }else {
+                this.subServeComment()
+            }
         },
         // 删除评论
         delComment (item) {
@@ -296,6 +312,99 @@ export default {
         currentChange (page) {
             this.offset = (page - 1) * this.limit
             this.getComment()
+        },
+        //提交单曲评论并获取评论
+        subServeComment(){
+            const params = {
+                tid:this.curId,
+                user_id:this.userId,
+                content:this.msg,
+                time:(new Date()).getTime(),
+                likecount:0,
+            }
+            if(this.childType == 0){
+                serveSongComment(params).then(res =>{
+                    if(res.status){
+                        this.$message.success('评论成功')
+                        this.msg = ''
+                        this.getServeComments()
+                    }
+                })
+            } else if(this.childType == 1){
+                serveMvComment(params).then(res =>{
+                    if(res.status){
+                        this.$message.success('评论成功')
+                        this.msg = ''
+                        this.getServeComments()
+                    }
+                })
+            }else if(this.childType == 3){
+                serveAlbumComment(params).then(res =>{
+                    if(res.status){
+                        this.$message.success('评论成功')
+                        this.msg = ''
+                        this.getServeComments()
+                    }
+                })
+            }
+
+        },
+        getServeComments(){
+            if(this.childType == 0){
+                getServeSongComment(this.curId).then(res =>{
+                    res.data.forEach(item =>{
+                        const user =item.user_id
+                        const comment = {
+                            content:item.content,
+                            user:{
+                                avatarUrl:'http://localhost:3001/admin/api/user/getImg/'+user._id,
+                                nickname:user.username,
+                                userId:user._id,
+                            },
+                            time:Number(item.time),
+                            likedCount:item.likecount
+                        };
+                        this.serveComment.unshift(comment)
+                    })
+                    // this.serveComment =JSON.parse(JSON.stringify(this.serveComment))
+                })
+            } else if(this.childType == 1){
+                getServeMvComment(this.curId).then(res =>{
+                    res.data.forEach(item =>{
+                        const user =item.user_id
+                        const comment = {
+                            content:item.content,
+                            user:{
+                                avatarUrl:'http://localhost:3001/admin/api/user/getImg/'+user._id,
+                                nickname:user.username,
+                                userId:user._id,
+                            },
+                            time:Number(item.time),
+                            likedCount:item.likecount
+                        };
+                        this.serveComment.unshift(comment)
+                    })
+                    // this.serveComment =JSON.parse(JSON.stringify(this.serveComment))
+                })
+            }else if(this.childType == 3){
+                getServeAlbumComment(this.curId).then(res =>{
+                    res.data.forEach(item =>{
+                        const user =item.user_id
+                        const comment = {
+                            content:item.content,
+                            user:{
+                                avatarUrl:'http://localhost:3001/admin/api/user/getImg/'+user._id,
+                                nickname:user.username,
+                                userId:user._id,
+                            },
+                            time:Number(item.time),
+                            likedCount:item.likecount
+                        };
+                        this.serveComment.unshift(comment)
+                    })
+                    // this.serveComment =JSON.parse(JSON.stringify(this.serveComment))
+                })
+            }
         }
     },
     watch: {
@@ -306,7 +415,7 @@ export default {
         },
         msg () {
             this.msg = this.maxLen >= this.msg ? this.msg : this.msg.substring(0, this.maxLen)
-        }
+        },
     }
 }
 </script>

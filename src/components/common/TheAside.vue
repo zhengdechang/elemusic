@@ -15,7 +15,7 @@
 <script>
 
     import {mapGetters} from 'vuex'
-    import {songLyric, songUrl} from "../../networks";
+    import {songLyric, songUrl,getServeLikedSong} from "../../networks";
     export default {
         name: "TheAside",
         data(){
@@ -28,6 +28,7 @@
                 'showAside',             //是否显示播放中的歌曲列表
                 "listOfSongs",           //当前歌曲列表
                 'id',                    //播放中的音乐id
+                'userId'
             ])
         },
         mounted() {
@@ -39,19 +40,23 @@
         methods:{
             toPlay(id,picUrl,index,name,artist){
                 this.$store.commit('setId',id);
-                // this.$store.commit('setUrl','http://music.163.com/song/media/outer/url?id='+id+'.mp3');
                 this.getUrl(id);
                 this.$store.commit('setPicUrl',picUrl);
                 this.$store.commit('setListIndex',index);
                 this.$store.commit('setTitle',name);
                 this.$store.commit('setArtist',artist);
-                // songLyric(id).then(res =>{
-                //     console.log(res.lrc.lyric);
-                //     this.$store.commit('setLyric',res.lrc.lyric);
-                // }).catch(err => {
-                //     console.log(err);
-                // });
                 this.getLyric(id);
+                if(this.loginIn){
+                    getServeLikedSong(this.userId).then(res =>{
+                        console.log(res);
+                        for(let item of res.data){
+                            if(item.tid == id){
+                                this.$store.commit('setIsActive',true);
+                                break;
+                            }
+                        }
+                    })
+                }
 
             },
             //获取歌曲的url

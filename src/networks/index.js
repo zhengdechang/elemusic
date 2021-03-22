@@ -206,3 +206,50 @@ export const searchHot = () =>get('/search/hot', {})
 export const searchHotDetail = () => ('/search/hot/detail', {})
 export const searchSuggest = ({ keywords = '' }) => get(`/search/suggest?keywords=${keywords}`, {})
 export const searchMatch = ({ keywords = '' }) => get(`/search/multimatch?keywords=${keywords}`, {})
+
+//单曲评论提交
+export const serveSongComment = (model) => http.post(`/commment/song`,model)
+//单曲获取评论
+export const  getServeSongComment = (tid) => http.get(`/commment/song/${tid}`)
+
+
+//mv评论提交
+export const serveMvComment = (model) => http.post(`/commment/mv`,model)
+//mv获取评论
+export const  getServeMvComment = (id) => http.get(`/commment/mv/${id}`)
+
+//专辑评论提交
+export const serveAlbumComment = (model) => http.post(`/commment/album`,model)
+//专辑获取评论
+export const  getServeAlbumComment = (id) => http.get(`/commment/album/${id}`)
+
+
+
+//------------------------------------------收藏相关接口-----------------------------------------
+//单曲收藏
+export const subServeLikedSong = (model) => http.post(`/likedsong`,model)
+//获取收藏的单曲
+export const  getServeLikedSong = (user_id) => http.get(`/likedsong/${user_id}`)
+//单曲取消收藏
+export const  deleteLikedSong = (tid) => http.delete(`/likedsong/delete/${tid}`)
+
+//歌单收藏
+export const subServeLikedAlbum = (model) => http.post(`/likedalbum`,model)
+//获取收藏的歌单
+export const  getServeLikedAlbum = (user_id) => http.get(`likedalbum/${user_id}`)
+//歌单取消收藏
+export const  deleteLikedAlbum = (tid) => http.delete(`/likedalbum/delete/${tid}`)
+
+//歌手收藏
+export const subServeLikedArtist = (model) => http.post(`/likedartist`,model)
+//歌手收藏的歌单
+export const  getServeLikedArtist = (user_id) => http.get(`likedartist/${user_id}`)
+//歌手取消收藏
+export const  deleteLikedArtist = (tid) => http.delete(`/likedartist/delete/${tid}`)
+
+//专辑收藏
+export const subServeLikedCollection = (model) => http.post(`/likedcollection`,model)
+//专辑收藏的歌单
+export const  getServeLikedCollection= (user_id) => http.get(`likedcollection/${user_id}`)
+//专辑取消收藏
+export const  deleteLikedCollection = (tid) => http.delete(`/likedcollection/delete/${tid}`)

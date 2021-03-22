@@ -56,7 +56,8 @@
                 <div class="song-oper">
                     <span :class="['play-btn','play-all', songDisable]" @click="playing1(info)"><i :class="['iconfont']"></i> {{info.vip ? 'VIP尊享' : '立即播放'}}</span>
                     <template>
-                        <span class="play-btn play-collect" @click="1"><i class="iconfont icon-collect"></i> 收藏</span>
+                        <span class="play-btn play-collect,isActiveSong? 'active' : ''" @click="subSong"><i :class="['iconfont','icon-collect' + (isActiveSong ? '-active' : '')]"></i>  {{ isActiveSong? '已收藏' : '收藏'}}</span>
+<!--                        <span :class="['singer-btn', 'singer-collect', isActiveArtist? 'active' : '']" @click="subArtist()"><i :class="['iconfont', 'icon-collect' + (isActiveArtist ? '-active' : '')]"></i> {{ isActiveArtist? '已收藏' : '收藏'}}</span>-->
                     </template>
 <!--                    <el-popover placement="bottom" trigger="click" ref="popAddList" v-else>-->
 <!--                        <span class="play-btn play-collect" slot="reference"><i class="iconfont icon-collect"></i> 收藏</span>-->
@@ -79,7 +80,7 @@
 import {mapGetters} from "vuex"
 import {mixin} from "../../mixins";
 import SongShowLyric from "../lyric/SongShowLyric";
-import {songDetail,simiSong} from '../../networks/index'
+import {songDetail, simiSong, subServeLikedSong, deleteLikedSong, getServeLikedSong} from '../../networks/index'
 import Comments from "../../components/common/Comment";
 export default {
     name: 'song-detail',
@@ -90,8 +91,6 @@ export default {
         // addList
         SongShowLyric
     },
-    created () {
-    },
     mixins:[mixin],
     data () {
         // 这里存放数据
@@ -101,8 +100,12 @@ export default {
             type: 0, // 0: 歌曲 1: mv 2: 歌单 3: 专辑  4: 电台 5: 视频 6: 动态
             simiSong: [],
             background:'',
+            tid:'',
         }
     },
+    created () {
+        this.tid = this.$route.query.id;
+     },
     mounted () {
         this.sId = String(this.$route.query.id)
         this.init()
@@ -112,7 +115,10 @@ export default {
     // 监听属性 类似于data概念
     computed: {
         ...mapGetters([
-            'listOfSongs'
+            'listOfSongs',
+            'isActiveSong',
+            'userId',
+            'loginIn',
         ]),
         // isCurSong () {
         //     return this.isPlayed && this.curSongInfo && this.curSongInfo.id === this.sId
@@ -163,8 +169,6 @@ export default {
         },
         backGround(){
             const bg =  document.getElementsByClassName('song-container');
-            console.log(bg);
-            console.log(this.background);
             bg.style = "background-image:url('"+this.background+"')";
         },
         getSongDetail () {
@@ -186,7 +190,6 @@ export default {
                 }
 
                 this.simiSong = res.songs
-                console.log(res.songs);
             })
         },
         playing1(params) {
@@ -204,6 +207,48 @@ export default {
             this.getSongDetail()
             this.getSimiSong()
         },
+        subSong() {
+                if (!this.isActiveSong) {
+                    if (this.loginIn) {
+                        const params = {
+                            user_id: this.userId,
+                            tid: this.tid,
+                            time: (new Date()).getTime(),
+                        }
+                        subServeLikedSong(params).then(res => {
+                            if (res.status == 200) {
+                                this.$store.commit("setIsActiveSong", true)
+                                this.$message.success('收藏成功');
+                            } else {
+                                this.$message.success('收藏失败');
+                            }
+                        })
+                    } else {
+                        this.$message.error('您还没有登录，请先登录')
+                    }
+                } else {
+                    deleteLikedSong(this.tid).then(res =>{
+                        if(res.status == 200){
+                            this.$message.success('取消收藏成功')
+                            this.$store.commit('setIsActiveSong',false)
+                        }else {
+                            this.$message.error('取消收藏失败')
+                        }
+                    })
+                }
+        },
+        getSong(){
+            if(this.loginIn){
+                getServeLikedSong(this.userId).then(res =>{
+                    for(let item of res.data){
+                        if(item.tid == this.$route.query.id){
+                            this.$store.commit('setIsActiveSong',true);
+                            break;
+                        }
+                    }
+                })
+            }
+        }
     },
     watch: {
         $route: {
@@ -212,6 +257,9 @@ export default {
                 this.init()
             },
             deep: true
+        },
+        tid(){
+            this.$store.commit('setIsActiveSong',false)
         }
     }
 }
@@ -240,6 +288,7 @@ a {
 .cover {
     position: relative;
 }
+
 .cover-img {
     margin-left: 30px;
     position: relative;
@@ -270,6 +319,8 @@ a {
         animation: soundPaying 15s linear infinite;
         animation-play-state: paused;
     }
+
+
 
     &.active {
         .cover-stylus {
@@ -420,8 +471,12 @@ a {
         padding: 7px 15px;
         cursor: pointer;
         margin: 5px 15px 5px 0;
-        background: #f0f0f0;
         color: #333;
+    }
+    .play-btn {
+        &.active, .icon-collect-active {
+            color: red;
+        }
     }
 
     .play-all {

@@ -61,8 +61,8 @@
                     <el-slider class="volume" v-model="volume" :vertical="true" ></el-slider>
                 </div>
                 <!--收藏-->
-                <div class="item">
-                    <svg class="icon">
+                <div class="item"  @click="subSong">
+                    <svg class="icon"  :class="{active:isActive}">
                         <use xlink:href="#icon-xihuan-shi"></use>
                     </svg>
                 </div>
@@ -86,7 +86,14 @@
 
 <script>
     import {mapGetters} from "vuex";
-    import {songLyric,songUrl,download} from "../../networks";
+    import {
+        songLyric,
+        songUrl,
+        download,
+        getServeLikedSong,
+        deleteLikedSong,
+        subServeLikedSong
+    } from "../../networks";
 
     export default {
         name: "PlayBar",
@@ -118,6 +125,9 @@
               'listIndex',              //当前歌曲在歌单中的位置
               'listOfSongs',             //当前的歌单列表
               'autoNext',                //自动播放下一首
+              'isActive',                //是否收藏
+              'loginIn',                 //是否登录
+              'userId',                  //用户id
     ])
         },
         mounted() {
@@ -156,6 +166,9 @@
               this.next();
 
             },
+            id(){
+                this.$store.commit('setIsActive',false)
+            }
 
         },
         methods:{
@@ -278,18 +291,20 @@
               if(id&&id !=this.id){
                   this.$store.commit('setId',this.listOfSongs[this.listIndex].id);
                   this.getUrl(this.listOfSongs[this.listIndex].id);
-                  // this.$store.commit('setUrl','http://music.163.com/song/media/outer/url?id='+this.listOfSongs[this.listIndex].id+'.mp3');
                   this.$store.commit('setPicUrl',this.listOfSongs[this.listIndex].al.picUrl);
-                  console.log(this.listOfSongs[this.listIndex].al.picUrl);
                   this.$store.commit('setTitle',this.listOfSongs[this.listIndex].name);
                   this.$store.commit('setArtist',this.listOfSongs[this.listIndex].ar[0].name);
-                  // songLyric(this.listOfSongs[this.listIndex].id).then(res =>{
-                  //     console.log(res.lrc.lyric);
-                  //     this.$store.commit('setLyric',res.lrc.lyric);
-                  // }).catch(err => {
-                  //     console.log(err);
-                  // });
                   this.getLyric(this.listOfSongs[this.listIndex].id);
+                  if(this.loginIn){
+                      getServeLikedSong(this.userId).then(res =>{
+                          for(let item of res.data){
+                              if(item.tid == id){
+                                  this.$store.commit('setIsActive',true);
+                                  break;
+                              }
+                          }
+                      })
+                  }
               }
             },
             //获取歌曲的url
@@ -369,6 +384,40 @@
                   console.log(err);
               })
             },
+            subSong() {
+                if (!this.id) {
+                    this.$message.error('当前无播放歌曲');
+                } else {
+                    if (!this.isActive) {
+                        if (this.loginIn) {
+                            const params = {
+                                user_id: this.userId,
+                                tid: this.id,
+                                time: (new Date()).getTime(),
+                            }
+                            subServeLikedSong(params).then(res => {
+                                if (res.status == 200) {
+                                    this.$store.commit("setIsActive", true)
+                                    this.$message.success('收藏成功');
+                                } else {
+                                    this.$message.success('收藏失败');
+                                }
+                            })
+                        } else {
+                            this.$message.error('您还没有登录，请先登录')
+                        }
+                    } else {
+                        deleteLikedSong(this.id).then(res =>{
+                            if(res.status == 200){
+                                this.$message.success('取消收藏成功')
+                                this.$store.commit('setIsActive',false)
+                            }else {
+                                this.$message.error('取消收藏失败')
+                            }
+                        })
+                    }
+                }
+            }
 
         },
     }

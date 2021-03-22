@@ -1,0 +1,155 @@
+.video-skin {
+  /* 初始化视频播放按钮占位符重置UI */
+  /* 初始化视频播放按钮占位符 */
+  /* 控制条上的播放按钮 */
+  /* 暂停按钮 */
+  /* 重播按钮 */
+  /* 音量按钮 */
+  /* 禁音按钮 */
+  /* 全屏按钮 */
+  /* 退出全屏按钮 */
+  /* 进度条 */
+  /* 已加载的进度条 */
+  /* 当前播放的进度条 */
+  /* 进度条上的小*/
+  /* 视频控制，当前时长与总时长 */
+  /* 音量条 */
+  /* 视频播放速度控制 */
+  /* 清晰度按钮 */
+}
+.video-skin .vjs-control-bar {
+  display: flex;
+  height: 60px;
+  padding: 20px 0 10px;
+  background: rgba(255, 255, 255, 0);
+  background: -moz-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.3) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(100%, rgba(0, 0, 0, 0.3)));
+  background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.3) 100%);
+  background: -o-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.3) 100%);
+  background: -ms-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.3) 100%);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.3) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#000000', GradientType=0);
+}
+.video-skin .vjs-icon-placeholder,
+.video-skin .vjs-icon-placeholder::before {
+  font-family: "iconfont" !important;
+}
+.video-skin .vjs-big-play-button {
+  width: 80px;
+  height: 80px;
+  line-height: 80px;
+  top: 50%;
+  left: 50%;
+  margin: -50px 0 0 -40px;
+  font-size: 80px;
+  border: 0 !important;
+  background-color: transparent !important;
+}
+.video-skin .vjs-big-play-button .vjs-icon-placeholder:before {
+  content: "\e737";
+}
+.video-skin .vjs-play-control .vjs-icon-placeholder:before {
+  content: "\e6a4";
+}
+.video-skin .vjs-play-control.vjs-playing .vjs-icon-placeholder:before {
+  content: "\e6a5";
+}
+.video-skin .vjs-play-control.vjs-ended .vjs-icon-placeholder:before {
+  content: "\e61c";
+}
+.video-skin .vjs-mute-control .vjs-icon-placeholder:before {
+  content: "\e8b9" !important;
+}
+.video-skin .vjs-mute-control.vjs-vol-0 .vjs-icon-placeholder:before,
+.video-skin .vjs-mute-control.vjs-vol-0 .vjs-icon-placeholder:before {
+  content: "\e8b8" !important;
+}
+.video-skin .vjs-fullscreen-control .vjs-icon-placeholder:before {
+  content: "\e8e8";
+}
+.video-skin.vjs-fullscreen .vjs-fullscreen-control .vjs-icon-placeholder:before {
+  content: "\e60f";
+}
+.video-skin .vjs-slider {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.video-skin .vjs-load-progress div {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+.video-skin .vjs-play-progress {
+  background-color: #ff641e;
+}
+.video-skin .vjs-play-progress::before {
+  box-sizing: content-box;
+  display: inline-block;
+  content: '';
+  position: absolute;
+  right: -6px;
+  width: 4px;
+  height: 4px;
+  border: 4px solid #ff641e;
+  top: -5px;
+  background: #fff;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
+  transition: all 0.3s;
+  border-radius: 50%;
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+.video-skin .vjs-progress-control:hover .vjs-play-progress::before {
+  top: -4px;
+}
+.video-skin .vjs-time-control {
+  display: inline-block;
+  min-width: auto;
+  padding: 0 2px;
+}
+.video-skin .vjs-volume-vertical {
+  background: transparent;
+}
+.video-skin .vjs-volume-level:before {
+  top: -5px;
+  left: -4px;
+}
+.video-skin .vjs-playback-rate-value {
+  font-size: 12px;
+  line-height: 30px;
+}
+.video-skin .vjs-menu {
+  width: 35px;
+  left: -5px;
+}
+.video-skin .vjs-menu li {
+  line-height: 24px;
+}
+.video-skin .vjs-menu li.vjs-selected {
+  color: ff641e;
+  background-color: #fff !important;
+}
+.video-skin .vjs-menu .vjs-menu-content {
+  color: #efefef;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.video-skin .vjs-quality .vjs-menu-button,
+.video-skin .vjs-quality .vjs-quality-value {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.video-skin .vjs-quality .vjs-quality-value {
+  font-size: 12px;
+  line-height: 30px;
+}
+.video-skin .vjs-quality.vjs-hover .vjs-menu {
+  display: block;
+}
+.video-skin.vjs-ended .vjs-big-play-button {
+  display: block;
+}
+.video-skin.vjs-ended .vjs-big-play-button .vjs-icon-placeholder:before {
+  content: "\e61c";
+}
+/*# sourceMappingURL=video.css.map */

@@ -14,7 +14,7 @@
                         {{details.name}}
                         <span>{{'#' + details.type}}</span>
                     </div>
-                    <div class="album-singer">歌手：<router-link :to="{ path: '/singer', query: { id: author.id }}" class="song_name" v-for="(author, k) in details.artists" :key="author.name">{{ k !== 0 ? ' / ' + author.name : author.name }}</router-link></div>
+                    <div class="album-singer">歌手：<router-link :to="{ path: '/artist', query: { id: author.id }}" class="song_name" v-for="(author, k) in details.artists" :key="author.name">{{ k !== 0 ? ' / ' + author.name : author.name }}</router-link></div>
                     <div class="album-time">发行时间：{{formartDate(details.publishTime, 'yyyy-MM-dd')}}</div>
                     <div class="album-company">发行公司：{{details.company}}</div>
                     <div class="album-desc" v-if="details.description">
@@ -31,9 +31,11 @@
                     <div class="song-header">
                         <h4>包含歌曲列表 <em>{{details.size + '首歌'}}</em></h4>
                         <span class="play-all" @click="playAllSongs"><i class="iconfont icon-audio-play"></i> 播放全部</span>
-                        <span :class="['collect', dynamic.isSub ? 'active' : '']" @click="'subAlbum'"><i :class="['iconfont', 'icon-collect' + (dynamic.isSub ? '-active' : '')]"></i> {{ dynamic.isSub ? '已收藏' : '收藏'}}</span>
+                        <span :class="['collect', isActiveCollection ? 'active' : '']" @click="subCollection()"><i :class="['iconfont', 'icon-collect' + (isActiveCollection ? '-active' : '')]"></i> {{ isActiveCollection ? '已收藏' : '收藏'}}</span>
                     </div>
-                    <album-content :songList="songList" :stripe="true"></album-content>
+                    <album-content :songList="songList" :stripe="true">
+                        <template slot="title">歌曲列表</template>
+                    </album-content>
                     <div class="album-comments" ref=comment>
                         <Comments :type="type" :id="albumId"></Comments>
                     </div>
@@ -62,7 +64,14 @@
 </template>
 
 <script>
-import {album,artistAlbum,albumDynamic} from "../../networks/index"
+    import {
+        album,
+        artistAlbum,
+        albumDynamic,
+        subServeLikedArtist,
+        deleteLikedArtist,
+        getServeLikedArtist, subServeLikedCollection, deleteLikedCollection, getServeLikedCollection
+    } from "../../networks/index"
 import AlbumContent from "../../components/common/AlbumContent";
 import Comments from "../../components/common/Comment";
 import {mixin} from "../../mixins";
@@ -84,6 +93,7 @@ export default {
         // 这里存放数据
         return {
             // 歌单详情
+            tid:'',
             albumId: '',
             details: null,
             songList: [],
@@ -99,7 +109,14 @@ export default {
     computed: {
         ...mapGetters([
             'listOfSongs',
+            'isActiveCollection',
+            'userId',
+            'loginIn',
         ])
+    },
+    created() {
+        this.tid = this.$route.query.id;
+        this.getLikedCollection();
     },
     // 方法集合
     methods: {
@@ -169,15 +186,52 @@ export default {
             this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
 
         },
-        // async subAlbum () {
-        //     const { data: res } = await this.$http.albumSub({ id: this.albumId, t: Number(!this.dynamic.isSub) })
-        //
-        //     if (res.code !== 200) {
-        //         return this.$msg.error('数据请求失败')
-        //     }
-        //     this.dynamic.isSub = Number(!this.dynamic.isSub)
-        // },
-        // 处理歌曲
+        //提交收藏
+        subCollection () {
+            if (!this.isActiveCollection) {
+                if (this.loginIn) {
+                    const params = {
+                        user_id: this.userId,
+                        tid: this.tid,
+                        time: (new Date()).getTime(),
+                    }
+                    subServeLikedCollection(params).then(res => {
+                        if (res.status == 200) {
+                            this.$store.commit("setIsActiveCollection", true)
+                            this.$message.success('收藏成功');
+                        } else {
+                            this.$message.success('收藏失败');
+                        }
+                    })
+                } else {
+                    this.$message.error('您还没有登录，请先登录')
+                }
+            } else {
+                deleteLikedCollection(this.tid).then(res =>{
+                    if(res.status == 200){
+                        this.$message.success('取消收藏成功')
+                        this.$store.commit('setIsActiveCollection',false)
+                    }else {
+                        this.$message.error('取消收藏失败')
+                    }
+                })
+            }
+        },
+        //获取收藏列表
+        getLikedCollection(){
+            if(this.loginIn){
+                getServeLikedCollection(this.userId).then(res =>{
+                    for(let item of res.data){
+                        if(item.tid == this.$route.query.id){
+                            this.$store.commit('setIsActiveCollection',true);
+                            break;
+                        }
+                    }
+                })
+            }
+        },
+
+        //处理歌曲
         _initialize () {
             this.getAlbum({ id: this.albumId })
             this.getAlbumDynamic({ id: this.albumId })
@@ -189,6 +243,9 @@ export default {
             if (this.albumId) {
                 this._initialize()
             }
+        },
+        tid(){
+            this.$store.commit("setIsActiveCollection", false)
         }
     }
 }

@@ -13,7 +13,7 @@
                     <div class="singer-author">
                         <div class="singer-name">{{artist.name}}</div>
                         <router-link v-if="artist.accountId" class="singer-btn singer-home" :to="{ path: '/artist', query: { id: artist.accountId }}"><i class="iconfont icon-home"></i> 个人主页</router-link>
-                        <span :class="['singer-btn', 'singer-collect', artist.followed ? 'active' : '']" @click="getArtistSub(artist.followed ? 0 : 1)"><i :class="['iconfont', 'icon-collect' + (artist.followed ? '-active' : '')]"></i> {{ artist.followed ? '已收藏' : '收藏'}}</span>
+                        <span :class="['singer-btn', 'singer-collect', isActiveArtist? 'active' : '']" @click="subArtist()"><i :class="['iconfont', 'icon-collect' + (isActiveArtist ? '-active' : '')]"></i> {{ isActiveArtist? '已收藏' : '收藏'}}</span>
                     </div>
                     <div class="singer-brief">{{artist.briefDesc ? artist.briefDesc : '暂无简介'}} <span v-if="introduction.length" @click="moreDesc">更多>></span></div>
                 </div>
@@ -31,11 +31,12 @@
                     <div class="singer-oper" v-if="type === 'hot'">
                         <span @click="playAllSongs" class="singer-btn playAll"><i class="iconfont icon-audio-play"></i> 播放全部</span>
 <!--                        <span @click="addAll" class="singer-btn addAll"><i class="iconfont icon-add"></i> 添加到播放列表</span>-->
-                        <span @click="collectAll" class="singer-btn collectAll"><i class="iconfont icon-collect"></i> 收藏热门</span>
                     </div>
                 </div>
                 <div class="singer-list">
-                        <album-content   :songList="listOfSongs" :stripe="true" v-show="type === 'hot'"></album-content>
+                        <album-content   :songList="listOfSongs" :stripe="true" v-show="type === 'hot'">
+                            <template slot="title">歌曲列表</template>
+                        </album-content>
                         <AlbumList :albumList="hotAlbums" v-show="type === 'album'"></AlbumList>
                         <MvList  class="loadMv" :mvList="currentMv" v-show="type === 'mv'" v-infinite-scroll="loadMv" :infinite-scroll-disabled="isLoadMv" infinite-scroll-distance="20"></MvList>
                     <template v-if="isLoading">
@@ -87,7 +88,15 @@
 </template>
 
 <script>
-    import {artistDesc,artists,artistAlbum,artistMv} from "../../networks/index"
+    import {
+        artistDesc,
+        artists,
+        artistAlbum,
+        artistMv,
+        subServeLikedSong,
+        deleteLikedSong,
+        subServeLikedArtist, deleteLikedArtist, getServeLikedArtist
+    } from "../../networks/index"
     import {mixin} from "../../mixins";
     import { mapGetters } from "vuex"
     import Loading from "../../components/common/Loading"
@@ -106,7 +115,7 @@
         data () {
             // 这里存放数据
             return {
-                sUid: this.$route.query.id,
+                sUid: '',
                 artist: {},
                 hotSongs: [],
                 hotAlbums: [],
@@ -128,9 +137,18 @@
                 AllhotAlbums:[],
             }
         },
+        created() {
+            this.sUid =this.$route.query.id,
+            this.getLikedAlbum()
+        },
         // 监听属性 类似于data概念
         computed: {
-            ...mapGetters(['listOfSongs'])
+            ...mapGetters([
+                'listOfSongs',
+                'isActiveArtist',
+                'userId',
+                'loginIn',
+            ])
         },
         mounted () {
             this.init()
@@ -168,15 +186,50 @@
                     this.isLoading = false
                 })
             },
-            // async getArtistSub (t) {
-            //     const { data: res } = await this.$http.artistSub({ id: this.sUid, t })
-            //
-            //     if (res.code !== 200) {
-            //         return this.$msg.error('数据请求失败')
-            //     }
-            //     this.$msg.success('操作成功')
-            //     this.getArtists()
-            // },
+            //提交收藏
+            subArtist () {
+                if (!this.isActiveArtist) {
+                    if (this.loginIn) {
+                        const params = {
+                            user_id: this.userId,
+                            tid: this.sUid,
+                            time: (new Date()).getTime(),
+                        }
+                        subServeLikedArtist(params).then(res => {
+                            if (res.status == 200) {
+                                this.$store.commit("setIsActiveArtist", true)
+                                this.$message.success('收藏成功');
+                            } else {
+                                this.$message.success('收藏失败');
+                            }
+                        })
+                    } else {
+                        this.$message.error('您还没有登录，请先登录')
+                    }
+                } else {
+                    deleteLikedArtist(this.sUid).then(res =>{
+                        if(res.status == 200){
+                            this.$message.success('取消收藏成功')
+                            this.$store.commit('setIsActiveArtist',false)
+                        }else {
+                            this.$message.error('取消收藏失败')
+                        }
+                    })
+                }
+            },
+            //获取收藏列表
+            getLikedAlbum(){
+                if(this.loginIn){
+                    getServeLikedArtist(this.userId).then(res =>{
+                        for(let item of res.data){
+                            if(item.tid == this.$route.query.id){
+                                this.$store.commit('setIsActiveArtist',true);
+                                break;
+                            }
+                        }
+                    })
+                }
+            },
             getArtistAlbum () {
                 this.isLoading = true
                 artistAlbum({ id: this.sUid, offset: this.offset }).then(res =>{
@@ -297,10 +350,11 @@
                 },
                 deep: true
             },
-            sUid (val, oldVal) {
+            sUid () {
+                this.$store.commit("setIsActiveArtist", false)
                 this.type = this.$route.query.type || 'hot'
                 this.getArtists()
-            }
+            },
         },
         beforeDestroy () {
             clearTimeout(this.timer)

@@ -45,13 +45,15 @@
                         <div class="song-header">
                             <h4>歌曲列表 <em>{{total + '首歌'}}</em></h4>
                             <span class="play-all" @click="playAllSongs"><i class="iconfont icon-audio-play"></i> 播放全部</span>
-                            <span :class="['collect', details.subscribed ? 'active' : '']" @click="subPlayList(details)"><i :class="['iconfont', 'icon-collect' + (details.subscribed ? '-active' : '')]"></i> {{ details.subscribed ? '已收藏' : '收藏'}}</span>
+                            <span :class="['collect', isActiveAlbum ? 'active' : '']" @click="subPlayList()"><i :class="['iconfont', 'icon-collect' + (isActiveAlbum ? '-active' : '')]"></i> {{ isActiveAlbum ? '已收藏' : '收藏'}}</span>
                         </div>
                         <template v-if="isLoading">
                             <Loading />
                         </template>
                         <template v-else>
-                            <album-content :songList="listOfSongs"></album-content>
+                            <album-content :songList="listOfSongs">
+                                <template slot="title">歌曲列表</template>
+                            </album-content>
                             <div class="pagination" >
                                 <el-pagination
                                         background
@@ -123,7 +125,14 @@
 import { mapGetters } from 'vuex'
 import {mixin} from "../../mixins";
 import Loading from '../../components/common/Loading'
-import {playlistdetail,playlistSCollect,playlistRelated,songDetail,playlistComment} from "../../networks/index"
+import {
+    playlistdetail,
+    playlistSCollect,
+    playlistRelated,
+    songDetail,
+    playlistComment,
+    subServeLikedAlbum, getServeLikedAlbum, deleteLikedAlbum
+} from "../../networks/index"
 import AlbumContent from "../../components/common/AlbumContent";
 export default {
     name: 'PlayListDetail',
@@ -152,11 +161,22 @@ export default {
             start:0,
             end:1,
             listSongs:'',
+            id:','
         }
     },
     // 监听属性 类似于data概念
     computed: {
-        ...mapGetters(['listOfSongs'])
+        ...mapGetters([
+            'listOfSongs',
+            'isActiveAlbum',
+            'userId',
+            'loginIn'
+        ])
+    },
+    created() {
+        this.id = this.$route.query.id
+        this.getLikedAlbum()
+        console.log(this.id);
     },
     // 方法集合
     methods: {
@@ -242,7 +262,6 @@ export default {
 
                 this.details = res.playlist
                 const ids = res.playlist.trackIds
-                console.log(ids);
                 this.getAllSongs(ids)
                 // this.songList = this._formatSongs(res.playlist.tracks)
                 // this.total = this.songList.length
@@ -288,7 +307,7 @@ export default {
 
         },
         // 相关歌单推荐
-        async getRecom(params) {
+        getRecom(params) {
             playlistRelated(params).then(res => {
                 if (res.code !== 200) {
                     return this.$message.error('数据请求失败')
@@ -332,40 +351,67 @@ export default {
             })
             this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
 
+        },
+        // 收藏、取消歌单
+        subPlayList () {
+            if(!this.isActiveAlbum){
+                if(this.loginIn){
+                    const params ={
+                        tid:this.$route.query.id,
+                        user_id: this.userId,
+                        time: (new Date()).getTime(),
+                    }
+                    subServeLikedAlbum(params).then(res =>{
+                        if(res.status == 200){
+                            this.$message.success('歌单收藏成功');
+                            this.$store.commit('setIsActiveAlbum',true)
+                        }
+                    })
+                }else {
+                    this.$message.error('您还没有登录，请先登录')
+                }
+            } else {
+                deleteLikedAlbum(this.id).then(res =>{
+                    if(res.status == 200){
+                        this.$message.success('取消收藏成功')
+                        this.$store.commit('setIsActiveAlbum',false);
+                    }else {
+                        this.$message.error('取消收藏失败')
+                    }
+                })
+            }
+
+
+        },
+        //获取收藏列表
+        getLikedAlbum(){
+            if(this.loginIn){
+                getServeLikedAlbum(this.userId).then(res =>{
+                    for(let item of res.data){
+                        if(item.tid == this.$route.query.id){
+                            this.$store.commit('setIsActiveAlbum',true);
+                            break;
+                        }
+                    }
+                })
+            }
         }
-        // formatSongInfo(params) {
-        //     return new Song({
-        //         id: String(params.id),
-        //         name: params.name,
-        //         mvId: params.mv,
-        //         singer: params.ar,
-        //         album: params.al,
-        //         alia: params.alia,
-        //         vip: params.fee === 1,
-        //         license: params.license,
-        //         duration: utils.formatSongTime(params.dt),
-        //         url: `https://music.163.com/song/media/outer/url?id=${params.id}.mp3`,
-        //         publishTime: utils.formatMsgTime(params.publishTime)
-        //     })
-        //     // // 收藏、取消歌单
-        //     // async subPlayList (item) {
-        //     //     const { data: res } = await this.$http.subPlayList({ id: item.id, t: (item.subscribed ? 2 : 1) })
-        //     //
-        //     //     if (res.code !== 200) {
-        //     //         return this.$msg.error('数据请求失败')
-        //     //     }
-        //     //     this.details.subscribed = !this.details.subscribed
-        //     // }
-        // },
     },
     watch: {
         $route(newId, oldId) {
+            this.$store.commit('setIsActiveAlbum',false);
+            this.getLikedAlbum()
+            this.id = this.$route.query.id
             const id = this.$route.query.id
+            // this.$store.commit('setIsActiveAlbum',false);
             if (id) {
                 this.songList = []
                 this.total = 0
                 this._initialize(id)
             }
+        },
+        id(){
+            this.$store.commit('setIsActiveAlbum',false);
         }
         // isLogin (newVal, oldVal) {
         //     if (newVal) {

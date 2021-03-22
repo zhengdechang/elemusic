@@ -59,7 +59,9 @@
                     </div>
                 </div>
                 <div class="search-list">
-                    <album-content :songList="list" :stripe="true" :offset="offset" v-if="type === '1'"></album-content>
+                    <album-content :songList="list" :stripe="true" :offset="offset" v-if="type === '1'">
+                        <template slot="title">搜索列表</template>
+                    </album-content>
                     <album-list :albumList="list" v-if="type === '10'"></album-list>
                     <artist-list :artistList="list" v-if="type === '100'"></artist-list>
                     <play-list :playList="list" v-if="type === '1000'"></play-list>

@@ -9,6 +9,12 @@
 
   .title {
     text-align: center;
+    margin-top: -15px;
+    font-size: 23px;
+    color: #1c008bc9;
+    >hr{
+      margin-top: 5px;
+    }
   }
   > ul {
     width: 100%;
