@@ -131,7 +131,9 @@ import {
     playlistRelated,
     songDetail,
     playlistComment,
-    subServeLikedAlbum, getServeLikedAlbum, deleteLikedAlbum
+    subServeLikedAlbum,
+    getServeLikedAlbum,
+    deleteLikedAlbum
 } from "../../networks/index"
 import AlbumContent from "../../components/common/AlbumContent";
 export default {

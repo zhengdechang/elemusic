@@ -78,6 +78,7 @@ export default {
                 this.isLoading = res.hasMore
             })
         },
+        //选择Mv类型
         selectType (type, index) {
             this[type + 'Index'] = index
             this.list = []

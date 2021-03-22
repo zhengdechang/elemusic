@@ -1,4 +1,4 @@
-<template>
+  <template>
     <div class='singer'>
         <div class="w1200">
             <div class="filter">
@@ -89,10 +89,11 @@
                 this.params.offset = 0
                 this.params[type] = this[type][index].val
             },
-            async getArtist (params) {
+            //获取歌手列表
+            getArtist (params) {
                 artistList(params).then(res =>{
                     if (res.code !== 200) {
-                        return this.$msg.error('数据请求失败')
+                        return this.$message.error('数据请求失败')
                     }
                     this.list = this.params.offset !== 0 ? [...this.list, ...res.artists] : res.artists
                     this.isLoadMv = !res.more

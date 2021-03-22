@@ -87,26 +87,19 @@
 <script>
     import Swiper from "../../components/swiper/Swiper";
     import playList from '../../components/common/PlayList'
-    // import {getAllSinger,getAllSongList} from "../../networks/index"
     import {hotList, playLists, topArtists, topList, listDetail, topAlbum, getNewMv} from "../../networks/index"
     import AlbumList from "../../components/common/AlbumList";
     import MvList from "../../components/common/MvList";
-    // import ContentList from "../../components/common/ContentList";
     export default {
         name: "Homes",
         components:{
             MvList,
             AlbumList,
-            // ContentList,
             playList,
             Swiper
         },
         data(){
             return{
-                // songslist:[
-                //     {name:"歌单",list:[]},
-                //     {name:"歌手",list:[]},
-                // ]
                 playlist_tags: [],
                 playlist_list: [],
                 playlist_index: 0,
@@ -150,22 +143,6 @@
             this.init()
         },
         methods:{
-            // getSongList(){
-            //     getAllSongList().then((res) =>{
-            //         this.songslist[0].list = res.playlists.slice(0,10);
-            //         console.log(res.playlists);
-            //     }).catch(err =>{
-            //         console.log(err);
-            //     })
-            // },
-            // getSinger(){
-            //     getAllSinger().then((res) =>{
-            //         this.songslist[1].list = res.playlists.slice(0,10);
-            //         console.log(res);
-            //     }).catch(err =>{
-            //         console.log(err);
-            //     })
-            // }
             // 热门歌单分类标签
             getHotTags () {
                 hotList().then(res =>{
@@ -186,6 +163,7 @@
                     this.playlist_list = res.playlists
                 })
             },
+            //选择歌单类型
             choosePlayListType (index) {
                 this.playlist_index = index
                 this.playlist_params.cat = index !== 0 ? this.playlist_tags[index].name : ''
@@ -201,6 +179,7 @@
                     this.album_list = res.monthData.slice(0, 9)
                 })
             },
+            //选择专辑播放类型
             chooseAlbumType (index) {
                 this.album_index = index
                 this.album_params.area = index !== 0 ? this.album_area[index].code : ''
@@ -219,22 +198,6 @@
                     })
                 })
             },
-            // getToplist () {
-            //     topList().then((r) => {
-            //         const res = r
-            //         if (res.code !== 200) {
-            //             return this.$message.error('数据请求失败')
-            //         }
-            //         return res
-            //     }).then((r) => {
-            //         this.top_list = r.list.splice(0, 4)
-            //         this.top_list.forEach(async item => {
-            //             listDetail({ id: item.id }).then(res =>{
-            //                 this.$set(this.songList, item.id, res.playlist.tracks.splice(0, 6))
-            //             })
-            //         })
-            //     })
-            // },
             // 最新MV
             getMv (params) {
                 getNewMv(params).then(res =>{
@@ -245,13 +208,12 @@
                     console.log(this.mv_list);
                 })
             },
+            //选择Mv类型
             chooseMvType (index) {
                 this.mv_index = index
                 this.mv_params.area = index !== 0 ? this.mv_area[index] : ''
                 this.getMv(this.mv_params)
             },
-
-
             // 热门歌手
             getArtists (params) {
                 topArtists(params).then(res =>{

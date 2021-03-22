@@ -79,18 +79,6 @@
         methods:{
             SignUp(){
                 let _this = this;
-                let d = this.registerForm.birth;
-                let datetime = d.getFullYear() + '-' +(d.getMonth()+1) + '-' + d.getDate();
-                // let params = new URLSearchParams();
-                // params.append('username',this.registerForm.username);
-                // params.append('password',this.registerForm.password);
-                // params.append('sex',this.registerForm.sex);
-                // params.append('phoneNum',this.registerForm.phoneNum);
-                // params.append('email',this.registerForm.email);
-                // params.append('birth',datetime);
-                // params.append('introduction',this.registerForm.introduction);
-                // params.append('location',this.registerForm.location);
-                // // params.append('avator','/img/user.jpg');
                 postSignUp(this.registerForm).then(res =>{
                     if(res.status == 200){
                             // _this.notify('注册成功','success');
@@ -98,7 +86,6 @@
                             type:'success',
                             message:'注册成功'
                          })
-                        // this.$store.commit("setAvator",require("../../assets/img/user.jpg"));
                         setTimeout(function () {
                             _this.$router.push({path:'/login-in'});
                         },1000)

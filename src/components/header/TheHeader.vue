@@ -131,6 +131,7 @@
 
         },
         methods:{
+            //过去热门搜索
             getSearchHot () {
                 searchHot().then(res =>{
                     if (res.code !== 200) {
@@ -147,8 +148,8 @@
                     this.isShowSearch = false
                 }
             },
+            // 显示搜索列表 若有关键词显示搜索建议，否则显示默认热门搜索列表
             showSearch () {
-                // 显示搜索列表 若有关键词显示搜索建议，否则显示默认热门搜索列表
                 if (!this.keyVal) {
                     this.serachHot = []
                     this.getSearchHot()
@@ -199,9 +200,6 @@
                 }
                 this.$router.push({ path: '/search', query: { key: item.first } })
             },
-            handleClose () {
-                this.isShowSearch = false
-            },
             goHome(){
                 this.$store.commit('setActiveName',navMsg[0].name)
                 this.activeName = navMsg[0].name
@@ -211,19 +209,19 @@
                 this.$store.commit('setActiveName',name)
                 this.$router.push({path:path});
             },
-            goSearch(){
-                this.$router.push({path:'/cloudsearch',query:{keywords:this.keywords}});
-                window.location.reload();
-            },
             //获取图片地址/头像
             attachImageUrl(avator){
                 return avator ? avator : require("../../assets/img/user.jpg");
             },
+            //设置菜单选择
             goMenuList(path){
                 if(path == 0){
                     this.$store.commit('setLoginIn',false);
                     this.$store.commit('setIsActive',false);
                     this.$store.commit('setIsActiveAlbum',false);
+                    this.$store.commit('setIsActiveSong',false);
+                    this.$store.commit('setIsActiveArtist',false);
+                    this.$store.commit('setIsActiveCollection',false);
                     this.$router.go(0);
                 }else {
                     this.$router.push({path:path});

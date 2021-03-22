@@ -79,7 +79,9 @@ export default {
                 this.$message.warning('你还没有登录，请先登录')
             }
         },
-        async getUserPlayList () {
+
+        //获取用户播放列表
+        getUserPlayList () {
             playlistUser({ uid:'276291614', limit: '', offset: '' }).then(res =>{
                 if (res.code !== 200) {
                     return this.$message.error('数据请求失败')
@@ -97,9 +99,11 @@ export default {
                 }
             })
         },
+        //改变选择（歌单，歌手，专辑，Mv）
         toggleSlide (index) {
             this['slideBox' + index] = !this['slideBox' + index]
         },
+        //收藏删除
         delPlayList (item, index, type) {
             subPlayList({ id: item.id, t: (item.subscribed ? 2 : 1) }).then(res =>{
                 if (res.code !== 200) {
@@ -111,9 +115,9 @@ export default {
                 this.$router.push({ path: '/my/playlist', query: { id: this.createdList[0].id } })
             })
         },
-        jump () {
-            this.$router.push({ path: '/my/favorite' })
-        }
+        // jump () {
+        //     this.$router.push({ path: '/my/favorite' })
+        // }
     },
     watch: {
         $route () {

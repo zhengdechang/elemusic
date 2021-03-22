@@ -9,12 +9,6 @@ export const mixin = {
         ])
     },
     methods:{
-        notify(title,type){
-            this.notify({
-                title:title,
-                type:type
-            })
-        },
         attachImageUrl(srcUrl){
             return srcUrl ? srcUrl : '../assets/img/user.jpg';
         },
@@ -83,15 +77,5 @@ export const mixin = {
                 console.log(err);
             });
         },
-
-        //获取名字前半部分
-        // replaceName(str){
-        //     let arr = str.split('-');
-        //     return arr[0]
-        // },
-        // replaceFName(str){
-        //     let arr = str.split('-');
-        //     return arr[1]
-        // },
     }
 }

@@ -156,12 +156,7 @@
         },
         // 方法集合
         methods: {
-            // ...mapMutations({
-            //     setPlayStatus: 'SET_PLAYSTATUS',
-            //     setPlayList: 'SET_PLAYLIST',
-            //     setPlayListTips: 'setPlayListTips',
-            //     setPlayIndex: 'SET_PLAYINDEX'
-            // }),
+            //获取歌手描述
             getArtistDesc () {
                 artistDesc({ id: this.sUid, timestamp: new Date().valueOf() }).then(res =>{
                     if (res.code !== 200) {
@@ -170,6 +165,7 @@
                     this.introduction = res.introduction
                 })
             },
+            //获取歌手
             getArtists () {
                 this.isLoading = true
                 artists({ id: this.sUid, timestamp: new Date().valueOf() }).then(res =>{
@@ -230,6 +226,7 @@
                     })
                 }
             },
+            //获取歌手专辑
             getArtistAlbum () {
                 this.isLoading = true
                 artistAlbum({ id: this.sUid, offset: this.offset }).then(res =>{
@@ -244,6 +241,7 @@
                 })
 
             },
+            //获取歌手Mv
             getArtistMv () {
                 if (!this.hasMoreMvs || !this.isLoadMv) return
                 this.isLoading = true
@@ -264,6 +262,7 @@
             loadMv () {
                 this.getArtistMv()
             },
+            //点击更多弹出描述
             moreDesc () {
                 this.dialogDescVisible = true
             },

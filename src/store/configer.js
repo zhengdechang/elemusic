@@ -1,10 +1,10 @@
 // import {navMsg} from "../assets/data/header";
 const configer ={
     state: {
-        // activeName:navMsg[0].name,       //当前选中的菜单名字
-        activeName:'',       //当前选中的菜单名字
-        showAside:false,                 //是否显示播放中的歌曲列表
-        loginIn:false,                   //用户是否已登录
+        // activeName:navMsg[0].name,     //当前选中的菜单名字
+        activeName:'',                    //当前选中的菜单名字
+        showAside:false,                  //是否显示播放中的歌曲列表
+        loginIn:false,                    //用户是否已登录
     },
     getters:{
         activeName:state => {

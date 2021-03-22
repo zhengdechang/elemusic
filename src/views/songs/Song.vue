@@ -114,38 +114,6 @@ export default {
     },
     // 监听属性 类似于data概念
     computed: {
-        ...mapGetters([
-            'listOfSongs',
-            'isActiveSong',
-            'userId',
-            'loginIn',
-        ]),
-        // isCurSong () {
-        //     return this.isPlayed && this.curSongInfo && this.curSongInfo.id === this.sId
-        // },
-        // 当前播放状态
-        // playFontIcon () {
-        //     return this.isCurSong ? 'icon-audio-pause' : 'icon-audio-play'
-        // },
-        // 若是无版权获取vip歌曲 播放按钮置灰
-        songDisable () {
-            return (this.info.license || this.info.vip) ? 'disable' : ''
-        },
-        // 显示歌曲简介
-        coverDesc () {
-            return this.info.alia.join(' / ')
-        },
-        // playSimiIcon () {
-        //     return function (item) {
-        //         return String(item.id) === this.curSongInfo.id && this.isPlayed ? 'icon-audio-pause' : 'icon-audio-play'
-        //     }
-        // },
-        // curSongInfo () {
-        //     return this.playList[this.playIndex]
-        // }
-    },
-    // 方法集合
-    methods: {
         // 时间毫秒格式化处理 2020-10-30 09:30:00
         formartDate (originVal, fmt) {
             const dt = new Date(originVal)
@@ -167,10 +135,28 @@ export default {
 
             return fmt
         },
+        ...mapGetters([
+            'listOfSongs',
+            'isActiveSong',
+            'userId',
+            'loginIn',
+        ]),
+        songDisable () {
+            return (this.info.license || this.info.vip) ? 'disable' : ''
+        },
+        // 显示歌曲简介
+        coverDesc () {
+            return this.info.alia.join(' / ')
+        },
+    },
+    // 方法集合
+    methods: {
+        //背景
         backGround(){
             const bg =  document.getElementsByClassName('song-container');
             bg.style = "background-image:url('"+this.background+"')";
         },
+        //获取歌曲详情
         getSongDetail () {
             songDetail({ ids: this.sId, timestamp: new Date().valueOf() }).then(res =>{
                 if (res.code !== 200) {
@@ -197,9 +183,7 @@ export default {
             console.log(params);
             this.toPlay(params.id,params.al.picUrl,0,params.name,params.ar[0].name)
         },
-        closeAddListPop () {
-            this.$refs.popAddList.doClose()
-        },
+        //点击评论跳到评论框
         jumpComment () {
             this.$refs.comment.scrollIntoView(true)
         },

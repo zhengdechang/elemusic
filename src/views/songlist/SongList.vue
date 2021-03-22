@@ -62,7 +62,8 @@
         },
         // 方法集合
         methods: {
-            async getCatlist () {
+            //获取所点击类型的歌单
+            getCatlist () {
                 catlist().then(res =>{
                     this.sub = res.sub
 

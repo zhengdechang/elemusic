@@ -68,9 +68,9 @@
         album,
         artistAlbum,
         albumDynamic,
-        subServeLikedArtist,
-        deleteLikedArtist,
-        getServeLikedArtist, subServeLikedCollection, deleteLikedCollection, getServeLikedCollection
+        subServeLikedCollection,
+        deleteLikedCollection,
+        getServeLikedCollection,
     } from "../../networks/index"
 import AlbumContent from "../../components/common/AlbumContent";
 import Comments from "../../components/common/Comment";
@@ -81,8 +81,6 @@ export default {
     components: {
         Comments,
         AlbumContent
-        // songList,
-        // Comments
     },
     mounted () {
         this.albumId = this.$route.query.id
@@ -93,7 +91,7 @@ export default {
         // 这里存放数据
         return {
             // 歌单详情
-            tid:'',
+            tid:'',            //提交给服务器的专辑id
             albumId: '',
             details: null,
             songList: [],
@@ -155,6 +153,7 @@ export default {
                 this.getArtistAlbum(this.artist_id)
             })
         },
+        //获取专辑动态
         getAlbumDynamic (params) {
             albumDynamic(params).then(res =>{
                 if (res.code !== 200) {
@@ -163,6 +162,7 @@ export default {
                 this.dynamic = res
             })
         },
+        //获取歌手专辑
         getArtistAlbum (id) {
             artistAlbum({ id: id, limit: 5,offset:0}).then(res =>{
                 if (res.code !== 200) {

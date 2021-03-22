@@ -90,7 +90,8 @@ export default {
             return  lyricsObjArr;
 
         },
-        formatLyricTime (time) { // 格式化歌词的时间 转换成 sss:ms
+        // 格式化歌词的时间 转换成 sss:ms
+        formatLyricTime (time) {
             const regMin = /.*:/
             const regSec = /:.*\./
             const regMs = /\./

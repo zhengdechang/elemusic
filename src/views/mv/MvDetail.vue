@@ -125,6 +125,7 @@ export default {
             //     this.videoOptions.quality = res.mp
             // })
         },
+        //获取mv地址
         getMvUrl (r) {
             mvUrl({ id: this.$route.query.id, r }).then(res =>{
                 if (res.code !== 200) {
@@ -138,6 +139,7 @@ export default {
             })
 
         },
+        //获取相似Mv
         getSimiMv(){
             simiMv( {id:this.$route.query.id} ).then(res =>{
                 if (res.code !== 200) {
@@ -186,6 +188,7 @@ export default {
             // 重新设置视频url
             this.getMvUrl(play.quality.val)
         },
+        //改变亮度
         toggleLight () {
             this.isNight = !this.isNight
         }

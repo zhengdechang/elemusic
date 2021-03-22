@@ -43,7 +43,8 @@ export default {
     computed: {},
     // 方法集合
     methods: {
-        async getPlayList (params) {
+        //获取歌曲列表
+        getPlayList (params) {
             playList(params).then(res =>{
                 if (res.code !== 200) {
                     return this.$message.error('数据请求失败')
@@ -54,6 +55,7 @@ export default {
             })
 
         },
+        //加载更多
         loadMore () {
             if (this.isScroll) {
                 this.busy = true

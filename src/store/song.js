@@ -8,18 +8,15 @@ const song ={
         playButtonUrl: '#icon-bofang' ,      //播放状态的图标
         duration:0,              //音乐时长
         curTime:0,              //当前音乐播放位置
-        changeTime:0,              //指定播放时刻
+        changeTime:0,           //指定播放时刻
         title:'',              //歌名
-        artist:'',              //歌手名
-        picUrl:'',              //歌曲图片
-        autoNext:true,              //自动播放下一首
+        artist:'',             //歌手名
+        picUrl:'',             //歌曲图片
+        autoNext:true,         //自动播放下一首
         lyric:[],              //未处理歌词数据
-        tempList:{},              //当个歌单信息或者歌手
-        listIndex:null,              //当前歌曲在歌单中的位置
+        tempList:{},           //当个歌单信息或者歌手
+        listIndex:null,        //当前歌曲在歌单中的位置
         volume:50,              //音量
-
-
-
     },
     getters:{
         listOfSongs:state => {

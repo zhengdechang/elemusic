@@ -2,14 +2,6 @@
     <div class='comments'>
         <div class="comment_hd">
             <h2>评论<em>共{{total}}条评论</em></h2>
-<!--            <div class="userInfo" v-if="userInfo">-->
-<!--                <span>{{userInfo.nickname}}</span>-->
-<!--                <el-image :src="userInfo.avatarUrl" class="avatar">-->
-<!--                    <div slot="placeholder" class="image-slot">-->
-<!--                        <i class="iconfont icon-placeholder"></i>-->
-<!--                    </div>-->
-<!--                </el-image>-->
-<!--            </div>-->
         </div>
         <el-form class="comment_box">
             <div class="comment_textarea">
@@ -155,14 +147,12 @@ export default {
                 mm: (dt.getMinutes() + '').padStart(2, '0'),
                 ss: (dt.getSeconds() + '').padStart(2, '0')
             }
-
             for (const k in opt) {
                 const ret = new RegExp('(' + k + ')').exec(fmt)
                 if (ret) {
                     fmt = fmt.replace(ret[1], opt[k])
                 }
             }
-
             return fmt
         },
         // 评论时间格式化处理
@@ -198,26 +188,25 @@ export default {
                 break
             }
         },
-         getSongComment () {
+        //获取歌曲评论
+        getSongComment () {
              commentSong({ id: this.curId, limit: this.limit, offset: this.offset, before: this.before }).then(res =>{
                  this.msgHandler(res)
              })
         },
+        //获取Mv评论
         getMvComment () {
             commentMv({ id: this.curId, limit: this.limit, offset: this.offset, before: this.before }).then(res =>{
                 this.msgHandler(res)
             })
         },
+        //获取专辑评论
         getAlbumComment () {
             albumComment({ id: this.curId, limit: this.limit, offset: this.offset, before: this.before }).then(res =>{
                 this.msgHandler(res)
             })
         },
-        // async getVideoComment () {
-        //     const { data: res } = await this.$http.commentVideo({ id: this.curId, limit: this.limit, offset: this.offset, before: this.before })
-        //
-        //     this.msgHandler(res)
-        // },
+        //评论msg处理
         msgHandler (res) {
             if (res.code !== 200) {
                 return this.$message.error('数据请求失败')
@@ -349,6 +338,7 @@ export default {
             }
 
         },
+        //获取评论（歌曲、专辑、mv）
         getServeComments(){
             if(this.childType == 0){
                 getServeSongComment(this.curId).then(res =>{

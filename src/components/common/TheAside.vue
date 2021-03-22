@@ -13,7 +13,6 @@
 </template>
 
 <script>
-
     import {mapGetters} from 'vuex'
     import {songLyric, songUrl,getServeLikedSong} from "../../networks";
     export default {
@@ -38,6 +37,7 @@
             },true)
         },
         methods:{
+            //播放歌曲
             toPlay(id,picUrl,index,name,artist){
                 this.$store.commit('setId',id);
                 this.getUrl(id);

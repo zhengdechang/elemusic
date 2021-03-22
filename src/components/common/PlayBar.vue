@@ -131,6 +131,7 @@
     ])
         },
         mounted() {
+            //改变音量
             this.progressLength = this.$refs.progress.getBoundingClientRect().width;
             document.querySelector('.item-volume').addEventListener('click',function (e) {
                 document.querySelector('.volume').classList.add('show-volume');
@@ -144,15 +145,16 @@
             },false);
         },
         watch:{
-          //切换播放状态的图标
-          isPlay(){
+            //切换播放状态的图标
+            isPlay(){
               if(this.isPlay){
                   this.$store.commit('setPlayButtonUrl','#icon-zanting');
               }else{
                   this.$store.commit('setPlayButtonUrl','#icon-bofang');
               }
-          },
-           curTime(){
+            },
+            //监控进度/时间
+            curTime(){
               this.nowTime = this.formatSeconds(this.curTime);
               this.songTime = this.formatSeconds(this.duration);
               this.curLength = (this.curTime / this.duration)*100;
@@ -172,14 +174,15 @@
 
         },
         methods:{
+          //切换播放
           togglePlay(){
               if(this.isPlay){
                   this.$store.commit('setIsPlay',false);
               }else{
                   this.$store.commit('setIsPlay',true);
-                  console.log(this.duration);
               }
           },
+            //时间格式处理
            formatSeconds(value){
                 let theTime = parseInt(value);
                 let result = '';
@@ -213,6 +216,8 @@
                 }
                 return  result;
             },
+
+            //改变进度
             mousedown(e){
                 this.mouseStartX = e.clientX;
                 this.tag = true;
@@ -384,6 +389,7 @@
                   console.log(err);
               })
             },
+            //收藏歌曲
             subSong() {
                 if (!this.id) {
                     this.$message.error('当前无播放歌曲');

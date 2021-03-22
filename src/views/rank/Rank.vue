@@ -159,6 +159,7 @@ export default {
 
             return num
         },
+        //获取排行榜详情
         getTopListDetail () {
             topListDetail().then(res =>{
                 if (res.code !== 200) {
@@ -183,6 +184,7 @@ export default {
             })
 
         },
+        //获取排行榜单详情
         getListDetail () {
             this.isLoading = true
             listDetail({ id: this.rId, s: -1 }).then(res =>{
@@ -203,12 +205,14 @@ export default {
             })
 
         },
+        //选择类型
         selectType (type) {
             this.type = type
             this.list = this['list' + this.type]
             this.rId = this['list' + type][0].id
             this.$router.push({ path: 'rank', query: { type: this.type, rId: this.rId } })
         },
+        //选择类型中的item
         selectItem (item) {
             this.rId = item.id
             this.$router.push({ path: 'rank', query: { type: this.type, rId: this.rId } })

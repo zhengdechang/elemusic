@@ -82,6 +82,7 @@
             this.rules =  rules;
         },
         methods:{
+            //保存信息
             saveMsg(){
                 changeUser(this.registerForm,this.userId).then(res =>{
                     console.log(res);
@@ -101,6 +102,7 @@
             goback(index){
                 this.$router.go(index);
             },
+            //获取用户资料
             fetch(){
                 getUserData(this.userId).then(res =>{
                     this.registerForm = res.data

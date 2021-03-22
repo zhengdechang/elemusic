@@ -18,7 +18,7 @@
 <script>
     import {mapGetters} from 'vuex'
     import {mixin} from "../../mixins";
-    import {changeUser, getImg, getUserData} from "../../networks/index"
+    import {getImg} from "../../networks/index"
     export default {
         name: "Upload",
         mixins:[mixin],

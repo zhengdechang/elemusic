@@ -29,11 +29,6 @@ export default http
 // Axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 
 //============歌手相关================
-//查询歌手
-export const getAllSinger =() => get(`/top/playlist/highquality`);
-//============歌单相关================
-//查询歌单
-export const getAllSongList =() => get(`/top/playlist/highquality`);
 
 //============歌曲相关================
 //模糊查询
@@ -59,13 +54,10 @@ export const SignUp = (params) =>post('consumer/add',params)
 
 
 //============歌单的歌曲相关============
-//根据歌单id查询歌曲列表
-export const listSongDetail = (songListId) => Axios(`listSong/detail?songListId=${songListId}`);
 
 
 //============用户相关================
 //查询用户
-export const getAllConsumer =() => get(`consumer/allConsumer`);
 
 // 首页轮播图
 export const getBanner = () => get('/banner', {})

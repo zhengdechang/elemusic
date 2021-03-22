@@ -142,6 +142,7 @@ export default {
     },
     // 方法集合
     methods: {
+        //获取搜索建议
         getSearchSuggest () {
             searchSuggest({ keywords: this.keyVal }).then(res =>{
                 if (res.code !== 200) {
@@ -152,6 +153,7 @@ export default {
             })
 
         },
+        //热门搜索
         getSearchMatch () {
             cloudsearch({ keywords: this.keyVal, type: this.type, limit: this.limit, offset: this.offset }).then(res =>{
                 if (res.code !== 200) {
@@ -192,6 +194,7 @@ export default {
                 this.getSearchMatch()
             }
         },
+        //跳到相对应的页面
         jumpPage (item, type) {
             this.keyVal = item.name
             switch (type) {
@@ -210,6 +213,7 @@ export default {
             }
             this.isShowSearch = false
         },
+        //显示搜索建议
         getListHandle () {
             if (this.keyVal) {
                 this.suggestInfo = {}
@@ -219,6 +223,7 @@ export default {
                 this.isShowSearch = false
             }
         },
+        //关闭搜索建议
         handleClose () {
             this.isShowSearch = false
         },

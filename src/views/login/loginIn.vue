@@ -106,6 +106,7 @@
                   this.changeIndex('注册')
                 this.$router.push({path:'/sign-up'});
             },
+            //改变首页theheader中的active
             changeIndex(value){
                 this.$store.commit('setActiveName',value);
             }
