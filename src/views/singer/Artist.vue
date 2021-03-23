@@ -138,8 +138,10 @@
             }
         },
         created() {
-            this.sUid =this.$route.query.id,
-            this.getLikedAlbum()
+            this.sUid =this.$route.query.id;
+            this.getLikedAlbum();
+            this.$store.commit('setActiveName','歌手');
+
         },
         // 监听属性 类似于data概念
         computed: {

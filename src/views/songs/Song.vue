@@ -105,6 +105,7 @@ export default {
     },
     created () {
         this.tid = this.$route.query.id;
+        this.$store.commit('setListOfSongs',[])
      },
     mounted () {
         this.sId = String(this.$route.query.id)
@@ -114,6 +115,22 @@ export default {
     },
     // 监听属性 类似于data概念
     computed: {
+        ...mapGetters([
+            'listOfSongs',
+            'isActiveSong',
+            'userId',
+            'loginIn',
+        ]),
+        songDisable () {
+            return (this.info.license || this.info.vip) ? 'disable' : ''
+        },
+        // 显示歌曲简介
+        coverDesc () {
+            return this.info.alia.join(' / ')
+        },
+    },
+    // 方法集合
+    methods: {
         // 时间毫秒格式化处理 2020-10-30 09:30:00
         formartDate (originVal, fmt) {
             const dt = new Date(originVal)
@@ -135,22 +152,6 @@ export default {
 
             return fmt
         },
-        ...mapGetters([
-            'listOfSongs',
-            'isActiveSong',
-            'userId',
-            'loginIn',
-        ]),
-        songDisable () {
-            return (this.info.license || this.info.vip) ? 'disable' : ''
-        },
-        // 显示歌曲简介
-        coverDesc () {
-            return this.info.alia.join(' / ')
-        },
-    },
-    // 方法集合
-    methods: {
         //背景
         backGround(){
             const bg =  document.getElementsByClassName('song-container');
@@ -158,7 +159,7 @@ export default {
         },
         //获取歌曲详情
         getSongDetail () {
-            songDetail({ ids: this.sId, timestamp: new Date().valueOf() }).then(res =>{
+            songDetail({ ids: this.sId,timestamp: new Date().valueOf() }).then(res =>{
                 if (res.code !== 200) {
                     return this.$message.error('数据请求失败')
                 }
@@ -180,7 +181,6 @@ export default {
         },
         playing1(params) {
             this.listOfSongs.unshift(params)
-            console.log(params);
             this.toPlay(params.id,params.al.picUrl,0,params.name,params.ar[0].name)
         },
         //点击评论跳到评论框

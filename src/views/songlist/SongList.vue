@@ -38,8 +38,10 @@
             songlist
         },
         created () {
-            this.params.cat = this.$route.query.cat
-            this.getCatlist()
+            this.params.cat = this.$route.query.cat;
+            this.getCatlist();
+            this.$store.commit('setActiveName','歌单');
+
         },
         data () {
             // 这里存放数据

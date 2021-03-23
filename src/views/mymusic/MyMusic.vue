@@ -356,6 +356,7 @@
     }
     .playlist,.album{
         margin-right: 40px;
+        justify-content: flex-start;
     }
     /*.album{*/
     /*    margin-right: 40px;*/

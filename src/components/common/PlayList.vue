@@ -59,7 +59,7 @@ export default {
 .item {
     width: 18%;
     padding: 20px 2% 30px 0;
-    margin-right: -22px;
+    margin-right: 0;
 
     .faceImg {
         display: block;

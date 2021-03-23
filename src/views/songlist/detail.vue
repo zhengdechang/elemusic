@@ -101,15 +101,13 @@
                         <h3 class="aside-title">歌单评论</h3>
                         <div class="aside-main comment-main">
                             <div class="comment-item" v-for="item in comments" :key="item.commentId">
-                                <router-link :to="{ path: '/user', query: { id: item.commentId }}">
                                     <el-image :src="item.user.avatarUrl">
                                         <div slot="placeholder" class="image-slot">
                                             <i class="iconfont icon-placeholder"></i>
                                         </div>
                                     </el-image>
-                                </router-link>
                                 <div class="comment-info">
-                                    <div class="comment-userInfo"><router-link :to="{ path: '/user', query: { id: item.commentId }}" class="comment-name">{{item.user.nickname}}</router-link><span class="comment-date">{{formatMsgTime(item.time)}}</span></div>
+                                    <div class="comment-userInfo"><div  class="comment-name">{{item.user.nickname}}</div><span class="comment-date">{{formatMsgTime(item.time)}}</span></div>
                                     <div class="comment-desc">{{item.content}}</div>
                                 </div>
                             </div>
