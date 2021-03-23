@@ -34,8 +34,6 @@ export default http
 //模糊查询
 export const likeSongofName =(keywords) => get(`/cloudsearch?keywords= ${keywords}`);
 
-//根据歌曲id查询歌曲对象
-export const songOfSongId =(id) => get(`song/detail?songId=${id}`);
 
 //id相对应的歌词
 export const songLyric =(id) => get(`/lyric?id=${id}`);
@@ -157,7 +155,6 @@ export const comment = ({ t = 1, type = 0, id = '', content = '', commentId = ''
     * t: 是否点赞 1: 是  0: 取消
     * type: 0: 歌曲 1: mv 2: 歌单 3: 专辑  4: 电台 5: 视频 6: 动态
 */
-export const commentLike = ({ id = '', cid = '', t = 1, type = 0 }) => get(`/comment/like?id=${id}&cid=${cid}&t=${t}&type=${type}`, {})
 
 // 专辑评论
 export const albumComment = ({ id = '', limit = 20, offset = 0, before = 0, timestamp = 0 }) =>get(`/comment/album?id=${id}&limit=${limit}&offset=${offset}&before=${before}&timestamp=${timestamp}`, {})

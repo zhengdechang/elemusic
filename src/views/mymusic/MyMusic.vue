@@ -2,7 +2,7 @@
     <div class='my-music'>
         <div class="cover">
             <div class="cover-img">
-                <el-image :src="details.coverImgUrl">
+                <el-image :src="baseUrl+userId">
                     <div slot="placeholder" class="image-slot">
                         <i class="iconfont icon-placeholder"></i>
                     </div>
@@ -10,44 +10,50 @@
             </div>
             <div class="cover-info">
                 <div class="cover-title">
-                    {{details.name}}
+                    收藏的歌曲
                 </div>
-                <div class="cover-author" v-if="details.creator">
-                    <el-image :src="details.creator.avatarUrl" class="cover-avatar">
+                <div class="cover-author">
+                    <el-image :src="baseUrl+userId" class="cover-avatar">
                         <div slot="placeholder" class="image-slot">
                             <i class="iconfont icon-placeholder"></i>
                         </div>
                     </el-image>
-                    <div class="cover-name">{{details.creator.nickname}}</div>
-                    <div class="cover-date">{{formartDate(details.createTime, 'yyyy-MM-dd')}}</div>
-                </div>
-                <div class="cover-tags" v-if="details.tags">
-                    <router-link :to="{ path: '/playlist', query: { cat: tag }}" class="tag" v-for="(tag, index) in details.tags" :key="index">#{{tag}}</router-link>
+                    <div class="cover-name">{{userInfo.username}}</div>
+                    <div class="cover-date">{{formartDate(time, 'yyyy-MM-dd')}}</div>
                 </div>
                 <div class="cover-digital">
-                    <span class="cover-playCount"><i class="iconfont icon-playnum"></i> {{formartNum(details.playCount)}}次</span>
-                    <span class="cover-collect"><i class="iconfont icon-collect"></i> {{formartNum(details.subscribedCount)}}</span>
-                    <span class="cover-comment"><i class="iconfont icon-comment"></i> {{formartNum(details.commentCount)}}</span>
-                </div>
-                <div class="cover-desc" v-if="details.description">
-                    <h5>歌单简介<em class="desc-close" v-if="isShowDesc" @click="isShowDesc = false"><i class="iconfont icon-closed"></i></em></h5>
-                    <p v-html="details.description" @click="showAllDesc"></p>
-                    <pre class="cover-desc-all" v-if="isShowDesc">
-                        {{details.description}}
-                    </pre>
+                    <span class="cover-playCount"><i class="iconfont icon-playnum"></i> 0次</span>
+                    <span class="cover-collect"><i class="iconfont icon-collect"></i> 0</span>
+                    <span class="cover-comment"><i class="iconfont icon-comment"></i> 6</span>
                 </div>
             </div>
         </div>
         <div class="song-header">
-            <h4>歌曲列表 <em>{{total + '首歌'}}</em></h4>
-            <span class="play-all" @click="playAllSongs"><i class="iconfont icon-audio-play"></i> 播放全部</span>
+            <h4>{{this.list[type]}}列表 <em v-if="type == 'song'">{{total + '首歌'}}</em></h4>
         </div>
         <template v-if="isLoading">
             <Loading />
         </template>
-        <template v-else>
-            <album-content :songList="listOfSongs" :stripe="true"></album-content>
-            <div class="pagination" >
+        <template v-else class="container">
+            <album-content :songList="listOfSongs" :stripe="true"  v-if="type == 'song'"></album-content>
+            <play-list :playList="playlist_list" :stripe="true"  v-if="type == 'album'"></play-list>
+            <div class="loadArtist"  stripe="true"  v-if="type == 'artist'">
+                <router-link :to="{ path: '/artist', query: { id: item.id }}" class="item" :key="item.id" v-for="item in artist_list" >
+                    <div class="faceImg">
+                        <el-image :src="item.picUrl + '?param=120y120'">
+                            <div slot="placeholder" class="image-slot">
+                                <i class="iconfont icon-placeholder"></i>
+                            </div>
+                        </el-image>
+                    </div>
+                    <div class="info">
+                        <div class="name">{{item.name}}</div>
+                        <div class="albumSize">专辑：{{item.albumSize}}</div>
+                    </div>
+                </router-link>
+            </div>
+            <AlbumList  :albumList="album_list" :stripe="true"  v-if="type == 'collection'"></AlbumList>
+            <div class="pagination" v-if="type == 'song'" >
                 <el-pagination
                         background
                         @current-change="currentChange"
@@ -63,21 +69,32 @@
 <script>
     import {mapGetters} from "vuex"
     import {mixin} from "../../mixins";
-    import {playlistdetail,songDetail} from "../../networks/index"
+    import {
+        album, artistAlbum,
+        getServeLikedAlbum, getServeLikedArtist,
+        getServeLikedCollection,
+        getServeLikedSong,
+        playlistdetail,
+        songDetail
+    } from "../../networks/index"
     import Loading from "../../components/common/Loading";
     import AlbumContent from "../../components/common/AlbumContent";
+    import PlayList from "../../components/common/PlayList";
+    import AlbumList from "../../components/common/AlbumList";
     export default {
         components: {
             AlbumContent,
-            Loading
+            Loading,
+            PlayList,
+            AlbumList,
         },
         mixins:[mixin],
         data () {
             // 这里存放数据
             return {
+                type:'song',
                 limit:10,
                 offset:2,
-                id: '',
                 details: {},
                 songList: [],
                 total: 0,
@@ -86,22 +103,108 @@
                 start:0,
                 end:1,
                 listSongs:'',
+                data:[],
+                baseUrl:'http://localhost:3001/admin/api/user/getImg/',
+                userInfo:'',
+                time:0,
+                list:{
+                    'song':'歌曲',
+                    'album':'歌单',
+                    'artist':'歌手',
+                    'collection':'专辑',
+                },
+                ids:[],
+                playlist_list:[],
+                album_list:[],
+                artist_list:[],
             }
+        },
+        created() {
+            this.type = this.$route.query.type;
+            this.getUserInfo();
         },
         // 监听属性 类似于data概念
         computed: {
             ...mapGetters([
-                'listOfSongs'
+                'listOfSongs',
+                'userId',
             ])
         },
         mounted () {
-            this.id = this.$route.query.id;
-            // this.id = '379440531';
-            // 歌单详情
-            this.getDetail({ id: this.id, s: '' })
         },
         // 方法集合
         methods: {
+            //获取收藏
+            getUserInfo(){
+                //歌曲
+                if(this.type == 'song'){
+                    getServeLikedSong(this.userId).then(res =>{
+                        this.data = res.data;
+                        this.userInfo = res.data[0].user_id;
+                        this.time = Number(res.data[0].time);
+                        for(let i=0;i<res.data.length;i++){
+                            this.ids.push(res.data[i].tid)
+                        }
+                        songDetail({ids: this.ids.join(','), timestamp: new Date().valueOf()}).then(res =>{
+                            this.listSongs = res.songs;
+                            this.$store.commit('setListOfSongs',(this.listSongs).slice(this.start*10,this.end*10))
+                            this.total = res.songs.length
+                        })
+                    })
+                }
+                //歌单
+                else if(this.type == 'album'){
+                    getServeLikedAlbum(this.userId).then(res =>{
+                        this.data = res.data;
+                        this.userInfo = res.data[0].user_id;
+                        this.time = Number(res.data[0].time);
+                        this.ids = [];
+                        for(let i=0;i<res.data.length;i++){
+                            this.ids.push(res.data[i].tid);
+                        }
+                        for(let i=0;i<this.ids.length;i++){
+                            playlistdetail({id:this.ids[i]}).then(res =>{
+                                this.playlist_list.push(res.playlist)
+                            })
+                        }
+                    })
+                }
+                //专辑
+                else if(this.type == 'collection'){
+                    getServeLikedCollection(this.userId).then(res =>{
+                        this.data = res.data;
+                        this.userInfo = res.data[0].user_id;
+                        this.time = Number(res.data[0].time);
+                        this.ids = [];
+                        for(let i=0;i<res.data.length;i++){
+                            this.ids.push(res.data[i].tid);
+                        }
+                        for(let i=0;i<this.ids.length;i++){
+                            album({id:this.ids[i]}).then(res =>{
+                                this.album_list.push(res.album)
+                            })
+                        }
+                    })
+                }
+                //专辑
+                else if(this.type == 'artist'){
+                    getServeLikedArtist(this.userId).then(res =>{
+                        this.data = res.data;
+                        this.userInfo = res.data[0].user_id;
+                        this.time = Number(res.data[0].time);
+                        this.ids = [];
+                        for(let i=0;i<res.data.length;i++){
+                            this.ids.push(res.data[i].tid);
+                        }
+                        for(let i=0;i<this.ids.length;i++){
+                            artistAlbum({id:this.ids[i]}).then(res =>{
+                                this.artist_list.push(res.artist)
+                            })
+                        }
+                    })
+                }
+                this.isLoading = false
+            },
             // 分页
             currentChange (page) {
                 this.start = page -1;
@@ -165,46 +268,6 @@
 
                 return result
             },
-            // 登录及未登录下获取歌单中歌曲的列表
-            getDetail (params) {
-                this.isLoading = true
-                playlistdetail(params).then(res =>{
-                    if (res.code !== 200) {
-                        return this.$message.error('数据请求失败')
-                    }
-                    this.details = res.playlist
-
-                    const ids = res.playlist.trackIds
-                    this.getAllSongs(ids)
-                })
-            },
-            // 根据ids获取所有歌曲列表
-            getAllSongs(ids) {
-                const sliceArr = []
-                const num = 500
-
-                // 数组过长 每500份一组
-                for (let index = 0; index < ids.length; index += num) {
-                    sliceArr.push(ids.slice(index, index + num))
-                }
-
-                for (let i = 0; i < sliceArr.length; i++) {
-                    const arrs = []
-                    sliceArr[i].map(d => {
-                        arrs.push(d.id)
-                    })
-                    this.isLoading = true
-                    songDetail({ids: arrs.join(','), timestamp: new Date().valueOf() + i}).then(res => {
-                        this.listSongs = res.songs;
-                        this.$store.commit('setListOfSongs',(this.listSongs).slice(this.start*10,this.end*10))
-                        // this.$store.commit('setListOfSongs',(this.listSongs).slice(0,10))
-                        this.total = res.songs.length
-                        // idsArr = idsArr.concat(this._formatSongs(res))
-                        // console.log(idsArr);
-                    })
-                }
-                this.isLoading = false
-            },
             // 播放列表为当前歌单的全部歌曲
             playAllSongs() {
                 // listSongs
@@ -234,14 +297,69 @@
         },
         watch: {
             $route () {
-                this.id = this.$route.query.id
-                // 歌单详情
-                this.getDetail({ id: this.id, s: '' })
+                this.type = this.$route.query.type
+                this.getUserInfo()
             }
         }
     }
 </script>
 <style scoped lang="less">
+    a {
+        text-decoration: none;
+        color: #333;
+      }
+    .faceImg{
+            width: 120px;
+            height: 120px;
+            border-radius: 100%;
+            overflow: hidden;
+    }
+    .loadArtist {
+        display: flex;
+        flex-wrap: wrap;
+        .item{
+            width: 120px;
+            margin-right: 70px;
+        }
+    }
+    .artists_item {
+        width: 120px;
+
+        .el-image {
+            transition: all .4s linear;
+        }
+
+        &:hover {
+            .el-image {
+                transform: rotateY(180deg);
+            }
+        }
+
+        .faceImg {
+            width: 120px;
+            height: 120px;
+            border-radius: 100%;
+            overflow: hidden;
+        }
+    }
+    .info {
+        text-align: center;
+
+        .name {
+            line-height: 28px;
+            font-size: 14px;
+        }
+
+        .albumSize {
+            color: #999;
+        }
+    }
+    .playlist,.album{
+        margin-right: 40px;
+    }
+    /*.album{*/
+    /*    margin-right: 40px;*/
+    /*}*/
     .pagination {
         padding: 30px 0;
         text-align: center;

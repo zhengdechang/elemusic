@@ -78,6 +78,11 @@ const routes = [
     component:detail
   },
   {
+    path: '/my/song-list/detail',
+    name: 'song-list-detail',
+    component:detail
+  },
+  {
     path: '/artist',
     name: 'artist',
     component:Artist

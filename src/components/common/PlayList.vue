@@ -28,6 +28,9 @@ export default {
         return {
         }
     },
+    created() {
+        console.log(this.playList);
+    },
     // 监听属性 类似于data概念
     computed: {},
     // 方法集合

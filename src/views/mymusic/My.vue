@@ -3,41 +3,11 @@
         <div class="w1200">
             <div class="my-container">
                 <div class="my-aside">
-                    <h3 class="my-favorite active" @click="jump">我收藏的歌手 <i class="iconfont icon-arrow"></i></h3>
-                    <h3 @click="toggleSlide('1')" :class="[slideBox1 ? 'active' : '']"><span>创建的歌单 ({{createdList.length}})</span> <i class="iconfont icon-arrow"></i></h3>
-                    <div :class="['playlist-main', slideBox1 ? 'active' : '']">
-                        <router-link :to="{ name: 'mymusic', query: { id: item.id } }" :class="['item', String(id) === String(item.id) ? 'active' : '']" class="item" v-for="(item,index) in createdList" :key="item.id">
-                            <el-image :src="item.coverImgUrl">
-                                <div slot="placeholder" class="image-slot">
-                                    <i class="iconfont icon-placeholder"></i>
-                                </div>
-                            </el-image>
-                            <div class="info">
-                                <div class="name">{{item.name}}</div>
-                                <div class="author">
-                                    {{item.trackCount}}首 By. <span>{{ item.creator.nickname }}</span>
-                                    <i class="iconfont icon-del" @click="delPlayList(item, index, 'created')" v-if="index"></i>
-                                </div>
-                            </div>
-                        </router-link>
-                    </div>
-                    <h3 @click="toggleSlide('2')" :class="[slideBox2 ? 'active' : '']"><span>收藏的歌单 ({{collectList.length}})</span> <i class="iconfont icon-arrow"></i></h3>
-                    <div :class="['playlist-main', slideBox2 ? 'active' : '']">
-                        <router-link :to="{ name: 'myPlaylist', query: { id: item.id } }" :class="['item', String(id) === String(item.id) ? 'active' : '']" class="item" v-for="(item,index) in collectList" :key="item.id">
-                            <el-image :src="item.coverImgUrl">
-                                <div slot="placeholder" class="image-slot">
-                                    <i class="iconfont icon-placeholder"></i>
-                                </div>
-                            </el-image>
-                            <div class="info">
-                                <div class="name">{{item.name}}</div>
-                                <div class="author">
-                                    {{item.trackCount}}首 By. <span>{{ item.creator.nickname }}</span>
-                                    <i class="iconfont icon-del" @click="delPlayList(item, index, 'collect')"></i>
-                                </div>
-                            </div>
-                        </router-link>
-                    </div>
+                    <!--收藏歌曲  -->
+                    <router-link :to="{ name: 'mymusic', query: {type:item.type,id:userId} }" :class="['item', String(id) === String(id) ? 'active' : '']" class="item" v-for="(item,index) in col"  :key="index" >
+                        <h3 class="my-favorite active">我收藏的{{item.name}} <i class="iconfont icon-arrow"></i></h3>
+                        <!--<i class="iconfont icon-del" @click="delPlayList(item, index, 'created')"></i>-->
+                    </router-link>
                 </div>
                 <div class="my-main">
                     <router-view></router-view>
@@ -48,15 +18,29 @@
 </template>
 
 <script>
-import {playlistUser,subPlayList} from "../../networks/index"
+    import {mapGetters} from 'vuex'
 export default {
-    components: {},
+    components: {
+
+    },
     created () {
         this.init();
+    },
+    computed:{
+        ...mapGetters([
+            'listOfSongs',
+            'userId',
+        ])
     },
     data () {
         // 这里存放数据
         return {
+            col:[
+                {type:'song',name:'歌曲'},
+                {type:'album',name:'歌单'},
+                {type:'artist',name:'歌手'},
+                {type:'collection',name:'专辑'},
+             ],
             createdList: [],
             collectList: [],
             slideBox1: false,
@@ -64,11 +48,7 @@ export default {
             id: this.$route.query.id
         }
     },
-    // 监听属性 类似于data概念
-    computed: {
-    },
     mounted () {
-        this.getUserPlayList()
     },
     // 方法集合
     methods: {
@@ -77,58 +57,11 @@ export default {
             if(loginIn == 'false'||!loginIn){
                 this.$router.push('/login-in')
                 this.$message.warning('你还没有登录，请先登录')
+            }else {
+                this.$router.push(`/my/mymusic?type=song&id=${this.userId}`)
             }
         },
-
-        //获取用户播放列表
-        getUserPlayList () {
-            playlistUser({ uid:'276291614', limit: '', offset: '' }).then(res =>{
-                if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
-                }
-                this.createdList = res.playlist.filter(item => {
-                    return !item.subscribed
-                })
-                this.collectList = res.playlist.filter(item => {
-                    return item.subscribed
-                })
-
-                if (!this.id && this.$route.path !== '/my/favorite') {
-                    this.id = this.createdList[0].id
-                    this.$router.push({ path: 'my/mymusic', query: { id: this.id } })
-                }
-            })
-        },
-        //改变选择（歌单，歌手，专辑，Mv）
-        toggleSlide (index) {
-            this['slideBox' + index] = !this['slideBox' + index]
-        },
-        //收藏删除
-        delPlayList (item, index, type) {
-            subPlayList({ id: item.id, t: (item.subscribed ? 2 : 1) }).then(res =>{
-                if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
-                }
-                // 删除收藏歌单后，默认显示我喜欢的音乐
-                this[type + 'List'].splice(index, 1)
-                this.id = this.createdList[0].id
-                this.$router.push({ path: '/my/playlist', query: { id: this.createdList[0].id } })
-            })
-        },
-        // jump () {
-        //     this.$router.push({ path: '/my/favorite' })
-        // }
     },
-    watch: {
-        $route () {
-            this.id = this.$route.query.id
-
-            if (!this.id && this.$route.path !== '/my/favorite') {
-                this.id = this.createdList[0].id
-                this.$router.push({ path: 'my/mumusic', query: { id: this.id } })
-            }
-        }
-    }
 }
 </script>
 <style scoped lang="less">
@@ -163,14 +96,10 @@ a {
         cursor: pointer;
 
         .iconfont {
+            transform: rotate(-90deg);
             transition: all .3s ease-in-out;
         }
 
-        &.active {
-            .iconfont {
-                transform: rotate(-90deg);
-            }
-        }
     }
 
     .my-favorite {
