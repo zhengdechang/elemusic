@@ -137,6 +137,9 @@ export default {
             return this.total + txt[this.type]
         }
     },
+    created() {
+        this.$store.commit('setActiveName','')
+    },
     mounted () {
         this.getSearchMatch()
     },

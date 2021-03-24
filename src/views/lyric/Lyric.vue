@@ -37,6 +37,7 @@
         },
         created() {
             this.lyr = this.parseLyric(this.lyric);
+            this.$store.commit('setActiveName','')
         },
         watch:{
             id() {

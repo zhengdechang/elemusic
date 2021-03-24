@@ -197,20 +197,20 @@ export const searchSuggest = ({ keywords = '' }) => get(`/search/suggest?keyword
 export const searchMatch = ({ keywords = '' }) => get(`/search/multimatch?keywords=${keywords}`, {})
 
 //单曲评论提交
-export const serveSongComment = (model) => http.post(`/commment/song`,model)
+export const serveSongComment = (model) => http.post(`/comment/song`,model)
 //单曲获取评论
-export const  getServeSongComment = (tid) => http.get(`/commment/song/${tid}`)
+export const  getServeSongComment = (tid) => http.get(`/comment/song/${tid}`)
 
 
 //mv评论提交
-export const serveMvComment = (model) => http.post(`/commment/mv`,model)
+export const serveMvComment = (model) => http.post(`/comment/mv`,model)
 //mv获取评论
-export const  getServeMvComment = (id) => http.get(`/commment/mv/${id}`)
+export const  getServeMvComment = (id) => http.get(`/comment/mv/${id}`)
 
 //专辑评论提交
-export const serveAlbumComment = (model) => http.post(`/commment/album`,model)
+export const serveAlbumComment = (model) => http.post(`/comment/album`,model)
 //专辑获取评论
-export const  getServeAlbumComment = (id) => http.get(`/commment/album/${id}`)
+export const  getServeAlbumComment = (id) => http.get(`/comment/album/${id}`)
 
 
 

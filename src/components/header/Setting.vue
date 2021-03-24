@@ -24,6 +24,9 @@
           Info,
           Upload
         },
+        created() {
+            this.$store.commit('setActiveName','')
+        },
         data(){
             return {
                 settingList:[

@@ -92,7 +92,7 @@
 <script>
     import {mapGetters} from 'vuex'
     import {navMsg,loginMsg,menuList} from '../../assets/data/header'
-    import {searchHot} from "../../networks";
+    import {searchHot, searchSuggest} from "../../networks";
     export default {
         name: "Header",
         data(){
@@ -105,6 +105,12 @@
               keyVal: '',
               serachHot: [],
               suggestInfo: {},
+              listType: {
+                  songs: '单曲',
+                  artists: '歌手',
+                  albums: '专辑',
+                  playlists: '歌单'
+              },
           }
         },
         components:{
@@ -131,7 +137,18 @@
 
         },
         methods:{
-            //过去热门搜索
+            //获取搜索建议
+            getSearchSuggest () {
+                searchSuggest({ keywords: this.keyVal }).then(res =>{
+                    if (res.code !== 200) {
+                        return this.$message.error('数据请求失败')
+                    }
+
+                    this.suggestInfo = res.result
+                })
+
+            },
+            //热门搜索
             getSearchHot () {
                 searchHot().then(res =>{
                     if (res.code !== 200) {
