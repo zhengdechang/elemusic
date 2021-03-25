@@ -106,6 +106,7 @@ export default {
     created () {
         this.tid = this.$route.query.id;
         this.$store.commit('setListOfSongs',[])
+        this.$store.commit('setActiveName','')
      },
     mounted () {
         this.sId = String(this.$route.query.id)

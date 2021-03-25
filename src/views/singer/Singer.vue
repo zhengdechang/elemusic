@@ -63,6 +63,9 @@
                 isLoadMv: true
             }
         },
+        created() {
+            this.$store.commit('setActiveName','')
+        },
         // 监听属性 类似于data概念
         computed: {},
         mounted () {

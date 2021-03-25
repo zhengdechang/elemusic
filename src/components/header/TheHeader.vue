@@ -203,7 +203,7 @@
                         this.$router.push({ path: '/album', query: { id: item.id } })
                         break
                     case 'playlists':
-                        this.$router.push({ path: '/playlist/detail', query: { id: item.id } })
+                        this.$router.push({ path: '/song-list/detail', query: { id: item.id } })
                         break
                 }
                 this.isShowSearch = false

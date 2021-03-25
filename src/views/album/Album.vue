@@ -115,6 +115,7 @@ export default {
     created() {
         this.tid = this.$route.query.id;
         this.getLikedCollection();
+        this.$store.commit("setActiveName",'')
     },
     // 方法集合
     methods: {
@@ -238,11 +239,12 @@ export default {
         },
     },
     watch: {
-        $route (newId, oldId) {
+        $route () {
             this.albumId = this.$route.query.id
             if (this.albumId) {
                 this._initialize()
             }
+            this.$store.commit("setIsActiveCollection", false)
         },
         tid(){
             this.$store.commit("setIsActiveCollection", false)
