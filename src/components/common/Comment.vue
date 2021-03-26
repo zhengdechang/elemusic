@@ -17,7 +17,7 @@
             <template v-if="comments.length">
                 <div class="comment_item" v-for="(item, index) in comments" :key="index">
                     <router-link :to="{ path: '/user', query: { id: item.user.userId }}" class="comment_avatar">
-                        <el-image :src="item.user.avatarUrl + '?param=120y120'">
+                        <el-image :src="item.user.avatarUrl + '?param=120y120'" class="el-img">
                             <div slot="placeholder" class="image-slot">
                                 <i class="iconfont icon-placeholder"></i>
                             </div>
@@ -410,6 +410,9 @@ export default {
 }
 </script>
 <style scoped lang="less">
+.el-img{
+    max-height: 100%;
+}
 .comments {
     padding-top: 30px;
 }

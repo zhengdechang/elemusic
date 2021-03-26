@@ -2,7 +2,7 @@
 @import "global.scss";
 
 #app {
-  background-image: linear-gradient(to bottom,#66ff0021, #fff7001c, #8c1abb47, #34dde230);
+  background-image: linear-gradient(to bottom right, #66ff003b, #fff70000, #8c1abb4d, #34dde257);
   @include layout(flex-start, stretch, column);
 }
 

@@ -21,9 +21,13 @@
   font-weight: bold;
   white-space: nowrap;
   cursor: pointer;
-  color: #1c0ef7bf;
+  color: #9fc91b;
+  span{
+    color: #9fc91b;
+    text-shadow: 4px 1px #ff00035e;
+  }
 .icon {
-    @include icon(($header-height / 3) * 2,#1c0ef7bf);
+    @include icon(($header-height / 3) * 2,#9fc91b);
     vertical-align: middle;
     margin-right: 11px;
     margin-top: -5px;
@@ -87,7 +91,7 @@
     margin: $header-user-margin;
     cursor: pointer;
     img {
-      width: 100%;
+      max-height: 100%;
     }
   }
 }

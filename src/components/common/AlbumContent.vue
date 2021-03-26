@@ -16,7 +16,7 @@
                 </div>
             </li>
             <li v-for="(item,index) in songList" :key="index">
-                <div class="song-item" @click="toPlay(item.id,item.al.picUrl,index,item.name,item.ar[0].name)">
+                <div class="song-item" @click="goSong(item.id)">
                     <span class="item-index">
                         {{index+1}}
                     </span>
@@ -24,6 +24,10 @@
                     <span class="item-name">{{item.ar[0].name}}</span>
                     <span class="item-intro">{{item.al.name}}</span>
                     <span class="item-duration">{{formatSongTime(item.dt)}}</span>
+                    <div class="songlist-oper">
+                        <i class="iconfont icon-play" title="添加收藏列表"  slot="reference" @click.stop="toPlay(item.id,item.al.picUrl,index,item.name,item.ar[0].name)"></i>
+                        <i class="iconfont icon-add-list" title="添加到列表" slot="reference" @click.stop="addList(item)"></i>
+                    </div>
                 </div>
             </li>
         </ul>
@@ -32,19 +36,28 @@
 
 <script>
     import {mixin} from "../../mixins";
+    import {mapGetters} from 'vuex'
 
     export default {
         name: "AlbumContent",
         data(){
             return{
-
+                singleIsActive:false,
+                data:[],
             }
+        },
+        created() {
+            this.getServeLikedSong();
+            console.log(this.songList);
         },
         mixins:[mixin],
         props:[
             'songList'
         ],
         methods:{
+            goSong(id){
+              this.$router.push({path:'/song',query:{id:id}})
+            },
             // 歌曲毫秒格式化处理 03:30
             formatSongTime (duration = 0) {
                 duration = duration / 1000
@@ -52,11 +65,44 @@
                 const s = (Math.floor(duration % 60) + '').padStart(2, '0')
                 return `${m}:${s}`
             },
-        }
+            addList(item){
+                this.listOfSongs.push(item)
+                this.$store.commit('setListOfSongs',this.listOfSongs)
+            },
+
+        },
+        computed:{
+          ...mapGetters([
+              'listOfSongs',
+              'isActive',
+              'userId',
+              'loginIn'
+          ])
+        },
     }
 </script>
 
 <style scoped lang="scss">
     @import "../../assets/css/album-content";
+    .songlist-oper {
+        display: none;
+        .iconfont {
+            margin-left: 15px;
+            font-size: 22px;
+            cursor: pointer;
+
+            &:hover {
+                color: red;
+            }
+        }
+    }
+    .song-item:hover{
+        .songlist-oper{
+            display: block;
+        }
+    }
+    .icon-collect-active{
+        color:red;
+    }
 
 </style>

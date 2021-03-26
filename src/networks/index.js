@@ -19,7 +19,7 @@ http.interceptors.response.use(res =>{
     }
     return Promise.reject(err)
 })
-axios.defaults.withCredentials = true
+axios.defaults.withCredentials = false
 
 
 export default http
