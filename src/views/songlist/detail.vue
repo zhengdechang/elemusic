@@ -170,13 +170,15 @@ export default {
             'listOfSongs',
             'isActiveAlbum',
             'userId',
-            'loginIn'
+            'loginIn',
+            'AsidePlayList'
         ])
     },
     created() {
         this.id = this.$route.query.id
         this.getLikedAlbum()
-        console.log(this.id);
+        this.$store.commit("setActiveName",'歌单');
+
     },
     // 方法集合
     methods: {
@@ -316,7 +318,7 @@ export default {
             })
         },
         // 歌单精彩评论
-        async getComment(params) {
+        getComment(params) {
             playlistComment(params).then(res => {
                 if (res.code !== 200) {
                     return this.$message.error('数据请求失败')
@@ -331,25 +333,12 @@ export default {
                 this.isShowDesc = !this.isShowDesc
             }
         },
-        // // 处理歌曲
-        // _formatSongs(list) {
-        //     const ret = []
-        //     list.songs.map((item, index) => {
-        //         if (item.id) {
-        //             // 是否有版权播放
-        //             item.license = !list.privileges[index].cp
-        //             // ret.push(this.formatSongInfo(item))
-        //         }
-        //     })
-        //     return ret
-        // },
         // 播放列表为当前歌单的全部歌曲
         playAllSongs() {
-            // listSongs
-            this.listSongs.forEach((item,i) => {
-                this.listOfSongs[i] = item
-            })
-            this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
+            const long = this.AsidePlayList.length
+            const list = [...this.AsidePlayList,...this.listOfSongs];
+            this.$store.commit("setAsidePlayList",list)
+            this.toPlay(this.AsidePlayList[long].id,this.AsidePlayList[long].al.picUrl,long,this.AsidePlayList[long].name,this.AsidePlayList[long].ar[0].name)
 
         },
         // 收藏、取消歌单

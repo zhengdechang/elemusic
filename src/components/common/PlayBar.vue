@@ -123,11 +123,12 @@
               'curTime',                //当前音乐的播放位置
               'showAside',              //是否显示播放的歌曲列表
               'listIndex',              //当前歌曲在歌单中的位置
-              'listOfSongs',             //当前的歌单列表
+              'listOfSongs',             //分页列表
               'autoNext',                //自动播放下一首
               'isActive',                //是否收藏
               'loginIn',                 //是否登录
               'userId',                  //用户id
+              'AsidePlayList',            //播放列表
     ])
         },
         mounted() {
@@ -165,8 +166,9 @@
            },
             //自动播放下一首
             autoNext(){
-              this.next();
-
+                if(this.autoNext){
+                    this.next();
+                }
             },
             id(){
                 this.$store.commit('setIsActive',false)
@@ -268,38 +270,38 @@
             },
             //上一首
             prev(){
-              if(this.listIndex != -1 && this.listOfSongs.length > 1){          //当前处于不可能状态或者只有一首音乐的时候不执行
+              if(this.listIndex != -1 && this.AsidePlayList.length > 1){          //当前处于不可能状态或者只有一首音乐的时候不执行
                   if(this.listIndex >0){                                        //不是第一首音乐
                       this.$store.commit('setListIndex',this.listIndex-1);  //直接返回上一首
 
                   }else{                                                                           //当前是第一首音乐
-                      this.$store.commit('setListIndex',this.listOfSongs.length-1);  //切换到倒数第一首
+                      this.$store.commit('setListIndex',this.AsidePlayList.length-1);  //切换到倒数第一首
                   }
-                  this.toPlay(this.listOfSongs[this.listIndex].id);
+                  this.toPlay(this.AsidePlayList[this.listIndex].id);
               }
             },
             //下一首
             next(){
-                if(this.listIndex != -1 && this.listOfSongs.length > 1){          //当前处于不可能状态或者只有一首音乐的时候不执行
-                    if(this.listIndex < this.listOfSongs.length-1){               //不是最后一首音乐
+                if(this.listIndex != -1 && this.AsidePlayList.length > 1){          //当前处于不可能状态或者只有一首音乐的时候不执行
+                    if(this.listIndex < this.AsidePlayList.length-1){               //不是最后一首音乐
                         this.$store.commit('setListIndex',this.listIndex+1);  //直接返回下一首
 
                     }else{                                                                           //当前是最后一首音乐
                         this.$store.commit('setListIndex',0);  //切换到第一首
                     }
-                    this.toPlay(this.listOfSongs[this.listIndex].id);
+                    this.toPlay(this.AsidePlayList[this.listIndex].id);
                 }
             },
 
             //播放
             toPlay(id){
               if(id&&id !=this.id){
-                  this.$store.commit('setId',this.listOfSongs[this.listIndex].id);
-                  this.getUrl(this.listOfSongs[this.listIndex].id);
-                  this.$store.commit('setPicUrl',this.listOfSongs[this.listIndex].al.picUrl);
-                  this.$store.commit('setTitle',this.listOfSongs[this.listIndex].name);
-                  this.$store.commit('setArtist',this.listOfSongs[this.listIndex].ar[0].name);
-                  this.getLyric(this.listOfSongs[this.listIndex].id);
+                  this.$store.commit('setId',this.AsidePlayList[this.listIndex].id);
+                  this.getUrl(this.AsidePlayList[this.listIndex].id);
+                  this.$store.commit('setPicUrl',this.AsidePlayList[this.listIndex].al.picUrl);
+                  this.$store.commit('setTitle',this.AsidePlayList[this.listIndex].name);
+                  this.$store.commit('setArtist',this.AsidePlayList[this.listIndex].ar[0].name);
+                  this.getLyric(this.AsidePlayList[this.listIndex].id);
                   if(this.loginIn){
                       getServeLikedSong(this.userId).then(res =>{
                           for(let item of res.data){

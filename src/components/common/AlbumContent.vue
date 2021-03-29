@@ -25,7 +25,7 @@
                     <span class="item-intro">{{item.al.name}}</span>
                     <span class="item-duration">{{formatSongTime(item.dt)}}</span>
                     <div class="songlist-oper">
-                        <i class="iconfont icon-play" title="添加收藏列表"  slot="reference" @click.stop="toPlay(item.id,item.al.picUrl,index,item.name,item.ar[0].name)"></i>
+                        <i class="iconfont icon-play" title="添加收藏列表"  slot="reference" @click.stop="toPlay(item.id,item.al.picUrl,index,item.name,item.ar[0].name,item)"></i>
                         <i class="iconfont icon-add-list" title="添加到列表" slot="reference" @click.stop="addList(item)"></i>
                     </div>
                 </div>
@@ -47,8 +47,6 @@
             }
         },
         created() {
-            this.getServeLikedSong();
-            console.log(this.songList);
         },
         mixins:[mixin],
         props:[
@@ -66,8 +64,8 @@
                 return `${m}:${s}`
             },
             addList(item){
-                this.listOfSongs.push(item)
-                this.$store.commit('setListOfSongs',this.listOfSongs)
+                this.AsidePlayList.push(item)
+                this.$store.commit('setAsidePlayList',this.AsidePlayList)
             },
 
         },
@@ -76,7 +74,8 @@
               'listOfSongs',
               'isActive',
               'userId',
-              'loginIn'
+              'loginIn',
+              'AsidePlayList',
           ])
         },
     }

@@ -121,6 +121,7 @@ export default {
             'isActiveSong',
             'userId',
             'loginIn',
+            "AsidePlayList",
         ]),
         songDisable () {
             return (this.info.license || this.info.vip) ? 'disable' : ''
@@ -167,6 +168,7 @@ export default {
                 // 是否有版权播放
                 // res.songs[0].license = !res.privileges[0].cp
                 this.info = res.songs[0];
+                console.log(res);
                 this.background = this.info.al.picUrl
             })
         },
@@ -181,8 +183,7 @@ export default {
             })
         },
         playing1(params) {
-            this.listOfSongs.unshift(params)
-            this.toPlay(params.id,params.al.picUrl,0,params.name,params.ar[0].name)
+            this.toPlay(params.id,params.al.picUrl,this.AsidePlayList.length,params.name,params.ar[0].name,params)
         },
         //点击评论跳到评论框
         jumpComment () {

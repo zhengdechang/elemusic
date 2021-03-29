@@ -110,6 +110,7 @@ export default {
             'isActiveCollection',
             'userId',
             'loginIn',
+            'AsidePlayList'
         ])
     },
     created() {
@@ -180,12 +181,11 @@ export default {
         },
         // 播放列表为当前歌单的全部歌曲
         playAllSongs() {
-            // listSongs
-            this.songList.forEach((item,i) => {
-                this.listOfSongs[i] = item
-            })
-            this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
-
+            const long = this.AsidePlayList.length
+            const list = [...this.AsidePlayList,...this.songList];
+            this.$store.commit("setAsidePlayList",list)
+            this.toPlay(this.AsidePlayList[long].id,this.AsidePlayList[long].al.picUrl,long,this.AsidePlayList[long].name,this.AsidePlayList[long].ar[0].name)
+            console.log(list);
         },
         //提交收藏
         subCollection () {

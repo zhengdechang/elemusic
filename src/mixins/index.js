@@ -5,7 +5,8 @@ export const mixin = {
     computed:{
         ...mapGetters([
             'loginIn',
-            'userId'
+            'userId',
+            'AsidePlayList',
         ])
     },
     methods:{
@@ -39,7 +40,7 @@ export const mixin = {
             }
         },
         //播放
-        toPlay(id,picUrl,index,name,artist){
+        toPlay(id,picUrl,index,name,artist,params){
             this.$store.commit('setId',id);
             this.getUrl(id);
             this.$store.commit('setPicUrl',picUrl);
@@ -47,6 +48,10 @@ export const mixin = {
             this.$store.commit('setTitle',name);
             this.$store.commit('setArtist',artist);
             this.getLyric(id);
+            if(params){
+                this.AsidePlayList.push(params)
+                this.$store.commit('setAsidePlayList',this.AsidePlayList)
+            }
             if(this.loginIn){
                 getServeLikedSong(this.userId).then(res =>{
                     console.log(res);

@@ -17,6 +17,7 @@ const song ={
         tempList:{},           //当个歌单信息或者歌手
         listIndex:null,        //当前歌曲在歌单中的位置
         volume:50,              //音量
+        AsidePlayList:[],       //播放列表
     },
     getters:{
         listOfSongs:state => {
@@ -131,6 +132,13 @@ const song ={
             }
             return volume;
         },
+        AsidePlayList:state => {
+            let AsidePlayList =state.AsidePlayList;
+            if(!AsidePlayList){
+                AsidePlayList = JSON.parse(window.localStorage.getItem('AsidePlayList'));
+            }
+            return AsidePlayList;
+        },
     },
     mutations: {
         setListOfSongs:(state,listOfSongs) => {
@@ -196,6 +204,10 @@ const song ={
         setVolume:(state,volume) => {
             state.volume = volume
             window.sessionStorage.setItem('volume',JSON.stringify(volume))
+        },
+        setAsidePlayList:(state,AsidePlayList) => {
+            state.AsidePlayList = AsidePlayList
+            window.localStorage.setItem('AsidePlayList',JSON.stringify(AsidePlayList))
         },
 
     },

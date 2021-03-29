@@ -96,6 +96,7 @@ export default {
     },
     created() {
         // this.$router.go(0);
+        this.$store.commit('setActiveName','MV')
     },
     mounted () {
         this.init()

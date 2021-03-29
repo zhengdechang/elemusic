@@ -327,11 +327,10 @@
             // 播放列表为当前歌单的全部歌曲
             playAllSongs() {
                 // listSongs
-                this.listSongs.forEach((item,i) => {
-                    this.listOfSongs[i] = item
-                })
-                this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
-
+                const long = this.AsidePlayList.length
+                const list = [...this.AsidePlayList,...this.listOfSongs];
+                this.$store.commit("setAsidePlayList",list)
+                this.toPlay(this.AsidePlayList[long].id,this.AsidePlayList[long].al.picUrl,long,this.AsidePlayList[long].name,this.AsidePlayList[long].ar[0].name)
             },
             // addAll () {
             //     this.addList({ list: this.hotSongs })
