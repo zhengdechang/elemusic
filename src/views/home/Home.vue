@@ -28,8 +28,8 @@
                         <div class="toplist_songlist">
                             <div class="songitem" v-for="(songItem, index) in songList[item.id]" :key="songItem.id">
                                 <div class="songnum">{{index + 1}}</div>
-                                <div class="songinfo">
-                                    <router-link :to="{ path: '/song', query: { id: songItem.id }}" class="song_title">{{songItem.name}}</router-link>
+                                <div class="songinfo ">
+                                    <router-link :to="{ path: '/song', query: { id: songItem.id }}" class="song_title ">{{songItem.name}}</router-link>
                                     <div class="song_author">
                                         <router-link :to="{ path: '/artist', query: { id: author.id }}" class="song_name" v-for="(author, k) in songItem.ar" :key="k">{{ k !== 0 ? '/ ' + author.name : author.name }}</router-link>
                                     </div>
@@ -204,8 +204,7 @@
                     if (res.code !== 200) {
                         return this.$message.error('数据请求失败')
                     }
-                    this.mv_list = res.data
-                    console.log(this.mv_list);
+                    this.mv_list = res.data;
                 })
             },
             //选择Mv类型

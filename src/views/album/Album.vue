@@ -151,7 +151,6 @@ export default {
                 this.details = res.album;
                 this.songList = res.songs
                 this.$store.commit("setListOfSongs",this.songList)
-                console.log(this.details)
                 this.getArtistAlbum(this.artist_id)
             })
         },
@@ -183,9 +182,8 @@ export default {
         playAllSongs() {
             const long = this.AsidePlayList.length
             const list = [...this.AsidePlayList,...this.songList];
-            this.$store.commit("setAsidePlayList",list)
+            this.$store.commit("setAsidePlayList",this.unique(list))
             this.toPlay(this.AsidePlayList[long].id,this.AsidePlayList[long].al.picUrl,long,this.AsidePlayList[long].name,this.AsidePlayList[long].ar[0].name)
-            console.log(list);
         },
         //提交收藏
         subCollection () {

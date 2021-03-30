@@ -337,8 +337,8 @@ export default {
         playAllSongs() {
             const long = this.AsidePlayList.length
             const list = [...this.AsidePlayList,...this.listOfSongs];
-            this.$store.commit("setAsidePlayList",list)
-            this.toPlay(this.AsidePlayList[long].id,this.AsidePlayList[long].al.picUrl,long,this.AsidePlayList[long].name,this.AsidePlayList[long].ar[0].name)
+            this.$store.commit("setAsidePlayList",this.unique(list));
+            this.toPlay(this.AsidePlayList[long].id,this.AsidePlayList[long].al.picUrl,long,this.AsidePlayList[long].name,this.AsidePlayList[long].ar[0].name);
 
         },
         // 收藏、取消歌单

@@ -69,6 +69,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import {mixin} from "../../mixins";
 import ReplyComment from "./ReplyComment";
 import {
     albumComment,
@@ -87,6 +88,7 @@ export default {
     components: {
         ReplyComment
     },
+    mixins:[mixin],
     props: {
         // 0: 歌曲 1: mv 2: 歌单 3: 专辑  4: 电台 5: 视频 6: 动态
         type: {
@@ -216,7 +218,7 @@ export default {
                 item.isHot = true
                 return item
             })
-            this.comments = [...this.serveComment,...this.hotComments, ...res.comments]
+            this.comments = this.unique([...this.serveComment,...this.hotComments, ...res.comments])
             // 当前评论是否为空
             this.total = this.comments.length
             this.isEmpty = this.before === 0 && !this.comments.length
@@ -316,7 +318,7 @@ export default {
                     if(res.status){
                         this.$message.success('评论成功')
                         this.msg = ''
-                        this.getServeComments()
+                        this.getComment()
                     }
                 })
             } else if(this.childType == 1){
@@ -324,7 +326,8 @@ export default {
                     if(res.status){
                         this.$message.success('评论成功')
                         this.msg = ''
-                        this.getServeComments()
+                        // this.getServeComments()
+                        this.getComment()
                     }
                 })
             }else if(this.childType == 3){
@@ -332,7 +335,8 @@ export default {
                     if(res.status){
                         this.$message.success('评论成功')
                         this.msg = ''
-                        this.getServeComments()
+                        // this.getServeComments()
+                        this.getComment()
                     }
                 })
             }
@@ -342,6 +346,7 @@ export default {
         getServeComments(){
             if(this.childType == 0){
                 getServeSongComment(this.curId).then(res =>{
+                    this.serveComment = []
                     res.data.forEach(item =>{
                         const user =item.user_id
                         const comment = {
@@ -360,6 +365,7 @@ export default {
                 })
             } else if(this.childType == 1){
                 getServeMvComment(this.curId).then(res =>{
+                    this.serveComment = []
                     res.data.forEach(item =>{
                         const user =item.user_id
                         const comment = {
@@ -378,6 +384,7 @@ export default {
                 })
             }else if(this.childType == 3){
                 getServeAlbumComment(this.curId).then(res =>{
+                    this.serveComment = []
                     res.data.forEach(item =>{
                         const user =item.user_id
                         const comment = {
@@ -406,6 +413,8 @@ export default {
         msg () {
             this.msg = this.maxLen >= this.msg ? this.msg : this.msg.substring(0, this.maxLen)
         },
+        serveComment(){
+        }
     }
 }
 </script>

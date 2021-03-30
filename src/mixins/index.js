@@ -50,11 +50,10 @@ export const mixin = {
             this.getLyric(id);
             if(params){
                 this.AsidePlayList.push(params)
-                this.$store.commit('setAsidePlayList',this.AsidePlayList)
+                this.$store.commit('setAsidePlayList',this.unique(this.AsidePlayList))
             }
             if(this.loginIn){
                 getServeLikedSong(this.userId).then(res =>{
-                    console.log(res);
                     for(let item of res.data){
                         if(item.tid == id){
                             this.$store.commit('setIsActive',true);
@@ -82,5 +81,20 @@ export const mixin = {
                 console.log(err);
             });
         },
+        //去重
+        unique(arr) {
+            const strings = arr.map((item) => JSON.stringify(item));
+            const removeDupList = [...new Set(strings)]; //也可以使用Array.from(new Set(strings))
+            const result = removeDupList.map((item) => JSON.parse(item));
+            return  result;
+        }
+        // unique2(arr,params){
+        //     arr.filter(item =>{
+        //         if(item.id == params.id){
+        //
+        //         }
+        //     })
+        //
+        // }
     }
 }

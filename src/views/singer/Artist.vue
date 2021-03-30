@@ -93,8 +93,6 @@
         artists,
         artistAlbum,
         artistMv,
-        subServeLikedSong,
-        deleteLikedSong,
         subServeLikedArtist, deleteLikedArtist, getServeLikedArtist
     } from "../../networks/index"
     import {mixin} from "../../mixins";
@@ -180,7 +178,6 @@
                     this.listSongs = this.hotSongs;
                     this.total =  this.listSongs.length;
                     this.$store.commit('setListOfSongs',(this.listSongs).slice(this.start*10,this.end*10))
-                    console.log(this.hotSongs);
                     this.isLoading = false
                 })
             },
@@ -328,20 +325,10 @@
             playAllSongs() {
                 // listSongs
                 const long = this.AsidePlayList.length
-                const list = [...this.AsidePlayList,...this.listOfSongs];
-                this.$store.commit("setAsidePlayList",list)
+                const list = this.unique([...this.AsidePlayList,...this.listOfSongs]);
+                this.$store.commit("setAsidePlayList",this.unique(list))
                 this.toPlay(this.AsidePlayList[long].id,this.AsidePlayList[long].al.picUrl,long,this.AsidePlayList[long].name,this.AsidePlayList[long].ar[0].name)
             },
-            // addAll () {
-            //     this.addList({ list: this.hotSongs })
-            //     this.setPlayListTips({ flag: true, txt: '已添加到播放列表' })
-            //     clearTimeout(this.timer)
-            //     this.timer = setTimeout(() => {
-            //         this.setPlayListTips({ flag: false, txt: '已添加到播放列表' })
-            //     }, 2000)
-            // },
-            // TODO收藏
-            collectAll () {},
         },
         watch: {
             $route: {

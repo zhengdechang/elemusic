@@ -20,7 +20,7 @@
         name: "TheAside",
         data(){
             return {
-                ly:''
+                ly:'',
             }
         },
         computed:{
@@ -38,8 +38,7 @@
             let _this = this;
             document.addEventListener('click',function () {
                 _this.$store.commit('setShowAside',false);
-            },true)
-            console.log(this.AsidePlayList);
+            },true);
         },
         methods:{
             //播放歌曲
@@ -87,7 +86,7 @@
                 this.$store.commit('setAsidePlayList',[])
                 this.$store.commit('setListIndex',0)
                 this.$store.commit('setIsPlay',false)
-            }
+            },
         }
     }
 </script>

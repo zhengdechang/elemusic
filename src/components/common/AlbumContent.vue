@@ -65,7 +65,7 @@
             },
             addList(item){
                 this.AsidePlayList.push(item)
-                this.$store.commit('setAsidePlayList',this.AsidePlayList)
+                this.$store.commit('setAsidePlayList',this.unique(this.AsidePlayList))
             },
 
         },

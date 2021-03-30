@@ -30,6 +30,7 @@
         </div>
         <div class="song-header">
             <h4>{{this.list[type]}}列表 <em v-if="type == 'song'">{{total + '首歌'}}</em></h4>
+            <span class="play-all" @click="playAllSongs"><i class="iconfont icon-audio-play"></i> 播放全部</span>
         </div>
         <template v-if="isLoading">
             <Loading />
@@ -269,13 +270,12 @@
                 return result
             },
             // 播放列表为当前歌单的全部歌曲
+            // 播放列表为当前歌单的全部歌曲
             playAllSongs() {
-                // listSongs
-                this.listSongs.forEach((item,i) => {
-                    this.listOfSongs[i] = item
-                })
-                this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
-
+                const long = this.AsidePlayList.length
+                const list = [...this.AsidePlayList,...this.listOfSongs];
+                this.$store.commit("setAsidePlayList",this.unique(list))
+                this.toPlay(this.AsidePlayList[long].id,this.AsidePlayList[long].al.picUrl,long,this.AsidePlayList[long].name,this.AsidePlayList[long].ar[0].name)
             },
             // 歌单简介查看更多
             showAllDesc () {
