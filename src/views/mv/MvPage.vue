@@ -4,18 +4,18 @@
             <div class="filter">
                 <div class="filter-item">
                     <span>区域</span>
-                    <em v-for="(item, index) in area" :class=" index === areaIndex ? 'active' : ''" :key="index" @click="selectType('area', index)">{{item}}</em>
+                    <em v-for="(item, index) in area" class="hover" :class=" index === areaIndex ? 'active' : ''" :key="index" @click="selectType('area', index)">{{item}}</em>
                 </div>
                 <div class="filter-item">
                     <span>类型</span>
-                    <em v-for="(item, index) in type" :class=" index === typeIndex ? 'active' : ''" :key="index" @click="selectType('type', index)">{{item}}</em>
+                    <em v-for="(item, index) in type" class="hover"  :class=" index === typeIndex ? 'active' : ''" :key="index" @click="selectType('type', index)">{{item}}</em>
                 </div>
             </div>
             <div class="list-container">
                 <div class="list-head">
                     <h2>全部MV</h2>
                     <div class="type">
-                        <span v-for="(item, index) in order" :class=" index === orderIndex ? 'active' : ''" :key="index" @click="selectType('order', index)">{{item}}</span>
+                        <span v-for="(item, index) in order" class="hover"  :class=" index === orderIndex ? 'active' : ''" :key="index" @click="selectType('order', index)">{{item}}</span>
                     </div>
                 </div>
                 <MvList class="loadMv" :mvList="list" v-infinite-scroll="loadMv"  infinite-scroll-disabled="isLoadMv" infinite-scroll-distance="50"></MvList>
@@ -100,91 +100,6 @@ export default {
     }
 }
 </script>
-<style scoped lang="less">
-.loadMv{
-    display: flex;
-    flex-wrap: wrap;
-    overflow-y: auto;
-}
-.mv-page{
-    margin-top: 70px;
-    margin-left: 120px;
-    margin-right: 120px;
-}
-.list-container {
-    padding-bottom: 40px;
-}
-.filter {
-    padding: 40px 0 20px;
-}
-.filter-item {
-    font-size: 0;
-    padding-bottom: 20px;
-
-    span {
-        display: inline-block;
-        width: 65px;
-        font-size: 14px;
-        line-height: 30px;
-        font-weight: bold;
-        vertical-align: top;
-    }
-
-    em {
-        display: inline-block;
-        font-size: 14px;
-        line-height: 30px;
-        padding: 0 10px;
-        margin-right: 15px;
-        font-style: normal;
-        cursor: pointer;
-        border-radius: 3px;
-
-        &.active {
-            color: #fff;
-            background: #ff641e;
-        }
-    }
-}
-.list-head {
-    display: flex;
-    padding: 15px 0;
-
-    h2 {
-        font-size: 24px;
-        line-height: 30px;
-    }
-
-    .type {
-        flex: 1;
-        padding: 5px 40px;
-
-        span {
-            position: relative;
-            display: inline-block;
-            height: 20px;
-            line-height: 20px;
-            margin-right: 34px;
-            font-weight: 300;
-            color: #333;
-            cursor: pointer;
-
-            &.active {
-                font-weight: 600;
-                color: #000;
-
-                &::after {
-                    position: absolute;
-                    content: "";
-                    left: 0;
-                    bottom: 1px;
-                    width: 100%;
-                    height: 6px;
-                    background:#ff641e;
-                    z-index: -1;
-                }
-            }
-        }
-    }
-}
+<style scoped lang="scss">
+@import "src/assets/css/mvpage";
 </style>

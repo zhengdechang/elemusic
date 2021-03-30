@@ -16,5 +16,5 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../../assets/css/scroll-top";
+ @import "../../assets/css/scroll-top";
 </style>

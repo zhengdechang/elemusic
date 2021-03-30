@@ -197,7 +197,7 @@
                         this.$router.push({ path: '/song', query: { id: item.id } })
                         break
                     case 'artists':
-                        this.$router.push({ path: '/singer', query: { id: item.id } })
+                        this.$router.push({ path: '/artist', query: { id: item.id } })
                         break
                     case 'albums':
                         this.$router.push({ path: '/album', query: { id: item.id } })
@@ -255,96 +255,5 @@
 
 <style scoped lang="scss">
     @import "../../assets/css/the-header.scss";
-    .search {
-        position: relative;
-        display: block;
-        text-align: right;
 
-        .keyVal {
-            width: 250px;
-            line-height: 32px;
-            border: 0;
-            border-bottom: 1px solid #999;
-            .el-input__inner{
-                padding-left: 20px;
-            }
-            input {
-                padding: 0;
-                border: none;
-            }
-        }
-
-        .icon-search {
-            font-size: 20px;
-            margin: 5px 0 5px 10px;
-            cursor: pointer;
-        }
-    }
-    .hot-search {
-        h5 {
-            font-size: 18px;
-        }
-
-        .hot-search-list {
-            padding: 10px 0;
-        }
-        .hot-item {
-            line-height: 28px;
-            cursor: pointer;
-
-            .top-0 {
-                font-weight: bold;
-                color: rgb(255, 0, 0);
-            }
-
-            .top-1 {
-                font-weight: bold;
-                color: rgba(255, 0, 0, .6);
-            }
-
-            .top-2 {
-                font-weight: bold;
-                color: rgba(255, 0, 0, .4);
-            }
-
-            img {
-                display: inline-block;
-                width: auto;
-                height: 16px;
-                padding: 6px 0;
-                vertical-align: top;
-            }
-        }
-    }
-    .search-item {
-        border-top: solid 1px #f2f2f2;
-        margin: -1px -12px 0;
-
-        h6 {
-            font-size: 14px;
-            line-height: 36px;
-            color: #666;
-            padding: 0 12px;
-        }
-
-        .list {
-            line-height: 36px;
-            color: #999;
-            padding: 0 12px 0 40px;
-            display: block;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            cursor: pointer;
-
-            &:hover {
-                color: #fff;
-                background: #ff641e;
-            }
-        }
-
-        &:first-child {
-            border: 0;
-        }
-    }
 </style>

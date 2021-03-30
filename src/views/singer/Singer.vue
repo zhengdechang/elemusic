@@ -3,13 +3,13 @@
         <div class="w1200">
             <div class="filter">
                 <div class="filter-item">
-                    <span v-for="(item, index) in initial" :key="index" :class=" index === initialIndex ? 'active' : ''" @click="selectType('initial', index)">{{item.label}}</span>
+                    <span v-for="(item, index) in initial"  class="hover" :key="index" :class=" index === initialIndex ? 'active' : ''" @click="selectType('initial', index)">{{item.label}}</span>
                 </div>
                 <div class="filter-item">
-                    <span v-for="(item, index) in area" :key="index" :class=" index === areaIndex ? 'active' : ''" @click="selectType('area', index)">{{item.label}}</span>
+                    <span v-for="(item, index) in area" :key="index"  class="hover" :class=" index === areaIndex ? 'active' : ''" @click="selectType('area', index)">{{item.label}}</span>
                 </div>
                 <div class="filter-item">
-                    <span v-for="(item, index) in type" :key="index" :class=" index === typeIndex ? 'active' : ''" @click="selectType('type', index)">{{item.label}}</span>
+                    <span v-for="(item, index) in type" :key="index"  class="hover" :class=" index === typeIndex ? 'active' : ''" @click="selectType('type', index)">{{item.label}}</span>
                 </div>
             </div>
             <div class="list-container" v-infinite-scroll="loadMore">
@@ -119,82 +119,6 @@
         }
     }
 </script>
-<style scoped lang="less">
-    a {
-        text-decoration: none;
-        color: #333;
-    }
-    .singer{
-        margin-top: 70px    ;
-    }
-    .filter {
-        padding: 40px 200px 20px;
-    }
-    .filter-item {
-        font-size: 0;
-        padding-bottom: 20px;
-
-        span {
-            display: inline-block;
-            padding: 0 17px;
-            font-size: 14px;
-            line-height: 30px;
-            margin-right: 6px;
-            vertical-align: top;
-            cursor: pointer;
-            border-radius: 3px;
-
-            &.active {
-                color: #fff;
-                background: #ff641e;
-            }
-        }
-    }
-
-    .list-container {
-        display: flex;
-        flex-wrap: wrap;
-        margin-left: 150px;
-        margin-right: 100px;
-        padding: 0 20px 40px 20px;
-        overflow-y: auto;
-        /*width: 100%;*/
-        /*height: auto;*/
-
-        .item {
-            width: 120px;
-            margin: 0 40px 40px;
-
-            .el-image {
-                transition: all .4s linear;
-            }
-
-            &:hover {
-                .el-image {
-                    transform: rotateY(180deg);
-                }
-            }
-        }
-
-        .faceImg {
-            width: 120px;
-            height: 120px;
-            border-radius: 100%;
-            overflow: hidden;
-        }
-
-        .info {
-            text-align: center;
-
-            .name {
-                line-height: 28px;
-                font-size: 14px;
-            }
-
-            .albumSize {
-                color: #999;
-            }
-        }
-    }
-
+<style scoped lang="scss">
+@import "src/assets/css/singer.scss";
 </style>

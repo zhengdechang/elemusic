@@ -133,59 +133,6 @@ export default {
     }
 }
 </script>
-<style scoped lang="less">
-.lyrics-main {
-    height: 100%;
-    max-height: 390px;
-    overflow-y: auto;
-    transition: all 1.5s ease-in-out;
-}
-
-.lyrics {
-    font-size: 0;
-    transform: translateY(0);
-    transition: transform 1.5s ease-in-out;
-
-    /deep/p {
-        margin: 0;
-        line-height: 30px;
-        font-size: 14px;
-        font-weight: 300;
-
-        &.active {
-            color: #ff641e;
-        }
-    }
-}
-.lyric-empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    min-height: 100px;
-    color: #ff641e;
-
-    ~ .more-lyric {
-        display: none;
-    }
-}
-.page-lyrics {
-    color: #666;
-    overflow: hidden;
-
-    .lyric-empty {
-        justify-content: left;
-    }
-
-    &.fullLyrics {
-        max-height: none;
-    }
-}
-
-.lyric-more span {
-    display: inline-block;
-    line-height: 30px;
-    cursor: pointer;
-    color: #ff641e;
-}
+<style scoped lang="scss">
+@import "src/assets/css/songshowlyric.scss";
 </style>

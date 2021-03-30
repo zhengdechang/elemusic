@@ -179,11 +179,11 @@ export default {
     }
 }
 </script>
-<style scoped lang="less">
+<style scoped lang="scss">
 .video{
     margin-top: 70px;
 }
-/deep/.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
+::v-deep.vjs-has-started.vjs-user-inactive.vjs-playing .vjs-control-bar {
     visibility: visible;
     opacity: 1;
 }

@@ -1,38 +1,80 @@
-@import "var.scss";
-@import "global.scss";
-
-div,
-ul,
-li {
-  box-sizing: border-box;
+a {
+  text-decoration: none;
+  color: #333;
 }
+.singer{
+  margin-top: 70px    ;
+}
+.filter {
+  padding: 40px 200px 20px;
+}
+.filter-item {
+  font-size: 0;
+  padding-bottom: 20px;
 
-.singer {
-  margin: 30px 10%;
-  margin-top: $header-height + 20px;
-  padding-bottom: 50px;
-  background-color: $color-white;
-  .singer-header {
-    width: 100%;
-    padding: 0 40px;
-    li {
-      display: inline-block;
-      line-height: 40px;
-      margin: 40px 20px 15px 20px;
-      font-size: 20px;
-      font-weight: 400;
-      color: $color-grey;
-      border-bottom: none;
-      cursor: pointer;
-    }
-    li.active {
-      color: $color-black;
-      font-weight: 600;
-      border-bottom: 4px solid $color-black;
+  span {
+    display: inline-block;
+    padding: 0 17px;
+    font-size: 14px;
+    line-height: 30px;
+    margin-right: 6px;
+    vertical-align: top;
+    cursor: pointer;
+    border-radius: 3px;
+
+    &.active {
+      color: #fff;
+      background: #ff641e;
     }
   }
 }
 
-.pagination {
-  @include layout;
+.list-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 150px;
+  margin-right: 100px;
+  padding: 0 20px 40px 20px;
+  overflow-y: auto;
+  /*width: 100%;*/
+  /*height: auto;*/
+
+  .item {
+    width: 120px;
+    margin: 0 40px 40px;
+
+    .el-image {
+      transition: all .4s linear;
+    }
+
+    &:hover {
+      .el-image {
+        transform: rotateY(180deg);
+      }
+    }
+  }
+
+  .faceImg {
+    width: 120px;
+    height: 120px;
+    border-radius: 100%;
+    overflow: hidden;
+  }
+
+  .info {
+    text-align: center;
+
+    .name {
+      line-height: 28px;
+      font-size: 14px;
+    }
+
+    .albumSize {
+      color: #999;
+    }
+  }
+}
+
+.hover:hover{
+  color: #25c34eb8;
 }

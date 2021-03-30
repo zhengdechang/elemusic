@@ -36,5 +36,5 @@
 </script>
 
 <style scoped lang="scss">
-    @import "../../assets/css/content-list";
+ @import "../../assets/css/content-list";
 </style>

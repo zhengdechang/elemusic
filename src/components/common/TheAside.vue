@@ -94,15 +94,5 @@
 
 <style scoped lang="scss">
     @import "../../assets/css/the-aside";
-    .sumAside{
-        float: left;
-        margin-top: -30px;
-        margin-left: 110px;
-    }
-    .delAll{
-        float: left;
-        margin-top: -30px;
-        margin-left: 170px;
-        cursor: pointer;
-    }
+
 </style>

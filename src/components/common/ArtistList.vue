@@ -32,49 +32,6 @@ export default {
     }
 }
 </script>
-<style scoped lang="less">
-a {
-    text-decoration: none;
-    color: #333;
-}
-.artist {
-    display: flex;
-    flex-wrap: wrap;
-    padding-bottom: 40px;
-
-    .item {
-        width: 120px;
-        margin: 0 40px 40px;
-
-        .el-image {
-            transition: all .4s linear;
-        }
-
-        &:hover {
-            .el-image {
-                transform: rotateY(180deg);
-            }
-        }
-    }
-
-    .faceImg {
-        width: 120px;
-        height: 120px;
-        border-radius: 100%;
-        overflow: hidden;
-    }
-
-    .info {
-        text-align: center;
-
-        .name {
-            line-height: 28px;
-            font-size: 14px;
-        }
-
-        .albumSize {
-            color: #999;
-        }
-    }
-}
+<style scoped lang="scss">
+@import "src/assets/css/artistlist.scss";
 </style>

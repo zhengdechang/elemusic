@@ -111,7 +111,10 @@ export default {
     },
     // 监听属性 类似于data概念
     computed: {
-            ...mapGetters(['listOfSongs'])
+            ...mapGetters([
+                'listOfSongs',
+                'AsidePlayList',
+            ])
     },
     created () {
         this.rId = this.$route.query.rId
@@ -219,12 +222,10 @@ export default {
         },
         // 播放列表为当前歌单的全部歌曲
         playAllSongs() {
-            // listSongs
-            this.listSongs.forEach((item,i) => {
-                this.listOfSongs[i] = item
-            })
-            this.toPlay(this.listOfSongs[0].id,this.listOfSongs[0].al.picUrl,0,this.listOfSongs[0].name,this.listOfSongs[0].ar[0].name)
-
+            const long = this.AsidePlayList.length
+            const list = [...this.AsidePlayList,...this.listSongs];
+            this.$store.commit("setAsidePlayList",list)
+            this.toPlay(this.AsidePlayList[long].id,this.AsidePlayList[long].al.picUrl,long,this.AsidePlayList[long].name,this.AsidePlayList[long].ar[0].name)
         },
         // 处理歌曲
         _formatSongs (list, privileges) {
@@ -250,222 +251,6 @@ export default {
     }
 }
 </script>
-<style scoped lang="less">
-.pagination {
-    padding: 30px 0;
-    text-align: center;
-}
-.rank{
-    margin-top: 70px;
-    margin-left: 110px;
-    margin-right: 110px;
-}
-.rank-container {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    flex-basis: auto;
-    box-sizing: border-box;
-    padding: 40px 0 0 0;
-}
-.rank-aside {
-    width: 300px;
-    padding: 0 20px 100px 0;
-
-    .rank-type {
-        box-shadow: 0 0 20px 0 rgba(65,67,70,.05);
-    }
-}
-.rank-main {
-    flex: 1;
-    padding: 0 20px 100px;
-    overflow: hidden;
-}
-
-.type-hd {
-    display: flex;
-    padding: 20px 0;
-    margin: 0 20px;
-    justify-content: space-between;
-    border-bottom: 1px solid #f2f2f2;
-
-    span {
-        position: relative;
-        display: inline-block;
-        height: 20px;
-        line-height: 20px;
-        font-weight: 300;
-        color: #333;
-        cursor: pointer;
-
-        &.active {
-            font-weight: 600;
-            color: #000;
-
-            &::after {
-                position: absolute;
-                content: "";
-                left: 0;
-                bottom: 1px;
-                width: 100%;
-                height: 6px;
-                background: #ff641e;
-                z-index: -1;
-            }
-        }
-    }
-}
-.type-main {
-    padding: 10px 0;
-}
-.type-item {
-    display: flex;
-    padding: 10px 20px;
-    cursor: pointer;
-
-    .item-img {
-        width: 60px;
-        height: 60px;
-    }
-
-    .item-info {
-        flex: 1;
-        align-items: center;
-        padding-left: 20px;
-    }
-
-    .item-title {
-        display: block;
-        font-weight: bold;
-        line-height: 30px;
-        padding-bottom: 15px;
-    }
-
-    .item-time {
-        font-size: 12px;
-        line-height: 12px;
-        color: #999;
-    }
-
-    &:hover {
-        background: #f5f5f5;
-    }
-
-    &.active {
-        background: #efefef;
-    }
-}
-
-.rank-list-hd {
-    display: flex;
-
-    .rank-img {
-        width: 150px;
-        height: 150px;
-        padding: 5px;
-        border: 1px solid #eee;
-    }
-
-    .rank-info {
-        flex: 1;
-        padding-left: 40px;
-    }
-
-    .rank-title {
-        padding-bottom: 20px;
-        font-size: 24px;
-        font-weight: bold;
-
-        span {
-            display: inline-block;
-            padding-left: 10px;
-            font-weight: normal;
-            line-height: 22px;
-            font-size: 14px;
-            color: #999;
-        }
-    }
-
-    .rank-desc {
-        line-height: 22px;
-        font-size: 14px;
-        color: #999;
-    }
-
-    .rank-tags {
-        padding-bottom: 5px;
-        line-height: 16px;
-
-        .tag {
-            display: inline-block;
-            margin-right: 5px;
-            font-size: 12px;
-            color: #ff641e;
-        }
-    }
-    .rank-playCount, .rank-collect, .rank-comment {
-        display: inline-block;
-        padding: 0 20px 5px 0;
-        line-height: 16px;
-        font-size: 14px;
-        color: #999;
-
-        i {
-            vertical-align: top;
-        }
-    }
-}
-
-.song-header {
-    display: flex;
-    padding: 30px 0 10px;
-
-    h4 {
-        flex: 1;
-        font-size: 20px;
-        line-height: 40px;
-
-        em {
-            display: inline-block;
-            padding-left: 10px;
-            font-size: 12px;
-            line-height: 14px;
-            font-style: normal;
-            font-weight: normal;
-            color: #666;
-            vertical-align: baseline;
-        }
-    }
-
-    span {
-        display: flex;
-        line-height: 16px;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50px;
-        padding: 7px 20px;
-        cursor: pointer;
-        margin: 5px 0 5px 15px;
-        transition: all .4s;
-        background: #f0f0f0;
-        color: #333;
-
-        i {
-            margin-right: 3px;
-        }
-    }
-
-    .play-all {
-        color: #fff;
-        background: #ff641e;
-
-        i {
-            color: #fff;
-        }
-    }
-
-    .collect.active, .collect.active i {
-        color: #ff641e;
-    }
-}
+<style scoped lang="scss">
+@import "../../assets/css/rank.scss";
 </style>

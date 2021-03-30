@@ -38,14 +38,5 @@
 
 <style  lang="scss" scoped>
 @import './assets/css/app.scss';
-.container {
-  height: 100%;
-}
-.layout {
-  /*min-height: calc(100vh - 80px - 40px);*/
-  margin: 0 30px;
-}
-.play-bar{
- z-index: 5;
-}
+
 </style>

@@ -9,3 +9,14 @@
 .music-content {
   flex: 1;
 }
+
+.container {
+  height: 100%;
+}
+.layout {
+  /*min-height: calc(100vh - 80px - 40px);*/
+  margin: 0 30px;
+}
+.play-bar{
+  z-index: 5;
+}

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+import {mapGetters} from 'vuex'
 export default {
     components: {
 
@@ -64,127 +64,6 @@ export default {
     },
 }
 </script>
-<style scoped lang="less">
-a {
-    text-decoration: none;
-    color: #333;
-}
-.my{
-    margin-top: 70px;
-}
-.my-container {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    flex-basis: auto;
-    box-sizing: border-box;
-}
-.my-aside {
-    width: 300px;
-    padding: 10px 0;
-    margin: 40px 0;
-    border-radius: 4px;
-    overflow-y: auto;
-    box-shadow: 0 0 20px 0 rgba(65,67,70,.05);
-
-    h3 {
-        display: flex;
-        padding: 0 20px;
-        line-height: 40px;
-        font-size: 14px;
-        justify-content: space-between;
-        cursor: pointer;
-
-        .iconfont {
-            transform: rotate(-90deg);
-            transition: all .3s ease-in-out;
-        }
-
-    }
-
-    .my-favorite {
-        cursor: pointer;
-    }
-}
-.my-main {
-    flex: 1;
-    padding: 0 20px;
-    margin: 40px 0;
-    overflow-y: auto;
-}
-.playlist-main {
-    overflow: hidden;
-
-    .el-image {
-        width: 40px;
-        height: 40px;
-        border-radius: 4px;
-        overflow: hidden;
-    }
-
-    .item {
-        display: flex;
-        padding: 10px 20px;
-        cursor: pointer;
-
-        .icon-del {
-            display: none;
-        }
-
-        &:hover {
-            background:#f5f5f5;
-
-            .icon-del {
-                display: block;
-            }
-        }
-
-        &.active {
-            background:#f5f5f5;
-        }
-    }
-
-    .info {
-        flex: 1;
-        padding-left: 10px;
-    }
-
-    .name {
-        width: 100%;
-        height: 20px;
-        line-height: 20px;
-        font-size: 14px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 1;
-        -webkit-box-orient: vertical;
-        word-break: break-all;
-        cursor: pointer;
-    }
-
-    .author {
-        position: relative;
-        height: 20px;
-        line-height: 20px;
-        font-size: 12px;
-        color: #999;
-
-        span {
-            display: inline-block;
-            color: #666;
-        }
-
-        .icon-del {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-        }
-    }
-
-    &.active {
-        height: 0;
-    }
-}
-
+<style scoped lang="scss">
+@import "src/assets/css/my.scss";
 </style>

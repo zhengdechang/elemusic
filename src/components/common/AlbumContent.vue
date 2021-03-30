@@ -83,25 +83,4 @@
 
 <style scoped lang="scss">
     @import "../../assets/css/album-content";
-    .songlist-oper {
-        display: none;
-        .iconfont {
-            margin-left: 15px;
-            font-size: 22px;
-            cursor: pointer;
-
-            &:hover {
-                color: red;
-            }
-        }
-    }
-    .song-item:hover{
-        .songlist-oper{
-            display: block;
-        }
-    }
-    .icon-collect-active{
-        color:red;
-    }
-
 </style>
