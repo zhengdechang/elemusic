@@ -301,11 +301,10 @@
               if(this.listIndex != -1 && this.AsidePlayList.length > 1){          //当前处于不可能状态或者只有一首音乐的时候不执行
                       if(this.listIndex >0){                                        //不是第一首音乐
                           this.$store.commit('setListIndex',this.listIndex-1);  //直接返回上一首
-
                       }else{                                                                           //当前是第一首音乐
                           this.$store.commit('setListIndex',this.AsidePlayList.length-1);  //切换到倒数第一首
                       }
-                  this.toPlay(this.AsidePlayList[this.listIndex].id);
+                      this.toPlay(this.AsidePlayList[this.listIndex].id);
               }
             },
             //下一首
@@ -321,6 +320,7 @@
                         const long = this.AsidePlayList.length;
                         if(this.listIndex < this.AsidePlayList.length-1){               //不是最后一首音乐
                             this.$store.commit('setListIndex',this.listIndex+Math.round(Math.random()*long));  //返回下面随机一首
+                            this.$store.commit("setIsPlay",true)
                         }else{                                                                           //当前是最后一首音乐
                             this.$store.commit('setListIndex',Math.round(Math.random()*long));  //从0开始随机一首
                         }
