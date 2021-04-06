@@ -1,8 +1,8 @@
 <template>
     <div class="song-audio">
         <audio ref="player"
-            :src="url" 
-            controls = "controls" 
+            :src="url"
+            controls = "controls"
             preload = "true"
             @canplay="startPlay"
             @ended="ended"

@@ -12,6 +12,7 @@ import '@/assets/js/iconfont2.js'
 import '@/assets/js/iconfont3.js'
 
 import '../src/assets/fonts/font.css'
+import '../src/assets/fonts/iconfont.css'
 
 import '../src/assets/js/directive'
 

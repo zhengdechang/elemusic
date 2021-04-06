@@ -18,8 +18,16 @@ const song ={
         listIndex:null,        //当前歌曲在歌单中的位置
         volume:50,              //音量
         AsidePlayList:[],       //播放列表
+        mode:0,                 //播放模式
     },
     getters:{
+        mode:state => {
+            let mode =state.mode;
+            if(!mode.length){
+                mode = JSON.parse(window.sessionStorage.getItem('mode'))
+            }
+            return mode;
+        },
         listOfSongs:state => {
             let listOfSongs =state.listOfSongs;
             if(!listOfSongs.length){
@@ -208,6 +216,10 @@ const song ={
         setAsidePlayList:(state,AsidePlayList) => {
             state.AsidePlayList = AsidePlayList
             window.localStorage.setItem('AsidePlayList',JSON.stringify(AsidePlayList))
+        },
+        setMode:(state,mode) => {
+            state.mode = mode
+            window.localStorage.setItem('Mode',JSON.stringify(mode))
         },
 
     },

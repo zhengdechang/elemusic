@@ -223,7 +223,7 @@ export default {
         // 播放列表为当前歌单的全部歌曲
         playAllSongs() {
             const long = this.AsidePlayList.length
-            const list = [...this.AsidePlayList,...this.listSongs];
+            const list = [...this.AsidePlayList,...this.listOfSongs];
             this.$store.commit("setAsidePlayList",this.unique(list))
             this.toPlay(this.AsidePlayList[long].id,this.AsidePlayList[long].al.picUrl,long,this.AsidePlayList[long].name,this.AsidePlayList[long].ar[0].name)
         },

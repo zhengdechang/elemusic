@@ -4,7 +4,7 @@
             <svg class="icon">
                 <use xlink:href="#icon-erji"></use>
             </svg>
-            <span>EleMusic</span>
+            <span class="title-text">EleMusic</span>
         </div>
         <ul class="navbar">
             <li  :class="{active:item.name == activeName}" v-for="item in navMsg" :key="item.path" @click="goPage(item.path,item.name)">
@@ -255,5 +255,4 @@
 
 <style scoped lang="scss">
     @import "../../assets/css/the-header.scss";
-
 </style>

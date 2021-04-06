@@ -78,7 +78,10 @@
                         <use xlink:href="#icon-liebiao"></use>
                     </svg>
                 </div>
-
+                <!--切换播放模式-->
+                <div class="item" @click="changePlayMode()">
+                    <i class="iconfont" :class="PlayMode()"></i>
+                </div>
             </div>
         </div>
     </div>
@@ -108,6 +111,12 @@
                 volume:50,           //音量
                 ly:'',               //歌词
                 toggle:true,         //显示隐藏播放器页面
+                playMode:{
+                    loop:0,
+                    suijixunhuan:1,
+                    danquxunhuan1:2,
+                },
+                mode:0,
             }
         },
         computed:{
@@ -130,6 +139,9 @@
               'userId',                  //用户id
               'AsidePlayList',            //播放列表
     ])
+        },
+        created() {
+            this.PlayMode();
         },
         mounted() {
             //改变音量
@@ -172,10 +184,26 @@
             },
             id(){
                 this.$store.commit('setIsActive',false)
+            },
+            mode(){
+                this.$store.commit("setMode",this.mode)
             }
 
         },
         methods:{
+           //切换模式
+           PlayMode(){
+               return this.mode === this.playMode.loop? 'icon-loop': this.mode === this.playMode.suijixunhuan?'icon-suijixunhuan':'icon-danquxunhuan1'
+           },
+           changePlayMode(){
+               if(this.mode>=2){
+                   this.mode = 0;
+                   this.PlayMode();
+               }else {
+                   this.mode = this.mode + 1
+               }
+
+           },
           //切换播放
           togglePlay(){
               if(this.isPlay){
@@ -271,23 +299,34 @@
             //上一首
             prev(){
               if(this.listIndex != -1 && this.AsidePlayList.length > 1){          //当前处于不可能状态或者只有一首音乐的时候不执行
-                  if(this.listIndex >0){                                        //不是第一首音乐
-                      this.$store.commit('setListIndex',this.listIndex-1);  //直接返回上一首
+                      if(this.listIndex >0){                                        //不是第一首音乐
+                          this.$store.commit('setListIndex',this.listIndex-1);  //直接返回上一首
 
-                  }else{                                                                           //当前是第一首音乐
-                      this.$store.commit('setListIndex',this.AsidePlayList.length-1);  //切换到倒数第一首
-                  }
+                      }else{                                                                           //当前是第一首音乐
+                          this.$store.commit('setListIndex',this.AsidePlayList.length-1);  //切换到倒数第一首
+                      }
                   this.toPlay(this.AsidePlayList[this.listIndex].id);
               }
             },
             //下一首
             next(){
                 if(this.listIndex != -1 && this.AsidePlayList.length > 1){          //当前处于不可能状态或者只有一首音乐的时候不执行
-                    if(this.listIndex < this.AsidePlayList.length-1){               //不是最后一首音乐
-                        this.$store.commit('setListIndex',this.listIndex+1);  //直接返回下一首
-
-                    }else{                                                                           //当前是最后一首音乐
-                        this.$store.commit('setListIndex',0);  //切换到第一首
+                    if(this.mode === 0){
+                        if(this.listIndex < this.AsidePlayList.length-1){               //不是最后一首音乐
+                            this.$store.commit('setListIndex',this.listIndex+1);  //直接返回下一首
+                        }else{                                                                           //当前是最后一首音乐
+                            this.$store.commit('setListIndex',0);  //切换到第一首
+                        }
+                    }else if(this.mode === 1){
+                        const long = this.AsidePlayList.length;
+                        if(this.listIndex < this.AsidePlayList.length-1){               //不是最后一首音乐
+                            this.$store.commit('setListIndex',this.listIndex+Math.round(Math.random()*long));  //返回下面随机一首
+                        }else{                                                                           //当前是最后一首音乐
+                            this.$store.commit('setListIndex',Math.round(Math.random()*long));  //从0开始随机一首
+                        }
+                    }else{
+                        this.$store.commit('setListIndex',this.listIndex+0);  //单曲循环播放当前
+                        this.$store.commit("setIsPlay",true)
                     }
                     this.toPlay(this.AsidePlayList[this.listIndex].id);
                 }
@@ -317,13 +356,11 @@
             //获取歌曲的url
             getUrl(id){
                 songUrl(id).then(res =>{
-                    // console.log(res);
                     this.$store.commit('setUrl',res.data[0].url);
                     console.log(res.data[0].url);
                 }).catch(err => {
                     console.log(err);
                 });
-                console.log(this.url);
             },
             //获取歌词
             getLyric(id){
@@ -426,11 +463,11 @@
                     }
                 }
             }
-
         },
     }
 </script>
 
 <style scoped lang="scss">
 @import "../../assets/css/play-bar";
+
 </style>

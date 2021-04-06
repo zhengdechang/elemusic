@@ -175,14 +175,17 @@
                     if (res.code !== 200) {
                         return this.$message.error('数据请求失败')
                     }
-
-                    this.album_list = res.monthData.slice(0, 9)
+                    if(res.monthData.length == []){
+                        this.album_list = res.weekData.slice(0, 9)
+                    }else{
+                        this.album_list = res.monthData.slice(0, 9)
+                    }
                 })
             },
             //选择专辑播放类型
             chooseAlbumType (index) {
                 this.album_index = index
-                this.album_params.area = index !== 0 ? this.album_area[index].code : ''
+                this.album_params.area = index !== 0 ? this.album_area[index].code : 'all'
                 this.getAlbum(this.album_params)
             },
 

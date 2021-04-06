@@ -113,3 +113,10 @@
 .icon {
   @include icon(1.2em, $color-black);
 }
+.iconfont{
+  font-weight: bold;
+  font-size: 21px;
+  position: absolute;
+  margin-top: -3px;
+  margin-left: -15px;
+}
