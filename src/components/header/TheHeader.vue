@@ -1,5 +1,6 @@
 <template>
     <div class="the-header">
+        <i v-if="activeName != '首页'" class="iconfont icon-fanhui" @click="back()"></i>
         <div class="header-logo" @click="goHome">
             <svg class="icon">
                 <use xlink:href="#icon-erji"></use>
@@ -137,6 +138,10 @@
 
         },
         methods:{
+            //返回
+            back(){
+                this.$router.go(-1);
+            },
             //获取搜索建议
             getSearchSuggest () {
                 searchSuggest({ keywords: this.keyVal }).then(res =>{
