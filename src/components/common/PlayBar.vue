@@ -1,28 +1,20 @@
 <template>
     <div class="play-bar" :class="{show:!toggle}">
         <div @click="toggle = !toggle" class="item-up" :class="{turn:toggle}">
-            <svg class="icon">
-                <use xlink:href="#icon-jiantou-shang-cuxiantiao"></use>
-            </svg>
+            <i class=" iconfont icon-xiangshang-05" title="" slot="reference" ></i>
         </div>
         <div class="kongjian">
             <!--上一首-->
             <div class="item" @click="prev">
-                <svg class="icon">
-                    <use xlink:href="#icon-ziyuanldpi"></use>
-                </svg>
+                <i class=" iconfont icon-shangyishou_huaban" title="上一首" slot="reference" ></i>
             </div>
             <!--播放-->
             <div class="item" @click="togglePlay()">
-                <svg class="icon">
-                    <use :xlink:href="playButtonUrl"></use>
-                </svg>
+                <i class="iconfont"  :class='playButtonUrl'  title="播放" slot="reference" ></i>
             </div>
             <!--下一首-->
             <div class="item" @click="next">
-                <svg class="icon">
-                    <use xlink:href="#icon-ziyuanldpi1"></use>
-                </svg>
+                <i class=" iconfont icon-xiayishou_huaban" title="下一首" slot="reference" ></i>
             </div>
             <!--歌曲图片-->
             <div class="item-img" @click="toLyric">
@@ -51,32 +43,21 @@
                 <div class="left-time">{{songTime}}</div>
                 <!--音量-->
                 <div class="item item-volume">
-                    <svg v-if="volume == 0" class="icon">
-                        <use xlink:href="#icon-yinliangjingyinheix"></use>
-                    </svg>
-                    <svg v-else class="icon">
-                        <use xlink:href="#icon-yinliang1"></use>
-                    </svg>
-
+                    <i v-if="volume == 0" class=" iconfont icon-jingyin" title="静音"  slot="reference" ></i>
+                    <i v-else class=" iconfont icon-yinliang" title="音量" slot="reference" ></i>
                     <el-slider class="volume" v-model="volume" :vertical="true" ></el-slider>
                 </div>
                 <!--收藏-->
                 <div class="item"  @click="subSong">
-                    <svg class="icon"  :class="{active:isActive}">
-                        <use xlink:href="#icon-xihuan-shi"></use>
-                    </svg>
+                    <i class=" iconfont icon-shoucang" title="收藏" slot="reference" ></i>
                 </div>
                 <!--下载-->
                 <div class="item" @click="download()">
-                    <svg class="icon">
-                        <use xlink:href="#icon-xiazai"></use>
-                    </svg>
+                    <i class=" iconfont icon-xiazai" title="收藏" slot="reference" ></i>
                 </div>
                 <!--当前播放的歌曲列表-->
                 <div class="item" @click="changeAside()">
-                    <svg class="icon">
-                        <use xlink:href="#icon-liebiao"></use>
-                    </svg>
+                    <i class=" iconfont icon-bofangliebiao" title="收藏" slot="reference" ></i>
                 </div>
                 <!--切换播放模式-->
                 <div class="item" @click="changePlayMode()">
@@ -161,9 +142,9 @@
             //切换播放状态的图标
             isPlay(){
               if(this.isPlay){
-                  this.$store.commit('setPlayButtonUrl','#icon-zanting');
+                  this.$store.commit('setPlayButtonUrl','icon-zanting4');
               }else{
-                  this.$store.commit('setPlayButtonUrl','#icon-bofang');
+                  this.$store.commit('setPlayButtonUrl','icon-play');
               }
             },
             //监控进度/时间
@@ -409,6 +390,7 @@
             //下载音乐
             download(){
               download(this.url).then(res =>{
+                  console.log(res);
                   let content = res.data;
                   console.log(this.artist);
                   console.log(this.title);

@@ -1,10 +1,8 @@
 <template>
     <div class="the-header">
-        <i v-if="activeName != '首页'" class="iconfont icon-fanhui" @click="back()"></i>
+        <i v-if="activeName != '首页'" class="iconfont iconfont-back icon-fanhui" @click="back()"></i>
         <div class="header-logo" @click="goHome">
-            <svg class="icon">
-                <use xlink:href="#icon-erji"></use>
-            </svg>
+            <i class="icon iconfont icon-lianmaiyinleermai"></i>
             <span class="title-text">EleMusic</span>
         </div>
         <ul class="navbar">
@@ -59,7 +57,7 @@
                                 </div>
                             </template>
                         </el-popover>
-                        <i class="iconfont icon-search" slot="suffix" @click="search"></i>
+                        <i class="iconfont icon-soushuo" @click="search"></i>
                     </span>
 <!--                <div class="header-search">-->
 <!--                    <input type="text" placeholder="搜索音乐" @keyup.enter="goSearch()" v-model="keywords">-->

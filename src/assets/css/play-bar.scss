@@ -10,7 +10,7 @@
 
   .item-up {
     position: absolute;
-    bottom: $play-bar-height + 10px;
+    bottom: $play-bar-height + 18px;
     left: 20px;
     cursor: pointer;
   }
@@ -27,7 +27,7 @@
       position: relative;
       width: 80px;
       height: 50px;
-      line-height: 60px;
+      line-height: 67px;
       text-align: center;
       cursor: pointer;
       .icon.active {
@@ -80,6 +80,7 @@
           width: 100%;
           background: $color-blue-shallow;
           height: 6px;
+          cursor: pointer;
           .bg {
             height: 100%;
             .cur-progress {
@@ -95,6 +96,7 @@
             background-color: $color-black;
             top: -11px;
             vertical-align: middle;
+            cursor: pointer;
           }
         }
       }
@@ -103,7 +105,7 @@
 }
 
 .turn {
-  transform: rotate(180deg);
+  transform: rotate(-180deg);
 }
 
 .show {
@@ -117,6 +119,6 @@
   font-weight: bold;
   font-size: 21px;
   position: absolute;
-  margin-top: -3px;
-  margin-left: -15px;
+  margin-top: -8px;
+  margin-left: -9px;
 }

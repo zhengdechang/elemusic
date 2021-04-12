@@ -16,21 +16,24 @@
 }
 
 .header-logo {
+  position: relative;
   margin: $header-logo-margin;
   font-size: $font-size-logo;
   font-weight: bold;
   white-space: nowrap;
   cursor: pointer;
-  color: #9fc91b;
+  color: #9fc91bb3;
   span{
     color: #9fc91b;
     text-shadow: 4px 1px #ff00035e;
   }
 .icon {
+    position: absolute;
     @include icon(($header-height / 3) * 2,#9fc91b);
     vertical-align: middle;
-    margin-right: 11px;
-    margin-top: -5px;
+    line-height: 24px;
+    margin-right: 10px;
+    top: -3px;
   }
 }
 
@@ -242,8 +245,12 @@
   }
 }
 
-.iconfont{
+.iconfont-back{
   position: absolute;
   left:40px;
+  cursor: pointer;
 }
 
+.icon-soushuo{
+  margin-left: 10px;
+}

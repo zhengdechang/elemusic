@@ -27,6 +27,7 @@
                     <div class="songlist-oper">
                         <i class="iconfont icon-play" title="添加收藏列表"  slot="reference" @click.stop="toPlay(item.id,item.al.picUrl,index,item.name,item.ar[0].name,item)"></i>
                         <i class="iconfont icon-add-list" title="添加到列表" slot="reference" @click.stop="addList(item)"></i>
+                        <i class="iconfont icon-xiazai" title="下载到本地" slot="reference" @click.stop="download(item.id,item.name,item.ar[0].name)"></i>
                     </div>
                 </div>
             </li>
@@ -37,6 +38,7 @@
 <script>
     import {mixin} from "../../mixins";
     import {mapGetters} from 'vuex'
+    import {download,songUrl} from "../../networks";
 
     export default {
         name: "AlbumContent",
@@ -47,12 +49,43 @@
             }
         },
         created() {
+
         },
         mixins:[mixin],
         props:[
             'songList'
         ],
         methods:{
+            // //根据id获取url
+            // getUrl(id){
+            //     songUrl(id).then(res =>{
+            //         this.downloadurl = res.data[0].url;
+            //     })
+            // },
+            //下载音乐
+            download(id,title,artist){
+                songUrl(id).then(res =>{
+                    const downloadurl = res.data[0].url;
+                    download(downloadurl).then(res =>{
+                        let content = res.data;
+                        let eleLink = document.createElement('a');
+                        eleLink.download = `${artist}-${title}.mp3`;
+                        eleLink.style.display = 'none';
+                        //把字符内容转换为blob地址
+                        let blob = new Blob([content]);
+                        eleLink.href = URL.createObjectURL(blob);
+                        //把链接地址加到document里
+                        document.body.appendChild(eleLink);
+                        //触发点击
+                        eleLink.click();
+                        //然后移除这个新加的控件
+                        document.body.removeChild(eleLink);
+                    }).catch(err =>{
+                        console.log(err);
+                    })
+
+                })
+            },
             goSong(id){
               this.$router.push({path:'/song',query:{id:id}})
             },

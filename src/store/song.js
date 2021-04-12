@@ -5,7 +5,7 @@ const song ={
         isPlay: false,          //是否播放中
         url: '',                //歌曲地址
         id: '' ,                 //歌曲id
-        playButtonUrl: '#icon-bofang' ,      //播放状态的图标
+        playButtonUrl: 'icon-play' ,      //播放状态的图标
         duration:0,              //音乐时长
         curTime:0,              //当前音乐播放位置
         changeTime:0,           //指定播放时刻
