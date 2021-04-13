@@ -242,3 +242,9 @@ export const subServeLikedCollection = (model) => http.post(`/likedcollection`,m
 export const  getServeLikedCollection= (user_id) => http.get(`likedcollection/${user_id}`)
 //专辑取消收藏
 export const  deleteLikedCollection = (tid) => http.delete(`/likedcollection/delete/${tid}`)
+
+
+//评论删除
+export const  songDeteleComment = (id) => http.delete(`/comment/song/${id}`)
+export const  mvDeteleComment = (id) => http.delete(`/comment/mv/${id}`)
+export const  albumDeteleComment = (id) => http.delete(`/comment/album/${id}`)

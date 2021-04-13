@@ -34,13 +34,10 @@
                         <div class="comment_footer">
                             <div class="comment_time">{{formatMsgTime(item.time)}}</div>
                             <div class="comment_oper">
-<!--                                <em class="comment_del" v-if="userInfo && userInfo.userId === item.user.userId" @click="delComment(item)"><i class="iconfont icon-del"></i></em>-->
-                                <span :class="[ item.liked ? 'active' : '']" @click="likeComment(item)"><i class="iconfont icon-praise"></i>({{item.likedCount}})</span>
+                                <em class="comment_del" @click="delComment(item)" v-if="userId === item.user.userId"><i class="iconfont icon-del"></i></em>
+                                <span :class="[ item.liked ? 'active' : '']" @click="likeComment(item)"><i class="iconfont icon-dianzan"></i>({{item.likedCount}})</span>
                                 <span class="replyComment" @click="replyComment(item, index)"><i class="iconfont icon-comment"></i></span>
                             </div>
-                        </div>
-                        <div class="isHot" v-if="item.isHot">
-                            <i class="iconfont icon-choicest"></i>
                         </div>
                         <transition name="fade" mode="out-in">
                             <ReplyComment :params="item" v-if="isShowReply(item, index)" @replyMsg="replyMsg"></ReplyComment>
@@ -81,7 +78,7 @@ import {
     serveMvComment,
     getServeMvComment,
     serveAlbumComment,
-    getServeAlbumComment,
+    getServeAlbumComment, songDeteleComment, mvDeteleComment, albumDeteleComment,
 } from "../../networks";
 export default {
     name: 'Comments',
@@ -254,18 +251,35 @@ export default {
             if (!this.loginIn) {
                 this.$message.error('请先登录')
             }else {
-                this.subServeComment()
+                this.subServeComment();
             }
         },
         // 删除评论
         delComment (item) {
-            this.$message.confirm('确定删除评论？', '提示', {
+            this.$confirm('确定删除评论？', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     center: true
                 }).then(() => {
-                    this.commentHandler(0, '', item.commentId)
+                    if(this.childType == 0){
+                        songDeteleComment(item._id).then(res =>{
+                            console.log(res);
+                            this.getComment();
+                        })
+                    } else if(this.childType == 1){
+                        mvDeteleComment(item._id).then(res =>{
+                            console.log(res);
+                            this.getComment();
+                        })
+                    }else if(this.childType == 3){
+                        albumDeteleComment(item._id).then(res =>{
+                            console.log(res);
+                            this.getComment();
+                    })
+
+                  }
                 }).catch(() => {
+                    console.log('取消')
                 })
         },
         // 回复评论
@@ -351,6 +365,8 @@ export default {
                         const user =item.user_id
                         const comment = {
                             content:item.content,
+                            tid:item.tid,
+                            _id:item._id,
                             user:{
                                 avatarUrl:'http://localhost:3001/admin/api/user/getImg/'+user._id,
                                 nickname:user.username,
@@ -370,6 +386,8 @@ export default {
                         const user =item.user_id
                         const comment = {
                             content:item.content,
+                            tid:item.tid,
+                            _id:item._id,
                             user:{
                                 avatarUrl:'http://localhost:3001/admin/api/user/getImg/'+user._id,
                                 nickname:user.username,
@@ -389,6 +407,8 @@ export default {
                         const user =item.user_id
                         const comment = {
                             content:item.content,
+                            tid:item.tid,
+                            _id:item._id,
                             user:{
                                 avatarUrl:'http://localhost:3001/admin/api/user/getImg/'+user._id,
                                 nickname:user.username,

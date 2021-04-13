@@ -49,7 +49,7 @@
                 </div>
                 <!--收藏-->
                 <div class="item"  @click="subSong">
-                    <i class=" iconfont icon-shoucang" title="收藏" slot="reference" ></i>
+                    <i class=" iconfont icon-shoucang " :class="[isActive ? 'active':'']" title="收藏" slot="reference" ></i>
                 </div>
                 <!--下载-->
                 <div class="item" @click="download()">

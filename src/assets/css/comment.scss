@@ -226,14 +226,9 @@
 
   .comment_del {
     cursor: pointer;
-    display: none;
   }
 
-  &:hover {
-    .comment_del {
-      display: inline-block;
-    }
-  }
+
 
   &:last-child {
     border: none;
