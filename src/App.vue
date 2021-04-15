@@ -25,6 +25,11 @@
 
   export default {
     name: 'App',
+    data(){
+      return{
+        time:(new Date()).getTime()
+      }
+    },
     components: {
       TheAside,
       TheFooter,
@@ -33,6 +38,8 @@
       SongAudio,
       PlayBar
     },
+
+
   }
 </script>
 

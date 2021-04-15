@@ -37,7 +37,7 @@
                         </el-image>
                         <div class="rank-info" v-if="rankInfo">
                             <div class="rank-title">
-                                {{rankInfo.name}} <span>({{formartDate(rankInfo.updateTime, 'MM月dd日')}} 更新)</span>
+                                {{rankInfo.name}} <span>({{format(rankInfo.updateTime, 'MM月DD日')}} 更新)</span>
                             </div>
                             <div class="rank-tags" v-if="rankInfo.tags">
                                 <router-link :to="{ path: '/song-list', query: { cat: tag }}" class="tag" v-for="(tag, index) in rankInfo.tags" :key="index">#{{tag}}</router-link>
@@ -129,27 +129,6 @@ export default {
             this.start = page -1;
             this.end = page;
             this.$store.commit('setListOfSongs',(this.listSongs).slice(this.start*10,this.end*10))
-        },
-        // 时间毫秒格式化处理 2020-10-30 09:30:00
-        formartDate (originVal, fmt) {
-            const dt = new Date(originVal)
-            const opt = {
-                yyyy: dt.getFullYear(),
-                MM: (dt.getMonth() + 1 + '').padStart(2, '0'),
-                dd: (dt.getDate() + '').padStart(2, '0'),
-                HH: (dt.getHours() + '').padStart(2, '0'),
-                mm: (dt.getMinutes() + '').padStart(2, '0'),
-                ss: (dt.getSeconds() + '').padStart(2, '0')
-            }
-
-            for (const k in opt) {
-                const ret = new RegExp('(' + k + ')').exec(fmt)
-                if (ret) {
-                    fmt = fmt.replace(ret[1], opt[k])
-                }
-            }
-
-            return fmt
         },
         // 数字过万的处理
         formartNum (val) {

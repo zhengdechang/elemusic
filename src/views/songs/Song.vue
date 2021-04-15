@@ -51,7 +51,7 @@
                 <p><router-link :to="{ path: '/artist', query: { id: author.id }}" class="song-author" v-for="(author, k) in info.singer" :key="author.name">{{ k !== 0 ? ' / ' + author.name : author.name }}</router-link></p>
                 <p class="song-info">
                     <span>专辑：<router-link class="song-album" :to="{ path: '/album', query: { id: info.al.id }}">{{ info.al.name }}</router-link></span>
-                    <span>发行时间：<em>{{formartDate(info.publishTime,'yyyy年MM月dd日')}}</em></span>
+                    <span>发行时间：<em>{{format(info.publishTime,'YYYY年MM月DD日')}}</em></span>
                 </p>
                 <div class="song-oper">
                     <span :class="['play-btn','play-all', songDisable]" @click="playing1(info)"><i :class="['iconfont']"></i> {{info.vip ? 'VIP尊享' : '立即播放'}}</span>
@@ -133,27 +133,6 @@ export default {
     },
     // 方法集合
     methods: {
-        // 时间毫秒格式化处理 2020-10-30 09:30:00
-        formartDate (originVal, fmt) {
-            const dt = new Date(originVal)
-            const opt = {
-                yyyy: dt.getFullYear(),
-                MM: (dt.getMonth() + 1 + '').padStart(2, '0'),
-                dd: (dt.getDate() + '').padStart(2, '0'),
-                HH: (dt.getHours() + '').padStart(2, '0'),
-                mm: (dt.getMinutes() + '').padStart(2, '0'),
-                ss: (dt.getSeconds() + '').padStart(2, '0')
-            }
-
-            for (const k in opt) {
-                const ret = new RegExp('(' + k + ')').exec(fmt)
-                if (ret) {
-                    fmt = fmt.replace(ret[1], opt[k])
-                }
-            }
-
-            return fmt
-        },
         //背景
         backGround(){
             const bg =  document.getElementsByClassName('song-container');

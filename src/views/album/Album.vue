@@ -15,7 +15,7 @@
                         <span>{{'#' + details.type}}</span>
                     </div>
                     <div class="album-singer">歌手：<router-link :to="{ path: '/artist', query: { id: author.id }}" class="song_name" v-for="(author, k) in details.artists" :key="author.name">{{ k !== 0 ? ' / ' + author.name : author.name }}</router-link></div>
-                    <div class="album-time">发行时间：{{formartDate(details.publishTime, 'yyyy-MM-dd')}}</div>
+                    <div class="album-time">发行时间：{{format(details.publishTime, 'YYYY-MM-DD')}}</div>
                     <div class="album-company">发行公司：{{details.company}}</div>
                     <div class="album-desc" v-if="details.description">
                         <h5>歌单简介<em class="desc-close" v-if="isShowDesc" @click="isShowDesc = false"><i class="iconfont icon-closed"></i></em></h5>
@@ -52,7 +52,7 @@
                             <div class="aside-album-info">
                                 <div class="aside-album-name">{{item.name}}</div>
                                 <div class="aside-album-time">
-                                    {{formartDate(details.publishTime, 'yyyy-MM-dd')}}
+                                    {{format(details.publishTime, 'YYYY-MM-DD')}}
                                 </div>
                             </div>
                         </router-link>
@@ -120,27 +120,6 @@ export default {
     },
     // 方法集合
     methods: {
-        // 时间毫秒格式化处理 2020-10-30 09:30:00
-        formartDate (originVal, fmt) {
-            const dt = new Date(originVal)
-            const opt = {
-                yyyy: dt.getFullYear(),
-                MM: (dt.getMonth() + 1 + '').padStart(2, '0'),
-                dd: (dt.getDate() + '').padStart(2, '0'),
-                HH: (dt.getHours() + '').padStart(2, '0'),
-                mm: (dt.getMinutes() + '').padStart(2, '0'),
-                ss: (dt.getSeconds() + '').padStart(2, '0')
-            }
-
-            for (const k in opt) {
-                const ret = new RegExp('(' + k + ')').exec(fmt)
-                if (ret) {
-                    fmt = fmt.replace(ret[1], opt[k])
-                }
-            }
-
-            return fmt
-        },
         // 相关歌单推荐
         getAlbum (params) {
             album(params).then(res =>{

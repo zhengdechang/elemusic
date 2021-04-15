@@ -11,7 +11,7 @@ import '../src/assets/fonts/font.css'
 import '../src/assets/fonts/iconfont.css'
 
 import '../src/assets/js/directive'
-
+import '../src/plugins/moment'
 
 
 

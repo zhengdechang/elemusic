@@ -87,14 +87,9 @@ export const mixin = {
             const removeDupList = [...new Set(strings)]; //也可以使用Array.from(new Set(strings))
             const result = removeDupList.map((item) => JSON.parse(item));
             return  result;
+        },
+        format(value,format){
+            return this.$moment(value).format(format||'YYYY-MM-DD hh-mm-ss')
         }
-        // unique2(arr,params){
-        //     arr.filter(item =>{
-        //         if(item.id == params.id){
-        //
-        //         }
-        //     })
-        //
-        // }
     }
 }

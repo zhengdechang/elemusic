@@ -39,7 +39,7 @@
                                 </div>
                             </template>
                     </el-popover>
-                    <i class="iconfont icon-search" slot="suffix" @click="jumpSearch(keyVal)" ></i>
+                    <i class="iconfont icon-soushuo"  @click="jumpSearch(keyVal)" ></i>
                     <div class="search-history" v-if="history.length">
                         <span>历史搜索：</span>
                     </div>
