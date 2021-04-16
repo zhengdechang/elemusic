@@ -27,7 +27,6 @@
     name: 'App',
     data(){
       return{
-        time:(new Date()).getTime()
       }
     },
     components: {
@@ -45,5 +44,4 @@
 
 <style  lang="scss" scoped>
 @import './assets/css/app.scss';
-
 </style>

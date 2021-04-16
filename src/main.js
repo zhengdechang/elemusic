@@ -10,7 +10,10 @@ Vue.use(ElementUI);
 import '../src/assets/fonts/font.css'
 import '../src/assets/fonts/iconfont.css'
 
+//自定义指令
 import '../src/assets/js/directive'
+
+//时间格式处理库
 import '../src/plugins/moment'
 
 

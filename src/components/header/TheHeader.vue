@@ -2,15 +2,14 @@
     <div class="the-header">
         <i v-if="activeName != '首页'" class="iconfont iconfont-back icon-fanhui" @click="back()"></i>
         <div class="header-logo" @click="goHome">
-            <i class="icon iconfont icon-lianmaiyinleermai"></i>
+<!--            <i class="icon iconfont icon-lianmaiyinleermai"></i>-->
+            <i ><img src="../../assets/img/elemuic.jpg"  class="icon " alt=""></i>
             <span class="title-text">EleMusic</span>
         </div>
         <ul class="navbar">
             <li  :class="{active:item.name == activeName}" v-for="item in navMsg" :key="item.path" @click="goPage(item.path,item.name)">
                 {{item.name}}
             </li>
-
-
             <li>
                 <span class="search" @keyup.enter="search" >
                         <el-popover

@@ -149,6 +149,7 @@ export default {
                     this.getAlbumComment()
                 break
             }
+            this.$forceUpdate()
         },
         //获取歌曲评论
         getSongComment () {
@@ -295,7 +296,6 @@ export default {
                     if(res.status){
                         this.$message.success('评论成功')
                         this.msg = ''
-                        this.getComment()
                     }
                 })
             } else if(this.childType == 1){
@@ -304,7 +304,6 @@ export default {
                         this.$message.success('评论成功')
                         this.msg = ''
                         // this.getServeComments()
-                        this.getComment()
                     }
                 })
             }else if(this.childType == 3){
@@ -313,11 +312,10 @@ export default {
                         this.$message.success('评论成功')
                         this.msg = ''
                         // this.getServeComments()
-                        this.getComment()
                     }
                 })
             }
-
+            this.getComment()
         },
         //获取评论（歌曲、专辑、mv）
         getServeComments(){
@@ -363,6 +361,7 @@ export default {
                     })
                     // this.serveComment =JSON.parse(JSON.stringify(this.serveComment))
                 })
+
             }else if(this.childType == 3){
                 getServeAlbumComment(this.curId).then(res =>{
                     this.serveComment = []
@@ -396,7 +395,9 @@ export default {
         msg () {
             this.msg = this.maxLen >= this.msg ? this.msg : this.msg.substring(0, this.maxLen)
         },
-        serveComment(){
+        serveComment(newVal,oldVal){
+            this.serveComment = newVal
+            this.getComment()
         }
     }
 }
