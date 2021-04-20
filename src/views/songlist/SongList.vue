@@ -37,11 +37,14 @@
         components: {
             songlist
         },
+        activated(){
+            //使用keep-alive代替触发周期函数的内容
+            this.$store.commit('setActiveName','歌单');
+        },
         created () {
             this.params.cat = this.$route.query.cat;
             this.getCatlist();
             this.$store.commit('setActiveName','歌单');
-
         },
         data () {
             // 这里存放数据

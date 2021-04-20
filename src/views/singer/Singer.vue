@@ -21,7 +21,7 @@
                             </div>
                         </el-image>
                     </div>
-                    <div class="info">
+                    <div class="info hover">
                         <div class="name">{{item.name}}</div>
                         <div class="albumSize">专辑：{{item.albumSize}}</div>
                     </div>
@@ -62,6 +62,10 @@
                 isLoading: true,
                 isLoadMv: true
             }
+        },
+        activated(){
+            //使用keep-alive代替触发周期函数的内容
+            this.$store.commit('setActiveName','歌手');
         },
         created() {
             this.$store.commit('setActiveName','歌手')

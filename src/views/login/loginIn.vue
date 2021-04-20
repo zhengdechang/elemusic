@@ -47,6 +47,10 @@
                 }
             }
         },
+        activated(){
+            //使用keep-alive代替触发周期函数的内容
+            this.$store.commit('setActiveName','登录');
+        },
         mounted() {
             this.changeIndex('登录');
         },

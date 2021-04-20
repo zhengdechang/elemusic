@@ -41,7 +41,9 @@ a {
 
   .item {
     width: 120px;
-    margin: 0 40px 40px;
+    margin-top: 35px;
+    margin-left: 40px;
+    margin-right: 93px;
 
     .el-image {
       transition: all .4s linear;
@@ -63,6 +65,7 @@ a {
 
   .info {
     text-align: center;
+
 
     .name {
       line-height: 28px;

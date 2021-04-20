@@ -16,7 +16,7 @@
                 </div>
             </li>
             <li v-for="(item,index) in songList" :key="index">
-                <div class="song-item" @click="goSong(item.id)">
+                <div class="song-item hover" @click="goSong(item.id)">
                     <span class="item-index">
                         {{index+1}}
                     </span>

@@ -18,27 +18,7 @@
             <div class="h_title">
                 <h3>排行榜</h3>
             </div>
-            <el-row class="wrapper" :gutter="20">
-                <el-col :span="6" v-for="item in top_list"  :key="item.id" class="toplist_item hover">
-                    <div class="coverImg">
-                        <el-image :src="item.coverImgUrl" class="toplist_img"></el-image>
-                    </div>
-                    <div class="toplist_wrapper">
-                        <h4 class="toplist_hd">{{item.name}}</h4>
-                        <div class="toplist_songlist">
-                            <div class="songitem" v-for="(songItem, index) in songList[item.id]" :key="songItem.id">
-                                <div class="songnum">{{index + 1}}</div>
-                                <div class="songinfo ">
-                                    <router-link :to="{ path: '/song', query: { id: songItem.id }}" class="song_title ">{{songItem.name}}</router-link>
-                                    <div class="song_author">
-                                        <router-link :to="{ path: '/artist', query: { id: author.id }}" class="song_name" v-for="(author, k) in songItem.ar" :key="k">{{ k !== 0 ? '/ ' + author.name : author.name }}</router-link>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </el-col>
-            </el-row>
+            <IndexRank></IndexRank>
         </div>
         <!--最新MV-->
         <div class='mv_list'>
@@ -65,20 +45,8 @@
             <div class="h_title">
                 <h3>热门歌手</h3>
             </div>
-            <div class="wrapper">
-                <router-link :to="{ path: '/artist', query: { id: item.id }}"  class="artists_item hover" :key="item.id" v-for="item in artists_list">
-                    <div class="faceImg">
-                        <el-image :src="item.picUrl + '?param=120y120'">
-                            <div slot="placeholder" class="image-slot">
-                                <i class="iconfont icon-placeholder"></i>
-                            </div>
-                        </el-image>
-                    </div>
-                    <div class="info">
-                        <div class="name">{{item.name}}</div>
-                        <div class="albumSize">专辑：{{item.albumSize}}</div>
-                    </div>
-                </router-link>
+            <div>
+                <IndexSInger :artists_list='artists_list'></IndexSInger>
             </div>
         </div>
     </div>
@@ -87,12 +55,16 @@
 <script>
     import Swiper from "../../components/swiper/Swiper";
     import playList from '../../components/common/PlayList'
-    import {hotList, playLists, topArtists, topList, listDetail, topAlbum, getNewMv} from "../../networks/index"
+    import {hotList, playLists, topArtists, topAlbum, getNewMv} from "../../networks/index"
     import AlbumList from "../../components/common/AlbumList";
     import MvList from "../../components/common/MvList";
+    import IndexRank from "../../components/common/IndexRank";
+    import IndexSInger from "../../components/common/IndexSInger";
     export default {
         name: "Homes",
         components:{
+            IndexSInger,
+            IndexRank,
             MvList,
             AlbumList,
             playList,
@@ -132,6 +104,10 @@
                 artists_list: [],
                 artists_params: { limit: 9 }
             }
+        },
+        activated(){
+            //使用keep-alive代替触发周期函数的内容
+            this.$store.commit('setActiveName','首页');
         },
         created() {
             this.chooseAlbumType ('0');
@@ -188,19 +164,6 @@
                 this.album_params.area = index !== 0 ? this.album_area[index].code : 'all'
                 this.getAlbum(this.album_params)
             },
-
-            //排行榜
-            getToplist () {
-                topList().then((r) => {
-                    this.top_list = r.list.splice(0, 4)
-                    this.top_list.forEach( item => {
-                        listDetail({ id: item.id }).then(res =>{
-                            // this.$set(this.songList, item.id, res.playlist.tracks.splice(0, 6))
-                            this.songList[item.id] = res.playlist.tracks.splice(0, 6)
-                        })
-                    })
-                })
-            },
             // 最新MV
             getMv (params) {
                 getNewMv(params).then(res =>{
@@ -227,7 +190,6 @@
             },
             init () {
                 this.getHotTags()
-                this.getToplist()
                 this.getPlayList(this.playlist_params)
                 this.getArtists(this.artists_params)
             }

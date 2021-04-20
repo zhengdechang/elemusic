@@ -10,7 +10,7 @@
                 <span class="playCount"><i class="iconfont icon-playnum"></i><em>{{dealNum(item.playCount)}}</em></span>
             </router-link>
             <div class="info">
-                <router-link :to="{ path: 'song-list/detail', query: { id: item.id }}" class="info_name">{{item.name}} </router-link>
+                <router-link :to="{ path: 'song-list/detail', query: { id: item.id }}" class="info_name hover">{{item.name}} </router-link>
                 <div class="tags">
                     <router-link :to="{ path: '/song-list', query: { cat: tag }}" class="tag" v-for="(tag, index) in item.tags" :key="index">#{{tag}} </router-link>
                 </div>

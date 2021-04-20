@@ -116,6 +116,10 @@ export default {
                 'AsidePlayList',
             ])
     },
+    activated(){
+        //使用keep-alive代替触发周期函数的内容
+        this.$store.commit('setActiveName','排行榜');
+    },
     created () {
         this.rId = this.$route.query.rId
         this.type = this.$route.query.type ? this.$route.query.type : this.type

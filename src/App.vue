@@ -3,7 +3,9 @@
     <song-audio/>
     <the-header/>
     <div class="layout">
-      <router-view/>
+      <keep-alive>
+         <router-view/>
+      </keep-alive>
     </div>
     <song-audio/>
     <the-aside></the-aside>

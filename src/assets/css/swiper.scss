@@ -1,8 +1,14 @@
 .swiper {
   width: 90%;
   margin: auto;
-  margin-top: 40px;
   img {
     width: 100%;
   }
+
+  ::v-deep .el-carousel__indicators {
+    display: inline-block;
+    margin-left: 630px !important;
+  }
 }
+
+

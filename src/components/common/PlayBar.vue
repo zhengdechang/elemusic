@@ -1,7 +1,7 @@
 <template>
     <div class="play-bar" :class="{show:!toggle}">
         <div @click="toggle = !toggle" class="item-up" :class="{turn:toggle}">
-            <i class=" iconfont icon-xiangshang-05" title="" slot="reference" ></i>
+            <i class=" iconfont icon-xiangshang-05" title="隐藏/显示" slot="reference" ></i>
         </div>
         <div class="kongjian">
             <!--上一首-->
@@ -10,7 +10,7 @@
             </div>
             <!--播放-->
             <div class="item" @click="togglePlay()">
-                <i class="iconfont"  :class='playButtonUrl'  title="播放" slot="reference" ></i>
+                <i class="iconfont"  :class='playButtonUrl'  title="播放/暂停" slot="reference" ></i>
             </div>
             <!--下一首-->
             <div class="item" @click="next">
@@ -53,15 +53,15 @@
                 </div>
                 <!--下载-->
                 <div class="item" @click="download()">
-                    <i class=" iconfont icon-xiazai" title="收藏" slot="reference" ></i>
+                    <i class=" iconfont icon-xiazai" title="下载" slot="reference" ></i>
                 </div>
                 <!--当前播放的歌曲列表-->
                 <div class="item" @click="changeAside()">
-                    <i class=" iconfont icon-bofangliebiao" title="收藏" slot="reference" ></i>
+                    <i class=" iconfont icon-bofangliebiao" title="播放列表" slot="reference" ></i>
                 </div>
                 <!--切换播放模式-->
                 <div class="item" @click="changePlayMode()">
-                    <i class="iconfont" :class="PlayMode()"></i>
+                    <i class="iconfont" :class="PlayMode()" title="切换模式"></i>
                 </div>
             </div>
         </div>

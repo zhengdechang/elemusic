@@ -135,11 +135,14 @@
                 AllhotAlbums:[],
             }
         },
+        activated(){
+            //使用keep-alive代替触发周期函数的内容
+            this.$store.commit('setActiveName','歌手');
+        },
         created() {
             this.sUid =this.$route.query.id;
             this.getLikedAlbum();
             this.$store.commit('setActiveName','歌手');
-
         },
         // 监听属性 类似于data概念
         computed: {

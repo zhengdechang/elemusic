@@ -294,14 +294,14 @@ export default {
             if(this.childType == 0){
                 serveSongComment(params).then(res =>{
                     if(res.status){
-                        this.$message.success('评论成功')
+                        this.$message.success('评论成功!数据同步可能会耗时!')
                         this.msg = ''
                     }
                 })
             } else if(this.childType == 1){
                 serveMvComment(params).then(res =>{
                     if(res.status){
-                        this.$message.success('评论成功')
+                        this.$message.success('评论成功!数据同步可能会耗时!')
                         this.msg = ''
                         // this.getServeComments()
                     }
@@ -309,7 +309,7 @@ export default {
             }else if(this.childType == 3){
                 serveAlbumComment(params).then(res =>{
                     if(res.status){
-                        this.$message.success('评论成功')
+                        this.$message.success('评论成功!数据同步可能会耗时!')
                         this.msg = ''
                         // this.getServeComments()
                     }

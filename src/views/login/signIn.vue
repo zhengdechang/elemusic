@@ -76,6 +76,10 @@
             this.cities = cities;
             this.rules =  rules;
         },
+        activated(){
+            //使用keep-alive代替触发周期函数的内容
+            this.$store.commit('setActiveName','注册');
+        },
         methods:{
             SignUp(){
                 let _this = this;

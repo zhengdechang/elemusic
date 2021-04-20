@@ -37,6 +37,10 @@ export default {
         MvList,
         Loading
     },
+    activated(){
+        //使用keep-alive代替触发周期函数的内容
+        this.$store.commit('setActiveName','MV');
+    },
     data () {
         // 这里存放数据
         return {

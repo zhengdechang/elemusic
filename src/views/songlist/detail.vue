@@ -178,7 +178,10 @@ export default {
         this.id = this.$route.query.id
         this.getLikedAlbum()
         this.$store.commit("setActiveName",'歌单');
-
+    },
+    activated(){
+        //使用keep-alive代替触发周期函数的内容
+        this.$store.commit('setActiveName','歌单');
     },
     // 方法集合
     methods: {

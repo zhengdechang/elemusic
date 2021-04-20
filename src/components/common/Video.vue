@@ -11,7 +11,7 @@
 import videojs from 'video.js'
 import '../../plugins/video-quality.js'
 import 'video.js/dist/video-js.css'
-import '../../assets/css/video.less'
+import '../../assets/css/video.scss'
 window.videojs = videojs
 require('video.js/dist/lang/zh-CN')
 export default {

@@ -108,6 +108,10 @@ export default {
         this.$store.commit('setListOfSongs',[])
         this.$store.commit('setActiveName','')
      },
+    activated(){
+        //使用keep-alive代替触发周期函数的内容
+        this.$store.commit('setActiveName','');
+    },
     mounted () {
         this.sId = String(this.$route.query.id)
         this.init()

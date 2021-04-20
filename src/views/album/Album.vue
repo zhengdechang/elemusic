@@ -118,6 +118,10 @@ export default {
         this.getLikedCollection();
         this.$store.commit("setActiveName",'')
     },
+    activated(){
+        //使用keep-alive代替触发周期函数的内容
+        this.$store.commit('setActiveName','');
+    },
     // 方法集合
     methods: {
         // 相关歌单推荐

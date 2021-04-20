@@ -95,14 +95,18 @@ export default {
     computed: {
     },
     created() {
+        this.init()
+        this.getMvUrl();
+        this.getMvDetail()
+        this.getSimiMv();
         // this.$router.go(0);
         this.$store.commit('setActiveName','MV')
     },
+    activated(){
+        //使用keep-alive代替触发周期函数的内容
+        this.$store.commit('setActiveName','MV');
+    },
     mounted () {
-        this.init()
-        this.getMvDetail()
-        this.getSimiMv();
-        this.getMvUrl();
     },
     // 方法集合
     methods: {
@@ -137,6 +141,7 @@ export default {
                     type: 'video/mp4',
                     src: src
                 })
+                this.$forceUpdate()
             })
 
         },
