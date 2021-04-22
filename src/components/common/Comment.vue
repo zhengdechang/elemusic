@@ -397,7 +397,7 @@ export default {
         },
         serveComment(newVal,oldVal){
             this.serveComment = newVal
-            this.getComment()
+            // this.getComment()
         }
     }
 }
