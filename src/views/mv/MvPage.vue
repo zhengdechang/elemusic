@@ -18,7 +18,7 @@
                         <span v-for="(item, index) in order" class="hover"  :class=" index === orderIndex ? 'active' : ''" :key="index" @click="selectType('order', index)">{{item}}</span>
                     </div>
                 </div>
-                <MvList class="loadMv" :mvList="list" v-infinite-scroll="loadMv"  infinite-scroll-disabled="isLoadMv" infinite-scroll-distance="50"></MvList>
+                <MvList class="loadMv" :mvList="pageList" v-infinite-scroll="loadMv"  infinite-scroll-disabled="isLoadMv" infinite-scroll-distance="50"></MvList>
             </div>
             <template v-if="isLoading">
                 <Loading />
@@ -59,7 +59,9 @@ export default {
             },
             list: [],
             isLoading: true,
-            isLoadMv: true
+            isLoadMv: true,
+            page:0,
+            pageList:[],
         }
     },
     // 监听属性 类似于data概念
@@ -68,16 +70,32 @@ export default {
         this.params.area = this.area[this.areaIndex]
         this.params.type = this.type[this.typeIndex]
         this.params.order = this.order[this.orderIndex]
+        this.pullup()
     },
     // 方法集合
     methods: {
+        //上拉加载
+        pullup(){
+            document.addEventListener('scroll', ()=> {
+                let  scrollTop = document.documentElement.scrollTop||document.body.scrollTop
+                let  clientHeight =  document.documentElement.clientHeight||document.body.clientHeight
+                let  offsetHeight = document.documentElement.offsetHeight||document.body.offsetHeight
+                console.log(scrollTop,clientHeight,offsetHeight)
+                if(offsetHeight <= scrollTop+clientHeight+1){
+                    this.isLoading = true
+                    this.page++
+                    this.pageList = [...this.pageList,...this.list.slice(this.page*20,(this.page+1)*20)]
+                    this.isLoading = false
+                }
+            })
+        },
          getMv (params) {
             mv(params).then(res =>{
                 if (res.code !== 200) {
                     return this.$message.error('数据请求失败')
                 }
-
                 this.list = this.params.offset !== 0 ? [...this.list, ...res.data] : res.data
+                this.pageList = this.list.slice(0,(this.page+1)*20)
                 this.isLoadMv = !res.hasMore
                 this.isLoading = res.hasMore
             })
@@ -86,6 +104,7 @@ export default {
         selectType (type, index) {
             this[type + 'Index'] = index
             this.list = []
+            this.page = 0
             this.params.offset = 0
             this.params[type] = this[type][index]
         },
@@ -96,8 +115,8 @@ export default {
     },
     watch: {
         params: {
-            handler (params) {
-                this.getMv(params)
+            handler (newVal) {
+                this.getMv(newVal)
             },
             deep: true // 深度监听
         }

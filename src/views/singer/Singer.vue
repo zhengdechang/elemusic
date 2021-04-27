@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="list-container" v-infinite-scroll="loadMore">
-                <router-link :to="{ path: '/artist', query: { id: item.id }}" class="item" :key="item.id" v-for="item in list">
+                <router-link :to="{ path: '/artist', query: { id: item.id }}" class="item" :key="item.id" v-for="item in pageList">
                     <div class="faceImg">
                         <el-image :src="item.picUrl + '?param=120y120'">
                             <div slot="placeholder" class="image-slot">
@@ -60,7 +60,9 @@
                 },
                 list: [],
                 isLoading: true,
-                isLoadMv: true
+                isLoadMv: true,
+                page:0,
+                pageList:[],
             }
         },
         activated(){
@@ -77,6 +79,7 @@
             this.params.type = this.type[this.typeIndex].val
             this.params.initial = this.initial[this.initialIndex].val
             this.renderInitial()
+            this.pullup()
         },
         // 方法集合
         methods: {
@@ -92,6 +95,7 @@
             },
             selectType (type, index) {
                 this[type + 'Index'] = index
+                this.page = 0
                 this.list = []
                 this.params.offset = 0
                 this.params[type] = this[type][index].val
@@ -103,10 +107,26 @@
                         return this.$message.error('数据请求失败')
                     }
                     this.list = this.params.offset !== 0 ? [...this.list, ...res.artists] : res.artists
+                    this.pageList = this.list.slice(0,(this.page+1)*30)
                     this.isLoadMv = !res.more
                     this.isLoading = res.more
                 })
 
+            },
+            //上拉加载
+            pullup(){
+                document.addEventListener('scroll', ()=> {
+                    let  scrollTop = document.documentElement.scrollTop||document.body.scrollTop
+                    let  clientHeight =  document.documentElement.clientHeight||document.body.clientHeight
+                    let  offsetHeight = document.documentElement.offsetHeight||document.body.offsetHeight
+                    console.log(scrollTop,clientHeight,offsetHeight)
+                    if(offsetHeight <= scrollTop+clientHeight+1){
+                        this.isLoading = true
+                        this.page++
+                        this.pageList = [...this.pageList,...this.list.slice(this.page*30,(this.page+1)*30)]
+                        this.isLoading = false
+                    }
+                })
             },
             loadMore () {
                 this.isLoadMv = true
