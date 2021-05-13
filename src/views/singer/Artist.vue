@@ -163,7 +163,7 @@
             getArtistDesc () {
                 artistDesc({ id: this.sUid, timestamp: new Date().valueOf() }).then(res =>{
                     if (res.code !== 200) {
-                        return this.$message.error('数据请求失败')
+                        return this.$message.error('获取歌手描述数据请求失败')
                     }
                     this.introduction = res.introduction
                 })
@@ -173,7 +173,7 @@
                 this.isLoading = true
                 artists({ id: this.sUid, timestamp: new Date().valueOf() }).then(res =>{
                     if (res.code !== 200) {
-                        return this.$message.error('数据请求失败')
+                        return this.$message.error('获取歌手数据请求失败')
                     }
 
                     this.artist = res.artist
@@ -233,7 +233,7 @@
                 this.isLoading = true
                 artistAlbum({ id: this.sUid, offset: this.offset }).then(res =>{
                     if (res.code !== 200) {
-                        return this.$message.error('数据请求失败')
+                        return this.$message.error('获取歌手专辑数据请求失败')
                     }
                     this.total = res.artist.albumSize
 
@@ -250,7 +250,7 @@
                 this.isLoadMv = false
                 artistMv({ id: this.sUid, offset: this.offset }).then(res =>{
                     if (res.code !== 200) {
-                        return this.$message.error('数据请求失败')
+                        return this.$message.error('获取歌手专辑数据请求失败')
                     }
                     this.hasMoreMvs = res.hasMore
                     this.hotMvs = [...this.hotMvs, ...res.mvs]

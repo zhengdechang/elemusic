@@ -123,7 +123,7 @@
             getHotTags () {
                 hotList().then(res =>{
                     if (res.code !== 200) {
-                        return this.$message.error('数据请求失败')
+                        return this.$message.error('歌单分类数据请求失败')
                     }
                     res.tags.unshift({ name: '为您推荐' })
                     this.playlist_tags = res.tags.splice(0, 6)
@@ -134,7 +134,7 @@
             getPlayList (params) {
                 playLists(params).then(res =>{
                     if (res.code !== 200) {
-                        return this.$message.error('数据请求失败')
+                        return this.$message.error('分类歌单数据请求失败')
                     }
                     this.playlist_list = res.playlists
                 })
@@ -149,7 +149,7 @@
             getAlbum (params) {
                 topAlbum(params).then(res =>{
                     if (res.code !== 200) {
-                        return this.$message.error('数据请求失败')
+                        return this.$message.error('新碟上架数据请求失败')
                     }
                     if(res.monthData.length == []){
                         this.album_list = res.weekData.slice(0, 9)
@@ -168,7 +168,7 @@
             getMv (params) {
                 getNewMv(params).then(res =>{
                     if (res.code !== 200) {
-                        return this.$message.error('数据请求失败')
+                        return this.$message.error('最新MV数据请求失败')
                     }
                     this.mv_list = res.data;
                 })
@@ -183,7 +183,7 @@
             getArtists (params) {
                 topArtists(params).then(res =>{
                     if (res.code !== 200) {
-                        return this.$message.error('数据请求失败')
+                        return this.$message.error('热门歌手数据请求失败')
                     }
                     this.artists_list = res.artists
                 })

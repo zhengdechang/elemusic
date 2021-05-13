@@ -134,7 +134,7 @@ export default {
         getMvUrl (r) {
             mvUrl({ id: this.$route.query.id, r }).then(res =>{
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('获取mv地址数据请求失败')
                 }
                 const src =res.data.url
                 this.$set(this.videoOptions.sources, 0, {
@@ -149,7 +149,7 @@ export default {
         getSimiMv(){
             simiMv( {id:this.$route.query.id} ).then(res =>{
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('获取相似Mv数据请求失败')
                 }
                 this.simiMv = res.mvs
             })
@@ -158,7 +158,7 @@ export default {
             this.currentTime = 0
             mvDetail({ id: this.$route.query.id}).then(res =>{
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('mv详情数据请求失败')
                 }
                 this.mvDetail = res.data
                 this.videoOptions.qualityList = res.data.brs
@@ -167,7 +167,7 @@ export default {
             mvUrl({ id:this.$route.query.id}).then(res =>{
                 const src = res.url
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('mv地址数据请求失败')
                 }
                 this.$set(this.videoOptions.sources, 0, {
                     type: 'video/mp4',

@@ -128,7 +128,7 @@ export default {
         getAlbum (params) {
             album(params).then(res =>{
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('歌单推荐数据请求失败')
                 }
                 this.artist_id = res.album.artists[0].id;
                 this.details = res.album;
@@ -141,7 +141,7 @@ export default {
         getAlbumDynamic (params) {
             albumDynamic(params).then(res =>{
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('专辑动态数据请求失败')
                 }
                 this.dynamic = res
             })
@@ -150,7 +150,7 @@ export default {
         getArtistAlbum (id) {
             artistAlbum({ id: id, limit: 5,offset:0}).then(res =>{
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('歌手专辑数据请求失败')
                 }
                 this.hotAlbums = res.hotAlbums
             })

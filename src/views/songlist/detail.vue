@@ -223,7 +223,7 @@ export default {
             this.isLoading = true
             playlistdetail(params).then(res => {
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('获取歌单中歌曲的列表数据请求失败')
                 }
 
                 this.details = res.playlist
@@ -266,7 +266,7 @@ export default {
         getCollect(params) {
             playlistSCollect(params).then(res => {
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('订阅该歌单的用户列表数据请求失败')
                 }
                 this.collects = res.subscribers
             })
@@ -276,7 +276,7 @@ export default {
         getRecom(params) {
             playlistRelated(params).then(res => {
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('相关歌单推荐数据请求失败')
                 }
                 this.playlists = res.playlists
             })
@@ -285,7 +285,7 @@ export default {
         getComment(params) {
             playlistComment(params).then(res => {
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('歌单精彩评论数据请求失败')
                 }
                 this.comments = res.comments
             })

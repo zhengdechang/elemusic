@@ -56,6 +56,7 @@
                 allList: {},
                 params: {
                     order: 'hot',
+                    order: 'hot',
                     cat: '',
                     limit: 50,
                     offset: 0
@@ -73,7 +74,7 @@
                     this.sub = res.sub
 
                     if (res.code !== 200) {
-                        return this.$message.error('数据请求失败')
+                        return this.$message.error('获取所点击类型的歌单数据请求失败')
                     }
 
                     for (const k in res.categories) {

@@ -149,7 +149,7 @@ export default {
         getSearchSuggest () {
             searchSuggest({ keywords: this.keyVal }).then(res =>{
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('获取搜索建议数据请求失败')
                 }
 
                 this.suggestInfo = res.result
@@ -160,7 +160,7 @@ export default {
         getSearchMatch () {
             cloudsearch({ keywords: this.keyVal, type: this.type, limit: this.limit, offset: this.offset }).then(res =>{
                 if (res.code !== 200) {
-                    return this.$msg.error('数据请求失败')
+                    return this.$msg.error('热门搜索数据请求失败')
                 }
 
                 if (this.type === '1') {

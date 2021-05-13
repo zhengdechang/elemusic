@@ -171,9 +171,9 @@ export default {
         },
         //评论msg处理
         msgHandler (res) {
-            if (res.code !== 200) {
-                return this.$message.error('数据请求失败')
-            }
+            // if (res.code !== 200) {
+            //     return this.$message.error('评论msg处理数据请求失败')
+            // }
             this.hotComments = res.hotComments || []
             this.hotComments.map(item => {
                 item.isHot = true
@@ -195,7 +195,7 @@ export default {
             }
             comment(params).then(res =>{
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('评论数据请求失败')
                 }
                 this.msg = ''
                 this.getComment()

@@ -145,9 +145,9 @@ export default {
         //获取歌曲详情
         getSongDetail () {
             songDetail({ ids: this.sId,timestamp: new Date().valueOf() }).then(res =>{
-                if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
-                }
+                // if (res.code !== 200) {
+                //     return this.$message.error('数据请求失败')
+                // }
                 // 是否有版权播放
                 // res.songs[0].license = !res.privileges[0].cp
                 this.info = res.songs[0];
@@ -158,9 +158,9 @@ export default {
         // 获取相似音乐
         getSimiSong () {
             simiSong({ id: this.sId }).then(res =>{
-                if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
-                }
+                // if (res.code !== 200) {
+                //     return this.$message.error('获取相似音乐数据请求失败')
+                // }
 
                 this.simiSong = res.songs
             })

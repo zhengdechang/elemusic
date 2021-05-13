@@ -104,7 +104,7 @@
             getArtist (params) {
                 artistList(params).then(res =>{
                     if (res.code !== 200) {
-                        return this.$message.error('数据请求失败')
+                        return this.$message.error('获取歌手列表数据请求失败')
                     }
                     this.list = this.params.offset !== 0 ? [...this.list, ...res.artists] : res.artists
                     this.pageList = this.list.slice(0,(this.page+1)*30)

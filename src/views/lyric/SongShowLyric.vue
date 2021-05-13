@@ -45,6 +45,7 @@ export default {
         }
     },
     mounted () {
+        console.log(this.sId);
         this.getLyrics(this.sId)
     },
     // 监听属性 类似于data概念
@@ -60,8 +61,9 @@ export default {
     },
     // 方法集合
     methods: {
-        async getLyrics (id) {
-            songLyric(id).then(res =>{
+        getLyrics (sid) {
+            songLyric(sid).then(res =>{
+                console.log(res.lrc);
                 this.lyric = this.parseLyric(res.lrc.lyric)
             }).catch(err => {
                 console.log(err);

@@ -149,7 +149,7 @@ export default {
         getTopListDetail () {
             topListDetail().then(res =>{
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('获取排行榜详情数据请求失败')
                 }
 
                 // 云音乐TOP榜
@@ -175,7 +175,7 @@ export default {
             this.isLoading = true
             listDetail({ id: this.rId, s: -1 }).then(res =>{
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('获取排行榜单详情数据请求失败')
                 }
 
                 this.rankInfo = res.playlist

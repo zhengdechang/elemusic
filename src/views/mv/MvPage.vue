@@ -92,7 +92,7 @@ export default {
          getMv (params) {
             mv(params).then(res =>{
                 if (res.code !== 200) {
-                    return this.$message.error('数据请求失败')
+                    return this.$message.error('获取数据请求失败')
                 }
                 this.list = this.params.offset !== 0 ? [...this.list, ...res.data] : res.data
                 this.pageList = this.list.slice(0,(this.page+1)*20)
