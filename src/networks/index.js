@@ -4,7 +4,7 @@ import axios from "axios";
 import Vue from 'vue'
 
 const http = axios.create({
-    baseURL:'111.67.203.0:3001/admin/api'
+    baseURL:'https://elemusic-serve.vercel.app/admin/api'
 })
 
 //拦截服务端错误信息显示在客户端
