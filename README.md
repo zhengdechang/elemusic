@@ -1,5 +1,7 @@
 # ele-music
 
+项目预览地址：https://elemusic-azww.vercel.app
+
 ## Project setup
 ```
 npm install
