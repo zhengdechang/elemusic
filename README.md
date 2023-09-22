@@ -1,6 +1,6 @@
 # ele-music
 
-项目预览地址：https://elemusic-azww.vercel.app
+项目预览地址：https://elemusic.vercel.app
 
 ## Project setup
 ```
