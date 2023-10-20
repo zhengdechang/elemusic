@@ -1,3 +1,6 @@
 [submodule "serve"]
 	path = serve
 	url = https://github.com/zhengdechang/serve.git
+[submodule "NeteaseCloudMusicApi"]
+	path = NeteaseCloudMusicApi
+	url = https://github.com/zhengdechang/NeteaseCloudMusicApi.git
