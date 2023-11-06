@@ -1,16 +1,3 @@
-FROM node:16 
-
-WORKDIR /app
-
-COPY . .
-
-RUN npm config set registry http://registry.npm.taobao.org/
-
-RUN npm install
-
-RUN npm run build
-
-
 FROM nginx:stable-alpine
 
 COPY dist /usr/share/nginx/html

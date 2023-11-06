@@ -9,13 +9,13 @@ services:
 
   server:
     build:
-      context: ./server
+      context: ./serve
     environment:
-      - MONGODB_URL=your_mongodb_url
+      - MONGODB_URL='mongodb+srv://user:password@cluster0.b9vurxx.mongodb.net/node-vue-moba?retryWrites=true&w=majority'
     ports:
       - "3001:3001"
 
-  NeteaseCloudMusicApi:
+  neteasecoudmusicapi:
     build:
       context: ./NeteaseCloudMusicApi
     ports:
@@ -23,6 +23,6 @@ services:
 
   music:
     build:
-      context: ./music
+      context: ./
     ports:
       - "8080:8080"
