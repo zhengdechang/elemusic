@@ -1,20 +1,20 @@
-import {get,post} from "./http";
+import { get, post } from "./http";
 import Axios from "axios";
 import axios from "axios";
 import Vue from 'vue'
 
 const http = axios.create({
-    baseURL:'https://elemusic-serve-git-master-zhengdevin11-gmailcom.vercel.app/admin/api'
+    baseURL: '/api2'
 })
 
 //拦截服务端错误信息显示在客户端
-http.interceptors.response.use(res =>{
+http.interceptors.response.use(res => {
     return res
-},err =>{
-    if(err.response.data.message){
+}, err => {
+    if (err.response.data.message) {
         Vue.prototype.$message({
-            type:'err',
-            message:err.response.data.message
+            type: 'err',
+            message: err.response.data.message
         })
     }
     return Promise.reject(err)
@@ -32,23 +32,23 @@ export default http
 
 //============歌曲相关================
 //模糊查询
-export const likeSongofName =(keywords) => get(`/cloudsearch?keywords= ${keywords}`);
+export const likeSongofName = (keywords) => get(`/cloudsearch?keywords= ${keywords}`);
 
 
 //id相对应的歌词
-export const songLyric =(sid) => get(`/lyric?id=${sid}`);
+export const songLyric = (sid) => get(`/lyric?id=${sid}`);
 //根据keywords相应的id获取音乐url
-export const songUrl =(id) => get(`/song/url?id=${id}`);
+export const songUrl = (id) => get(`/song/url?id=${id}`);
 
 //下载音乐
 export const download = (url) => Axios({
-    method:'get',
-    url:url,
-    responseType:'blob'
+    method: 'get',
+    url: url,
+    responseType: 'blob'
 });
 
 //注册
-export const SignUp = (params) =>post('consumer/add',params)
+export const SignUp = (params) => post('/consumer/add', params)
 
 
 //============歌单的歌曲相关============
@@ -64,20 +64,20 @@ export const getBanner = () => get('/banner', {})
 export const simiSong = ({ id = '' }) => get(`/simi/song?id=${id}`, {})
 
 //用户注册接口
-export const postSignUp =(model) => http.post('rest2/user',model);
+export const postSignUp = (model) => http.post('/rest2/user', model);
 
 //用户登录接口
-export const loginIn =(model) => http.post('user/login',model);
+export const loginIn = (model) => http.post('/user/login', model);
 
 //获取数据
-export  const getUserData =(id) => http.get(`user/change/${id}`);
+export const getUserData = (id) => http.get(`/user/change/${id}`);
 
 //修改用户信息
-export  const changeUser =(model,id) => http.put(`user/change/${id}`,model);
+export const changeUser = (model, id) => http.put(`/user/change/${id}`, model);
 
 
 //获取用户头像
-export  const getImg =(id) => http.get(`/user/getImg/${id}`);
+export const getImg = (id) => http.get(`/user/getImg/${id}`);
 
 
 // 热门歌单分类
@@ -107,7 +107,7 @@ export const artistAlbum = ({ id = '', limit = 50, offset = 0 }) => get(`/artist
 export const topArtists = ({ limit = 30, offset = 0 }) => get(`/top/artists?limit=${limit}&offset=${offset}`, {})
 
 //排行榜
-export  const topList = () => get('/toplist', {})
+export const topList = () => get('/toplist', {})
 
 // 歌单详情
 export const listDetail = ({ id = '', s = 8 }) => get(`/playlist/detail?id=${id}&s=${s}`, {})
@@ -133,12 +133,12 @@ export const album = ({ id = '' }) => get(`/album?id=${id}`, {})
 export const albumDynamic = ({ id = '' }) => get(`/album/detail/dynamic?id=${id}`, {})
 
 // 新碟上架
-export  const topAlbum = ({ limit = 20, offset = 0, area = '', type = 'new', year = '', month = '' }) => get(`/top/album?limit=${limit}&offset=${offset}&area=${area}&type=${type}&year=${year}&month=${month}`, {})
+export const topAlbum = ({ limit = 20, offset = 0, area = '', type = 'new', year = '', month = '' }) => get(`/top/album?limit=${limit}&offset=${offset}&area=${area}&type=${type}&year=${year}&month=${month}`, {})
 
 
 /* ********* 歌曲评论 ********* */
 // 歌曲评论
-export const commentSong = ({ id = '', limit = 20, offset = 0, before = 0, timestamp = 0 }) =>get(`/comment/music?id=${id}&limit=${limit}&offset=${offset}&before=${before}&timestamp=${timestamp}`, {})
+export const commentSong = ({ id = '', limit = 20, offset = 0, before = 0, timestamp = 0 }) => get(`/comment/music?id=${id}&limit=${limit}&offset=${offset}&before=${before}&timestamp=${timestamp}`, {})
 /*
     * 发送/删除评论
     * t: 0删除 1发送 2回复
@@ -157,22 +157,22 @@ export const comment = ({ t = 1, type = 0, id = '', content = '', commentId = ''
 */
 
 // 专辑评论
-export const albumComment = ({ id = '', limit = 20, offset = 0, before = 0, timestamp = 0 }) =>get(`/comment/album?id=${id}&limit=${limit}&offset=${offset}&before=${before}&timestamp=${timestamp}`, {})
+export const albumComment = ({ id = '', limit = 20, offset = 0, before = 0, timestamp = 0 }) => get(`/comment/album?id=${id}&limit=${limit}&offset=${offset}&before=${before}&timestamp=${timestamp}`, {})
 
 
 /* ********* MV ********* */
 // 获取 mv
 export const mv = ({ area = '', type = '', order = '', limit = 50, offset = 0 }) => get(`/mv/all?area=${area}&type=${type}&order=${order}&limit=${limit}&offset=${offset}`, {})
 // 获取 mv详情
-export const mvDetail = ({ id = '' }) =>get(`/mv/detail?mvid=${id}`, {})
+export const mvDetail = ({ id = '' }) => get(`/mv/detail?mvid=${id}`, {})
 // 获取 地址
 export const mvUrl = ({ id = '', r = 1080 }) => get(`/mv/url?id=${id}&r=${r}`, {})
 // 获取mv评论
 export const commentMv = ({ id = '', limit = 20, offset = 0, before = 0, timestamp = 0 }) => get(`/comment/mv?id=${id}&limit=${limit}&offset=${offset}&before=${before}&timestamp=${timestamp}`, {})
 // 相似mv
-export const simiMv= ({ id = ''} ) =>get(`/simi/mv?mvid=${id}`,{})
+export const simiMv = ({ id = '' }) => get(`/simi/mv?mvid=${id}`, {})
 // 最新MV
-export const getNewMv = ({ limit = 30, area = '' }) =>get(`/mv/first?limit=${limit}&area=${area}`, {})
+export const getNewMv = ({ limit = 30, area = '' }) => get(`/mv/first?limit=${limit}&area=${area}`, {})
 
 
 // 获取歌手 mv
@@ -188,63 +188,63 @@ export const topListDetail = () => get('/toplist/detail', {})
 // 搜索
 export const search = ({ keywords = '' }) => get(`/search?keywords=${keywords}`, {})
 // 搜索类型；默认为 1 即单曲 , 取值意义 : 1: 单曲, 10: 专辑, 100: 歌手, 1000: 歌单, 1002: 用户, 1004: MV, 1006: 歌词, 1009: 电台, 1014: 视频, 1018:综合
-export const cloudsearch = ({ keywords = '', limit = 30, offset = 0, type = '1' }) =>get(`/cloudsearch?keywords=${keywords}&limit=${limit}&offset=${offset}&type=${type}`, {})
+export const cloudsearch = ({ keywords = '', limit = 30, offset = 0, type = '1' }) => get(`/cloudsearch?keywords=${keywords}&limit=${limit}&offset=${offset}&type=${type}`, {})
 // 热门搜索
-export const searchHot = () =>get('/search/hot', {})
+export const searchHot = () => get('/search/hot', {})
 // 热门搜索详细
 export const searchHotDetail = () => ('/search/hot/detail', {})
 export const searchSuggest = ({ keywords = '' }) => get(`/search/suggest?keywords=${keywords}`, {})
 export const searchMatch = ({ keywords = '' }) => get(`/search/multimatch?keywords=${keywords}`, {})
 
 //单曲评论提交
-export const serveSongComment = (model) => http.post(`/comment/song`,model)
+export const serveSongComment = (model) => http.post(`/comment/song`, model)
 //单曲获取评论
-export const  getServeSongComment = (tid) => http.get(`/comment/song/${tid}`)
+export const getServeSongComment = (tid) => http.get(`/comment/song/${tid}`)
 
 
 //mv评论提交
-export const serveMvComment = (model) => http.post(`/comment/mv`,model)
+export const serveMvComment = (model) => http.post(`/comment/mv`, model)
 //mv获取评论
-export const  getServeMvComment = (id) => http.get(`/comment/mv/${id}`)
+export const getServeMvComment = (id) => http.get(`/comment/mv/${id}`)
 
 //专辑评论提交
-export const serveAlbumComment = (model) => http.post(`/comment/album`,model)
+export const serveAlbumComment = (model) => http.post(`/comment/album`, model)
 //专辑获取评论
-export const  getServeAlbumComment = (id) => http.get(`/comment/album/${id}`)
+export const getServeAlbumComment = (id) => http.get(`/comment/album/${id}`)
 
 
 
 //------------------------------------------收藏相关接口-----------------------------------------
 //单曲收藏
-export const subServeLikedSong = (model) => http.post(`/likedsong`,model)
+export const subServeLikedSong = (model) => http.post(`/likedsong`, model)
 //获取收藏的单曲
-export const  getServeLikedSong = (user_id) => http.get(`/likedsong/${user_id}`)
+export const getServeLikedSong = (user_id) => http.get(`/likedsong/${user_id}`)
 //单曲取消收藏
-export const  deleteLikedSong = (tid) => http.delete(`/likedsong/delete/${tid}`)
+export const deleteLikedSong = (tid) => http.delete(`/likedsong/delete/${tid}`)
 
 //歌单收藏
-export const subServeLikedAlbum = (model) => http.post(`/likedalbum`,model)
+export const subServeLikedAlbum = (model) => http.post(`/likedalbum`, model)
 //获取收藏的歌单
-export const  getServeLikedAlbum = (user_id) => http.get(`likedalbum/${user_id}`)
+export const getServeLikedAlbum = (user_id) => http.get(`/likedalbum/${user_id}`)
 //歌单取消收藏
-export const  deleteLikedAlbum = (tid) => http.delete(`/likedalbum/delete/${tid}`)
+export const deleteLikedAlbum = (tid) => http.delete(`/likedalbum/delete/${tid}`)
 
 //歌手收藏
-export const subServeLikedArtist = (model) => http.post(`/likedartist`,model)
+export const subServeLikedArtist = (model) => http.post(`/likedartist`, model)
 //歌手收藏的歌单
-export const  getServeLikedArtist = (user_id) => http.get(`likedartist/${user_id}`)
+export const getServeLikedArtist = (user_id) => http.get(`/likedartist/${user_id}`)
 //歌手取消收藏
-export const  deleteLikedArtist = (tid) => http.delete(`/likedartist/delete/${tid}`)
+export const deleteLikedArtist = (tid) => http.delete(`/likedartist/delete/${tid}`)
 
 //专辑收藏
-export const subServeLikedCollection = (model) => http.post(`/likedcollection`,model)
+export const subServeLikedCollection = (model) => http.post(`/likedcollection`, model)
 //专辑收藏的歌单
-export const  getServeLikedCollection= (user_id) => http.get(`likedcollection/${user_id}`)
+export const getServeLikedCollection = (user_id) => http.get(`/likedcollection/${user_id}`)
 //专辑取消收藏
-export const  deleteLikedCollection = (tid) => http.delete(`/likedcollection/delete/${tid}`)
+export const deleteLikedCollection = (tid) => http.delete(`/likedcollection/delete/${tid}`)
 
 
 //评论删除
-export const  songDeteleComment = (id) => http.delete(`/comment/song/${id}`)
-export const  mvDeteleComment = (id) => http.delete(`/comment/mv/${id}`)
-export const  albumDeteleComment = (id) => http.delete(`/comment/album/${id}`)
+export const songDeteleComment = (id) => http.delete(`/comment/song/${id}`)
+export const mvDeteleComment = (id) => http.delete(`/comment/mv/${id}`)
+export const albumDeteleComment = (id) => http.delete(`/comment/album/${id}`)

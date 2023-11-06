@@ -33,8 +33,5 @@
     "sass-loader": "^8.0.2",
     "svg-sprite-loader": "^5.2.1",
     "vue-template-compiler": "^2.6.11"
-  },
-  "engines": {
-    "node": "16.14.2"
   }
 }
