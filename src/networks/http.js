@@ -5,7 +5,7 @@ axios.defaults.timeout = 5000;  //超市时间是5秒
 //Content-Type 响应头
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
 // //基础url
-axios.defaults.baseURL = "/api";
+axios.defaults.baseURL = "/cloud-api";
 // axios.defaults.baseURL = "https://netease-cloud-music-e87vw4ni0-zhengdevin11-gmailcom.vercel.app";
 
 

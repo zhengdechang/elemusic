@@ -1,0 +1,28 @@
+# docker-compose up --build
+version: "3"
+services:
+  admin:
+    build:
+      context: ./admin
+    ports:
+      - "8082:8082"
+
+  server:
+    build:
+      context: ./server
+    environment:
+      - MONGODB_URL=your_mongodb_url
+    ports:
+      - "3001:3001"
+
+  NeteaseCloudMusicApi:
+    build:
+      context: ./NeteaseCloudMusicApi
+    ports:
+      - "3000:3000"
+
+  music:
+    build:
+      context: ./music
+    ports:
+      - "8080:8080"

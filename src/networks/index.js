@@ -4,7 +4,7 @@ import axios from "axios";
 import Vue from 'vue'
 
 const http = axios.create({
-    baseURL: '/api2'
+    baseURL: '/admin/api'
 })
 
 //拦截服务端错误信息显示在客户端
