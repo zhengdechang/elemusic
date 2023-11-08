@@ -11,7 +11,7 @@ services:
     build:
       context: ./serve
     environment:
-      - MONGODB_URL='mongodb+srv://user:password@cluster0.b9vurxx.mongodb.net/node-vue-moba?retryWrites=true&w=majority'
+      - MONGODB_URL=mongodb+srv://user:password@cluster0.b9vurxx.mongodb.net/node-vue-moba?retryWrites=true&w=majority
     ports:
       - "3001:3001"
 
