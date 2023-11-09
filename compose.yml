@@ -1,0 +1,31 @@
+version: "3"
+services:
+  admin:
+	image: codedevin/elemusic_admin
+    container_name: admin
+    restart: always
+    ports:
+      - "8081:8081"
+
+  server:
+	image: codedevin/elemusic_server
+    container_name: server
+    restart: always
+    environment:
+      - MONGODB_URL=mongodb+srv://user:password@cluster0.b9vurxx.mongodb.net/node-vue-moba?retryWrites=true&w=majority
+    ports:
+      - "3001:3001"
+
+  neteasecoudmusicapi:
+	image: codedevin/elemusic_neteasecoudmusicapi
+    container_name: neteasecoudmusicapi
+    restart: always
+    ports:
+      - "3000:3000"
+
+  music:
+	image: codedevin/elemusic
+    container_name: elemusic
+    restart: always
+    ports:
+      - "8080:8080"
